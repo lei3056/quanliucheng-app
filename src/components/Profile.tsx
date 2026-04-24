@@ -51,7 +51,7 @@ export default function Profile() {
       {/* Radar Chart Card */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <h2 className="text-sm font-black text-slate-400 mb-2 flex items-center gap-2 uppercase tracking-tighter">
-          <div className="w-1 h-4 bg-indigo-500"></div> 能力图谱 / Radar
+          <div className="w-1 h-4 bg-primary-500"></div> 能力图谱 / Radar
         </h2>
         <div className="h-[200px] w-full -ml-2 mb-4">
           <ResponsiveContainer width="100%" height="100%">
@@ -72,7 +72,7 @@ export default function Profile() {
         </div>
         
         <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-           <p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest mb-1">综合诊断</p>
+           <p className="text-[10px] text-primary-600 font-black uppercase tracking-widest mb-1">综合诊断</p>
            <p className="text-xs text-slate-600 leading-relaxed font-medium">您的表单基础完整度较好，但在<span className="font-bold text-slate-900">家庭社会关系</span>核查项中存在风险空白点。</p>
         </div>
       </div>
@@ -87,7 +87,7 @@ export default function Profile() {
           <button 
             key={section.id}
             onClick={() => handleEdit(section.id as SectionType)}
-            className="w-full bg-white p-4 rounded-2xl border border-slate-200 flex items-center gap-4 hover:border-indigo-300 transition-colors group text-left shadow-sm"
+            className="w-full bg-white p-4 rounded-2xl border border-slate-200 flex items-center gap-4 hover:border-primary-300 transition-colors group text-left shadow-sm"
           >
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               section.status === 'complete' ? 'bg-emerald-50 border border-emerald-100 text-emerald-600' : 
@@ -113,11 +113,11 @@ export default function Profile() {
       </div>
 
       {/* AI Tool CTA */}
-      <div className="group bg-indigo-600 p-6 rounded-2xl text-white relative overflow-hidden shadow-lg shadow-indigo-100 cursor-pointer transition-transform active:scale-95 mt-4">
+      <div className="group bg-primary-600 p-6 rounded-2xl text-white relative overflow-hidden shadow-lg shadow-primary-100 cursor-pointer transition-transform active:scale-95 mt-4">
         <Sparkles size={100} className="absolute -right-6 -top-6 text-white/10" />
         <h3 className="font-bold mb-1 text-base">不想一项项填写？</h3>
-        <p className="text-[11px] text-indigo-100 mb-4 font-medium leading-relaxed">上传现有 PDF / Word 简历，系统自动提取识别并填充所有档案数据。</p>
-        <button className="bg-white text-indigo-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest pointer-events-none">
+        <p className="text-[11px] text-primary-100 mb-4 font-medium leading-relaxed">上传现有 PDF / Word 简历，系统自动提取识别并填充所有档案数据。</p>
+        <button className="bg-white text-primary-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest pointer-events-none">
           智能解析简历
         </button>
       </div>
@@ -132,7 +132,7 @@ export default function Profile() {
         <div className="bg-white px-6 pt-10 pb-6 border-b border-slate-200 shrink-0 shadow-sm z-10 relative">
           <button 
             onClick={() => setViewMode('overview')}
-            className="flex items-center gap-1 text-slate-500 hover:text-indigo-600 transition-colors font-bold text-[10px] uppercase tracking-widest mb-6"
+            className="flex items-center gap-1 text-slate-500 hover:text-primary-600 transition-colors font-bold text-[10px] uppercase tracking-widest mb-6"
           >
             <ChevronLeft size={16} /> 返回档案概览
           </button>
@@ -142,7 +142,7 @@ export default function Profile() {
             </div>
             <div>
               <h2 className="text-xl font-black text-slate-900 tracking-tight">{section?.title}</h2>
-              <p className="text-[10px] text-indigo-600 font-black uppercase tracking-widest">Update Information</p>
+              <p className="text-[10px] text-primary-600 font-black uppercase tracking-widest">Update Information</p>
             </div>
           </div>
         </div>
@@ -162,11 +162,11 @@ export default function Profile() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">姓名 / Name</label>
-                  <input type="text" defaultValue="李雷" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-indigo-500 focus:bg-white outline-none transition-colors" />
+                  <input type="text" defaultValue="李雷" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 focus:bg-white outline-none transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">性别 / Gender</label>
-                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-indigo-500 focus:bg-white outline-none transition-colors appearance-none">
+                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 focus:bg-white outline-none transition-colors appearance-none">
                     <option>男</option>
                     <option>女</option>
                   </select>
@@ -174,16 +174,16 @@ export default function Profile() {
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">证件号码 / ID Number <span className="text-rose-500">*</span></label>
-                <input type="text" defaultValue="510**********3412" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-indigo-500 focus:bg-white outline-none transition-colors" />
+                <input type="text" defaultValue="510**********3412" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 focus:bg-white outline-none transition-colors" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">民族 / Ethnicity</label>
-                  <input type="text" defaultValue="汉族" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-indigo-500 outline-none transition-colors" />
+                  <input type="text" defaultValue="汉族" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 outline-none transition-colors" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">政治面貌 / Politics</label>
-                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-indigo-500 outline-none transition-colors appearance-none">
+                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 outline-none transition-colors appearance-none">
                     <option>中共党员</option>
                     <option>共青团员</option>
                     <option>群众</option>
@@ -203,7 +203,7 @@ export default function Profile() {
                       <Trash2 size={16} />
                     </div>
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-6 h-6 bg-indigo-50 text-indigo-600 rounded-md flex items-center justify-center text-xs font-black">{idx + 1}</div>
+                      <div className="w-6 h-6 bg-primary-50 text-primary-600 rounded-md flex items-center justify-center text-xs font-black">{idx + 1}</div>
                       <span className="text-sm font-bold text-slate-800">高等教育经历</span>
                     </div>
                     <div className="space-y-4">
@@ -224,17 +224,17 @@ export default function Profile() {
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">学校名称</label>
-                        <input type="text" defaultValue={edu.school} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold focus:border-indigo-500 outline-none" />
+                        <input type="text" defaultValue={edu.school} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold focus:border-primary-500 outline-none" />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">专业名称 (需与毕业证一致)</label>
-                        <input type="text" defaultValue={edu.major} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold focus:border-indigo-500 outline-none" />
+                        <input type="text" defaultValue={edu.major} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold focus:border-primary-500 outline-none" />
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <button className="w-full bg-white border-2 border-dashed border-indigo-200 text-indigo-600 rounded-2xl py-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest hover:bg-indigo-50 transition-colors">
+              <button className="w-full bg-white border-2 border-dashed border-primary-200 text-primary-600 rounded-2xl py-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest hover:bg-primary-50 transition-colors">
                 <Plus size={16} /> 添加教育经历
               </button>
             </>
@@ -269,7 +269,7 @@ export default function Profile() {
                     </div>
                     <div className="space-y-1.5 mb-4">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">工作单位及职务</label>
-                        <input type="text" defaultValue={fam.company} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold focus:border-indigo-500 outline-none" />
+                        <input type="text" defaultValue={fam.company} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold focus:border-primary-500 outline-none" />
                     </div>
                     <div className="space-y-1.5">
                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">政治面貌</label>
@@ -291,13 +291,13 @@ export default function Profile() {
           {activeSection === 'evaluation' && (
             <div className="space-y-6">
               <div className="bg-white p-5 rounded-2xl border border-slate-200 space-y-4">
-                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                <div className="bg-primary-50 p-4 rounded-xl border border-primary-100">
                   <div className="flex items-center gap-2 mb-2">
-                    <Sparkles size={14} className="text-indigo-600" />
-                    <span className="text-[10px] font-black text-indigo-700 uppercase tracking-widest">AI 智能重塑引擎</span>
+                    <Sparkles size={14} className="text-primary-600" />
+                    <span className="text-[10px] font-black text-primary-700 uppercase tracking-widest">AI 智能重塑引擎</span>
                   </div>
-                  <p className="text-xs text-indigo-600 font-medium leading-relaxed">系统已为您提取：汉语言文学专业优势、3次校内奖学金背景。是否应用到自我评价中生成初稿？</p>
-                  <button className="mt-3 text-[10px] font-black text-indigo-700 bg-white border border-indigo-200 px-3 py-1.5 rounded-lg uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-colors">
+                  <p className="text-xs text-primary-600 font-medium leading-relaxed">系统已为您提取：汉语言文学专业优势、3次校内奖学金背景。是否应用到自我评价中生成初稿？</p>
+                  <button className="mt-3 text-[10px] font-black text-primary-700 bg-white border border-primary-200 px-3 py-1.5 rounded-lg uppercase tracking-widest hover:bg-primary-600 hover:text-white transition-colors">
                     应用 AI 撰写 Apply Form
                   </button>
                 </div>
@@ -306,12 +306,12 @@ export default function Profile() {
                   <textarea 
                     rows={8}
                     placeholder="请输入您的自我评价及校内国际奖项、表彰记录。建议包含：专业能力、性格特质、核心荣誉..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-medium focus:border-indigo-500 outline-none transition-colors resize-none leading-relaxed"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-medium focus:border-primary-500 outline-none transition-colors resize-none leading-relaxed"
                   ></textarea>
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   {['文字功底扎实', '抗压能力强', '熟悉体制内公文', '逻辑严密', '党员先锋'].map(tag => (
-                    <button key={tag} className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold text-slate-600 hover:border-indigo-500 transition-colors">
+                    <button key={tag} className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold text-slate-600 hover:border-primary-500 transition-colors">
                       + {tag}
                     </button>
                   ))}
@@ -329,12 +329,12 @@ export default function Profile() {
                     <div className="absolute right-4 top-4 text-slate-300 hover:text-rose-500 transition-colors">
                       <Trash2 size={16} />
                     </div>
-                    <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 bg-primary-50 text-primary-600 rounded-xl flex items-center justify-center shrink-0">
                       <Award size={20} />
                     </div>
                     <div>
                       <h3 className="font-bold text-slate-800 mb-1 leading-tight">{cert.name}</h3>
-                      <p className="text-[11px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md inline-block uppercase tracking-wider">{cert.detail}</p>
+                      <p className="text-[11px] font-bold text-primary-600 bg-primary-50 border border-primary-100 px-2 py-0.5 rounded-md inline-block uppercase tracking-wider">{cert.detail}</p>
                     </div>
                   </div>
                 ))}
@@ -344,14 +344,14 @@ export default function Profile() {
                   <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">快捷添加常见资质</h3>
                   <div className="flex flex-wrap gap-2">
                     {['大学英语四级 (CET-4)', '计算机二级', '法律职业资格证书 (A)', '初级会计师', '普通话二甲'].map(tag => (
-                      <button key={tag} className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-colors">
+                      <button key={tag} className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-600 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200 transition-colors">
                         + {tag}
                       </button>
                     ))}
                   </div>
                 </div>
               </div>
-              <button className="w-full mt-4 bg-white border-2 border-dashed border-indigo-200 text-indigo-600 rounded-2xl py-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest hover:bg-indigo-50 transition-colors">
+              <button className="w-full mt-4 bg-white border-2 border-dashed border-primary-200 text-primary-600 rounded-2xl py-4 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest hover:bg-primary-50 transition-colors">
                 <Plus size={16} /> 手动录入其他证书
               </button>
             </>
@@ -414,7 +414,7 @@ export default function Profile() {
                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">李雷 · 2026届应届生</p>
                   </div>
                    <div className="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center border border-slate-700 truncate">
-                     <UserCircle size={24} className="text-indigo-400" />
+                     <UserCircle size={24} className="text-primary-400" />
                    </div>
                 </div>
                 
@@ -422,10 +422,10 @@ export default function Profile() {
                 <div className="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-sm">
                   <div className="flex justify-between items-center text-[10px] uppercase font-bold text-slate-300 tracking-widest mb-3">
                      <span>Resume Completion</span>
-                     <span className="text-indigo-400">80%</span>
+                     <span className="text-primary-400">80%</span>
                   </div>
                   <div className="w-full bg-slate-900 rounded-full h-1.5 flex overflow-hidden">
-                    <div className="bg-indigo-500 h-full rounded-full w-[80%] relative transition-all duration-1000">
+                    <div className="bg-primary-500 h-full rounded-full w-[80%] relative transition-all duration-1000">
                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white/20 rounded-full blur-sm"></div>
                     </div>
                   </div>

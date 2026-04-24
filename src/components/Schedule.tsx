@@ -28,11 +28,11 @@ export default function Schedule() {
         </h1>
         <div className="flex justify-between items-center mb-4">
           <span className="text-sm font-black text-slate-800 uppercase tracking-widest">2026 / 04</span>
-          <span className="text-[10px] font-bold text-indigo-700 px-3 py-1 bg-indigo-50 border border-indigo-100 rounded-md uppercase tracking-widest">回到今天</span>
+          <span className="text-[10px] font-bold text-primary-700 px-3 py-1 bg-primary-50 border border-primary-100 rounded-md uppercase tracking-widest">回到今天</span>
         </div>
         <div className="flex justify-between mt-4">
           {days.map((d, i) => (
-            <div key={i} className={`flex flex-col items-center justify-center p-2 rounded-xl w-11 h-14 transition-all border ${d.active ? 'bg-indigo-600 border-indigo-700 text-white shadow-sm' : 'bg-slate-50 border-slate-100 text-slate-500'}`}>
+            <div key={i} className={`flex flex-col items-center justify-center p-2 rounded-xl w-11 h-14 transition-all border ${d.active ? 'bg-primary-600 border-primary-700 text-white shadow-sm' : 'bg-slate-50 border-slate-100 text-slate-500'}`}>
               <span className={`text-[10px] font-bold mb-1 ${d.active ? 'opacity-80' : ''}`}>{d.day}</span>
               <span className={`text-sm font-black ${d.active ? '' : 'text-slate-800'}`}>{d.date}</span>
             </div>
@@ -68,9 +68,9 @@ export default function Schedule() {
 
             {/* Upcoming Item */}
             <div className="relative">
-              <span className="absolute -left-[31px] top-1 w-[18px] h-[18px] rounded-full bg-slate-50 border-[4px] border-indigo-400 z-10 ring-4 ring-slate-50"></span>
+              <span className="absolute -left-[31px] top-1 w-[18px] h-[18px] rounded-full bg-slate-50 border-[4px] border-primary-400 z-10 ring-4 ring-slate-50"></span>
               <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <div className="text-[10px] font-bold flex items-center gap-1 uppercase tracking-wider mb-2 text-indigo-700 bg-indigo-50 border border-indigo-100 w-fit px-2 py-1 rounded-md">
+                <div className="text-[10px] font-bold flex items-center gap-1 uppercase tracking-wider mb-2 text-primary-700 bg-primary-50 border border-primary-100 w-fit px-2 py-1 rounded-md">
                   <Clock size={12} /> 04/20 09:00 开启
                 </div>
                 <h3 className="font-bold text-slate-900 mb-2 text-sm">软州市林业局-业务股工作人员</h3>

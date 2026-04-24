@@ -33,9 +33,9 @@ export default function App() {
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id as any)}
-                className={`flex flex-col items-center gap-1.5 transition-all ${isActive ? 'text-indigo-600 scale-105' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`flex flex-col items-center gap-1.5 transition-all ${isActive ? 'text-primary-600 scale-105' : 'text-slate-400 hover:text-slate-600'}`}
               >
-                <div className={`relative flex items-center justify-center w-10 h-8 rounded-lg transition-colors ${isActive ? 'bg-indigo-50 border border-indigo-100' : ''}`}>
+                <div className={`relative flex items-center justify-center w-10 h-8 rounded-lg transition-colors ${isActive ? 'bg-primary-50 border border-primary-100' : ''}`}>
                   <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
                 </div>
                 <span className={`text-[10px] uppercase font-black tracking-widest`}>{item.label}</span>

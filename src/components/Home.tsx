@@ -13,7 +13,7 @@ export default function Home() {
       <div className="flex flex-col gap-4 px-6 pt-8 pb-4 bg-white border-b border-slate-200 shrink-0 sticky top-0 z-20">
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">P</div>
+              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">P</div>
               <div>
                 <h1 className="text-base font-bold text-slate-900">发现机会</h1>
                 <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Discovery Engine</p>
@@ -37,7 +37,7 @@ export default function Home() {
       {/* Daily Picks - Horizontal Scroll */}
       <div className="px-6 space-y-4">
         <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 uppercase tracking-tighter">
-          <div className="w-1 h-4 bg-indigo-500"></div> 今日 AI 精选 / Top Picks
+          <div className="w-1 h-4 bg-primary-500"></div> 今日 AI 精选 / Top Picks
         </h2>
         
         <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-6 px-6 scrollbar-hide">
@@ -47,7 +47,7 @@ export default function Home() {
               <span className="bg-rose-50 border border-rose-100 text-rose-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 uppercase tracking-wider">
                 <Clock size={10} /> 剩余 1天 04时
               </span>
-              <span className="text-indigo-700 font-bold text-[10px] bg-indigo-50 border border-indigo-100 px-2 py-1 rounded-md tracking-wider uppercase">匹配度 98%</span>
+              <span className="text-primary-700 font-bold text-[10px] bg-primary-50 border border-primary-100 px-2 py-1 rounded-md tracking-wider uppercase">匹配度 98%</span>
             </div>
             <h3 className="text-base font-bold text-slate-900 mb-2 leading-tight">成都市武侯区教育局 - 数学教师</h3>
             <p className="text-[11px] text-slate-500 mb-4 flex items-center gap-1">
@@ -61,7 +61,7 @@ export default function Home() {
               <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-slate-100">
                 忽略 Ignore
               </button>
-              <button className="flex-[2] bg-indigo-600 text-white py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-indigo-700">
+              <button className="flex-[2] bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-primary-700">
                 重点关注 Target
               </button>
             </div>
@@ -73,7 +73,7 @@ export default function Home() {
               <span className="bg-amber-50 border border-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 uppercase tracking-wider">
                 <Clock size={10} /> 即将开始报名
               </span>
-              <span className="text-indigo-700 font-bold text-[10px] bg-indigo-50 border border-indigo-100 px-2 py-1 rounded-md tracking-wider uppercase">匹配度 92%</span>
+              <span className="text-primary-700 font-bold text-[10px] bg-primary-50 border border-primary-100 px-2 py-1 rounded-md tracking-wider uppercase">匹配度 92%</span>
             </div>
             <h3 className="text-base font-bold text-slate-900 mb-2 leading-tight">江西省交投数据科技 - 研发工程岗</h3>
             <p className="text-[11px] text-slate-500 mb-4 flex items-center gap-1">
@@ -87,7 +87,7 @@ export default function Home() {
               <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-slate-100">
                 忽略 Ignore
               </button>
-              <button className="flex-[2] bg-indigo-600 text-white py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-indigo-700">
+              <button className="flex-[2] bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-primary-700">
                 重点关注 Target
               </button>
             </div>
@@ -120,7 +120,7 @@ export default function Home() {
           <div className="flex justify-between items-start">
             <div>
               <h3 className="font-bold text-slate-900 text-sm mb-1">绵阳经济技术开发区三江小学</h3>
-              <p className="text-[11px] font-bold text-indigo-600 mb-3">小学语文教师</p>
+              <p className="text-[11px] font-bold text-primary-600 mb-3">小学语文教师</p>
             </div>
             <button className="text-slate-300 hover:text-rose-500 transition-colors bg-slate-50 p-2 rounded-lg border border-slate-100">
               <ThumbsUp size={14} />
@@ -132,7 +132,7 @@ export default function Home() {
           </div>
           <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4 uppercase tracking-widest">
             <span className="text-slate-400">PUB: 04-27</span>
-            <span className="text-indigo-600 px-2 py-1 bg-indigo-50 rounded-md border border-indigo-100">报名未开始</span>
+            <span className="text-primary-600 px-2 py-1 bg-primary-50 rounded-md border border-primary-100">报名未开始</span>
           </div>
         </div>
 
@@ -141,7 +141,7 @@ export default function Home() {
           <div className="flex justify-between items-start">
             <div>
               <h3 className="font-bold text-slate-900 text-sm mb-1">吉安东管理中心</h3>
-              <p className="text-[11px] font-bold text-indigo-600 mb-3">文秘宣传岗</p>
+              <p className="text-[11px] font-bold text-primary-600 mb-3">文秘宣传岗</p>
             </div>
             <button className="text-rose-500 bg-rose-50 p-2 rounded-lg border border-rose-100">
               <ThumbsUp size={14} className="fill-current" />
