@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, UserCircle, Briefcase, ChevronLeft, Plus, CheckCircle2, AlertCircle, FileText, GraduationCap, Users, Trash2, Award } from 'lucide-react';
+import { Sparkles, UserCircle, Briefcase, ChevronLeft, Plus, CheckCircle2, AlertCircle, FileText, GraduationCap, Users, Trash2, Award, Target, Bookmark, Bell } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 type ViewMode = 'overview' | 'editor';
 type SectionType = 'basic' | 'education' | 'experience' | 'certifications' | 'family' | 'evaluation';
 
-export default function Profile() {
+interface ProfileProps {
+  onNavigate?: (tab: 'home' | 'schedule' | 'profile' | 'favorites' | 'targeted') => void;
+}
+
+export default function Profile({ onNavigate }: ProfileProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
 
@@ -48,6 +52,37 @@ export default function Profile() {
 
   const Overview = () => (
     <div className="flex flex-col gap-6 p-6 pb-32">
+      {/* Quick Access */}
+      <div className="grid grid-cols-3 gap-3">
+        <button 
+           onClick={() => onNavigate?.('targeted')}
+           className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-2 hover:border-primary-300 transition-colors"
+        >
+          <div className="w-10 h-10 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center">
+            <Target size={20} />
+          </div>
+          <span className="text-[11px] font-bold text-slate-700">重点关注</span>
+        </button>
+        <button 
+           onClick={() => onNavigate?.('favorites')}
+           className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-2 hover:border-primary-300 transition-colors"
+        >
+          <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <Bookmark size={20} />
+          </div>
+          <span className="text-[11px] font-bold text-slate-700">我的收藏</span>
+        </button>
+        <button 
+           className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-2 hover:border-primary-300 transition-colors"
+        >
+          <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center relative">
+            <Bell size={20} />
+            <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
+          </div>
+          <span className="text-[11px] font-bold text-slate-700">消息通知</span>
+        </button>
+      </div>
+
       {/* Radar Chart Card */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <h2 className="text-sm font-black text-slate-400 mb-2 flex items-center gap-2 tracking-tighter">

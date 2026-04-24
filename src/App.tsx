@@ -24,7 +24,7 @@ export default function App() {
         <div className="flex-1 overflow-hidden relative">
           {activeTab === 'home' && <Home onNavigate={setActiveTab} />}
           {activeTab === 'schedule' && <Schedule />}
-          {activeTab === 'profile' && <Profile />}
+          {activeTab === 'profile' && <Profile onNavigate={setActiveTab} />}
           <AnimatePresence>
             {activeTab === 'favorites' && <Favorites onBack={() => setActiveTab('home')} />}
             {activeTab === 'targeted' && <Targeted onBack={() => setActiveTab('home')} />}

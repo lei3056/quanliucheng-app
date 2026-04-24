@@ -1,7 +1,17 @@
-import { motion } from 'motion/react';
-import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target, PenTool, Edit3 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target, PenTool, Edit3, X } from 'lucide-react';
 
 export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favorites' | 'targeted') => void; onTrack?: (title: string, status: any) => void }) {
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isSearchExpanded && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchExpanded]);
+
   return (
     <motion.div 
       initial={{ opacity: 0, x: -20 }}
@@ -10,41 +20,73 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
       className="flex flex-col gap-6 pb-24 bg-slate-50 h-full overflow-y-auto"
     >
       {/* Header */}
-      <div className="flex flex-col gap-4 px-6 pt-8 pb-4 bg-white border-b border-slate-200 shrink-0 sticky top-0 z-20">
-        <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">P</div>
-              <div>
-                <h1 className="text-base font-bold text-slate-900">发现机会</h1>
-                <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold"></p>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => onNavigate?.('targeted')}
-                className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
+      <div className="flex flex-col px-6 pt-8 pb-4 bg-white border-b border-slate-200 shrink-0 sticky top-0 z-20 min-h-[80px] justify-center">
+        <div className="flex items-center justify-between relative h-10 w-full">
+          <AnimatePresence>
+            {!isSearchExpanded && (
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="flex items-center absolute left-0"
               >
-                <Target size={16} />
-              </button>
-              <button 
-                onClick={() => onNavigate?.('favorites')}
-                className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
+                <div className="flex items-center gap-3">
+                  <div>
+                    <h1 className="text-xl font-black text-slate-900 tracking-tight">发现机会</h1>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isSearchExpanded && (
+              <motion.div 
+                initial={{ opacity: 0, width: 40 }}
+                animate={{ opacity: 1, width: '100%' }}
+                exit={{ opacity: 0, width: 40 }}
+                className="absolute right-0 top-0 bottom-0 flex items-center w-full z-10"
               >
-                <Bookmark size={16} />
-              </button>
-              <button className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600">
-                <Bell size={16} />
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
-              </button>
-            </div>
-        </div>
-        <div className="bg-slate-50 rounded-xl flex items-center px-4 py-3 border border-slate-200">
-          <Search size={16} className="text-slate-400 mr-3" />
-          <input 
-            type="text" 
-            placeholder="搜索职位、单位名称..." 
-            className="bg-transparent text-slate-800 placeholder-slate-400 focus:outline-none w-full text-sm font-medium"
-          />
+                <div className="bg-slate-50 rounded-xl flex items-center px-4 py-2 border border-slate-200 w-full h-full shadow-inner">
+                  <Search size={16} className="text-slate-400 mr-3 shrink-0" />
+                  <input 
+                    ref={searchInputRef}
+                    type="text" 
+                    placeholder="搜索职位、单位名称..." 
+                    className="bg-transparent text-slate-800 placeholder-slate-400 focus:outline-none w-full text-sm font-medium h-full"
+                  />
+                  <button 
+                    onClick={() => setIsSearchExpanded(false)}
+                    className="ml-2 text-slate-400 hover:text-slate-600 transition-colors shrink-0 p-1 rounded-full hover:bg-slate-200/50"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {!isSearchExpanded && (
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="flex gap-2 absolute right-0"
+              >
+                <button 
+                  onClick={() => setIsSearchExpanded(true)}
+                  className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
+                >
+                  <Search size={16} />
+                </button>
+                <button className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors">
+                  <Bell size={16} />
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
