@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target, PenTool, Edit3, X } from 'lucide-react';
+import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target, PenTool, Edit3, X, FileText } from 'lucide-react';
 
 export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favorites' | 'targeted') => void; onTrack?: (title: string, status: any) => void }) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -114,7 +114,10 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
               <span className="text-[11px] font-bold bg-slate-50 border border-slate-100 text-slate-600 px-2 py-1 rounded-md">本科学历</span>
             </div>
             <div className="flex gap-3 mt-auto">
-              <button className="w-full bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-primary-700">
+              <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-slate-100 flex items-center justify-center gap-1">
+                <FileText size={14} /> 公告详情
+              </button>
+              <button className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-primary-700">
                 加入收藏
               </button>
             </div>
@@ -137,7 +140,10 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
               <span className="text-[11px] font-bold bg-slate-50 border border-slate-100 text-slate-600 px-2 py-1 rounded-md">计算机类</span>
             </div>
              <div className="flex gap-3 mt-auto">
-              <button className="w-full bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-primary-700">
+              <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-slate-100 flex items-center justify-center gap-1">
+                <FileText size={14} /> 公告详情
+              </button>
+              <button className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-primary-700">
                 加入收藏
               </button>
             </div>
@@ -180,15 +186,20 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">本科</span>
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">无限制</span>
           </div>
-          <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4 uppercase tracking-widest">
-            <span className="text-slate-400">发布: 04-27</span>
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col gap-3 border-t border-slate-100 pt-4">
+            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+              <span className="text-slate-400">发布: 04-27</span>
               <span className="text-primary-600 px-2 py-1 bg-primary-50 rounded-md border border-primary-100">报名未开始</span>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-[4] bg-slate-50 text-slate-600 hover:bg-slate-100 py-2 rounded-xl border border-slate-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]">
+                <FileText size={14} /> 公告详情
+              </button>
               <button 
                 onClick={() => onTrack?.('绵阳经济技术开发区三江小学 - 小学语文教师', '未报名')}
-                className="bg-slate-100 text-slate-500 hover:text-primary-600 hover:bg-primary-50 px-2 py-1 rounded-md border border-slate-200 hover:border-primary-200 transition-colors flex items-center gap-1"
+                className="flex-[5] bg-slate-50 text-slate-600 hover:text-primary-600 hover:bg-primary-50 py-2 rounded-xl border border-slate-200 hover:border-primary-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]"
               >
-                <Edit3 size={10} /> 更新状态
+                <Edit3 size={14} /> 更新状态
               </button>
             </div>
           </div>
@@ -209,17 +220,22 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">校招</span>
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">汉语言文学</span>
           </div>
-           <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4 uppercase tracking-widest">
-            <span className="text-slate-400">截止: 05-06</span>
-            <div className="flex items-center gap-2">
+           <div className="flex flex-col gap-3 border-t border-slate-100 pt-4">
+            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+              <span className="text-slate-400">截止: 05-06</span>
               <span className="text-amber-600 px-2 py-1 bg-amber-50 rounded-md border border-amber-100 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> 进行中
               </span>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-[4] bg-slate-50 text-slate-600 hover:bg-slate-100 py-2 rounded-xl border border-slate-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]">
+                <FileText size={14} /> 公告详情
+              </button>
               <button 
                 onClick={() => onTrack?.('吉安东管理中心 - 文秘宣传岗', '已报名')}
-                className="bg-slate-100 text-slate-500 hover:text-primary-600 hover:bg-primary-50 px-2 py-1 rounded-md border border-slate-200 hover:border-primary-200 transition-colors flex items-center gap-1"
+                className="flex-[5] bg-slate-50 text-slate-600 hover:text-primary-600 hover:bg-primary-50 py-2 rounded-xl border border-slate-200 hover:border-primary-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]"
               >
-                <Edit3 size={10} /> 更新状态
+                <Edit3 size={14} /> 更新状态
               </button>
             </div>
           </div>
@@ -241,17 +257,22 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md">事业编</span>
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md">预防医学</span>
           </div>
-           <div className="flex justify-between items-center text-[10px] font-bold border-t border-primary-100 pt-4 uppercase tracking-widest">
-            <span className="text-slate-500">截止: 05-15</span>
-            <div className="flex items-center gap-2">
+           <div className="flex flex-col gap-3 border-t border-primary-100 pt-4">
+            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+              <span className="text-slate-500">截止: 05-15</span>
               <span className="text-amber-600 px-2 py-1 bg-amber-50 rounded-md border border-amber-200 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> 报名中
               </span>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-[4] bg-white text-slate-600 hover:bg-slate-50 py-2 rounded-xl border border-slate-200 shadow-sm transition-colors flex justify-center items-center gap-1 font-bold text-[11px]">
+                <FileText size={14} /> 公告详情
+              </button>
               <button 
                 onClick={() => onTrack?.('南昌市青云谱区卫健委 - 公共卫生干事', '未报名')}
-                className="bg-white text-primary-600 hover:bg-primary-50 px-2 py-1 rounded-md border border-primary-200 shadow-sm transition-colors flex items-center gap-1"
+                className="flex-[5] bg-white text-primary-600 hover:bg-primary-50 py-2 rounded-xl border border-primary-200 shadow-sm transition-colors flex justify-center items-center gap-1 font-bold text-[11px]"
               >
-                <Edit3 size={10} /> 更新状态
+                <Edit3 size={14} /> 更新状态
               </button>
             </div>
           </div>

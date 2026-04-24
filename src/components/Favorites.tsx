@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ChevronLeft, Bookmark, Clock, MapPin, Target, Edit3 } from 'lucide-react';
+import { ChevronLeft, Bookmark, Clock, MapPin, Target, Edit3, FileText } from 'lucide-react';
 
 interface FavoritesProps {
   onBack: () => void;
@@ -45,17 +45,22 @@ export default function Favorites({ onBack, onTrack }: FavoritesProps) {
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md">本科</span>
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md">1:12竞考</span>
           </div>
-          <div className="flex justify-between items-center text-[10px] font-bold border-t border-primary-100 pt-4 uppercase tracking-widest">
-            <div className="flex items-center gap-2">
-              <span className="text-emerald-600 px-2 py-1 bg-emerald-50 rounded-md border border-emerald-100">进行中</span>
+          <div className="flex flex-col gap-3 border-t border-primary-100 pt-4">
+            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
               <span className="text-slate-400 flex items-center gap-1"><Clock size={10}/> 截止: 05-12</span>
+              <span className="text-emerald-600 px-2 py-1 bg-emerald-50 rounded-md border border-emerald-100">进行中</span>
             </div>
-            <button 
-              onClick={() => onTrack?.('成都市武侯区教育局 - 数学教师 (事业编)', '未报名')}
-              className="bg-white text-primary-600 px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1 border border-primary-200 hover:bg-primary-50 transition-colors shadow-sm"
-            >
-              <Edit3 size={12} /> 状态
-            </button>
+            <div className="flex gap-2">
+              <button className="flex-[4] bg-white text-slate-600 hover:bg-slate-50 py-2 rounded-xl border border-slate-200 shadow-sm transition-colors flex justify-center items-center gap-1 font-bold text-[11px]">
+                <FileText size={14} /> 公告详情
+              </button>
+              <button 
+                onClick={() => onTrack?.('成都市武侯区教育局 - 数学教师 (事业编)', '未报名')}
+                className="flex-[5] bg-white text-primary-600 hover:bg-primary-50 py-2 rounded-xl border border-primary-200 shadow-sm transition-colors flex justify-center items-center gap-1 font-bold text-[11px]"
+              >
+                <Edit3 size={14} /> 更新状态
+              </button>
+            </div>
           </div>
         </div>
 
@@ -74,18 +79,23 @@ export default function Favorites({ onBack, onTrack }: FavoritesProps) {
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md flex items-center gap-1"><MapPin size={10}/> 杭州</span>
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">硕士</span>
           </div>
-          <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4 uppercase tracking-widest">
-            <div className="flex items-center gap-2">
-              <span className="text-slate-500 px-2 py-1 bg-slate-100 rounded-md border border-slate-200">已结束</span>
+          <div className="flex flex-col gap-3 border-t border-slate-100 pt-4">
+            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
               <span className="text-slate-400 flex items-center gap-1"><Clock size={10}/> 截止: 04-10</span>
+              <span className="text-slate-500 px-2 py-1 bg-slate-100 rounded-md border border-slate-200">已结束</span>
             </div>
-            <button 
-              onClick={() => onTrack?.('杭州市余杭区政府 - 综合管理储备干部', '未报名')}
-              className="bg-slate-100 text-slate-500 px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1 border border-slate-200 hover:bg-slate-200 transition-colors cursor-not-allowed"
-              disabled
-            >
-              <Edit3 size={12} /> 状态
-            </button>
+            <div className="flex gap-2">
+              <button className="flex-[4] bg-slate-50 text-slate-600 hover:bg-slate-100 py-2 rounded-xl border border-slate-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]">
+                <FileText size={14} /> 公告详情
+              </button>
+              <button 
+                onClick={() => onTrack?.('杭州市余杭区政府 - 综合管理储备干部', '未报名')}
+                className="flex-[5] bg-slate-100 text-slate-500 py-2 rounded-xl border border-slate-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px] cursor-not-allowed"
+                disabled
+              >
+                <Edit3 size={14} /> 更新状态
+              </button>
+            </div>
           </div>
         </div>
       </div>
