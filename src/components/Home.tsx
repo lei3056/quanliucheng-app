@@ -136,8 +136,8 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites' | 
               <h3 className="font-bold text-slate-900 text-sm mb-1">绵阳经济技术开发区三江小学</h3>
               <p className="text-[11px] font-bold text-primary-600 mb-3">小学语文教师</p>
             </div>
-            <button className="text-slate-300 hover:text-rose-500 transition-colors bg-slate-50 p-2 rounded-lg border border-slate-100">
-              <ThumbsUp size={14} />
+            <button className="text-slate-300 hover:text-primary-500 transition-colors bg-slate-50 p-2 rounded-lg border border-slate-100">
+              <Bookmark size={14} />
             </button>
           </div>
           <div className="flex gap-2 mb-4">
@@ -157,8 +157,8 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites' | 
               <h3 className="font-bold text-slate-900 text-sm mb-1">吉安东管理中心</h3>
               <p className="text-[11px] font-bold text-primary-600 mb-3">文秘宣传岗</p>
             </div>
-            <button className="text-rose-500 bg-rose-50 p-2 rounded-lg border border-rose-100">
-              <ThumbsUp size={14} className="fill-current" />
+            <button className="text-primary-500 bg-primary-50 p-2 rounded-lg border border-primary-100">
+              <Bookmark size={14} className="fill-current" />
             </button>
           </div>
           <div className="flex gap-2 mb-4">
@@ -169,6 +169,37 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites' | 
             <span className="text-slate-400">截止: 05-06</span>
             <span className="text-amber-600 px-2 py-1 bg-amber-50 rounded-md border border-amber-100 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> 进行中
+            </span>
+          </div>
+        </div>
+
+        {/* Feed Item 3 (Bookmarked & Targeted) */}
+        <div className="bg-primary-50/30 p-5 rounded-2xl shadow-sm border border-primary-200 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-primary-500"></div>
+          <div className="flex justify-between items-start">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-bold text-slate-900 text-sm">南昌市青云谱区卫健委</h3>
+                <span className="bg-primary-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm flex items-center gap-0.5">
+                  <Target size={10} /> 重点关注
+                </span>
+              </div>
+              <p className="text-[11px] font-bold text-primary-600 mb-3">公共卫生干事</p>
+            </div>
+            <div className="flex gap-1.5">
+              <button className="text-primary-500 bg-primary-50 p-2 rounded-lg border border-primary-100 shadow-sm cursor-default">
+                <Bookmark size={14} className="fill-current" />
+              </button>
+            </div>
+          </div>
+          <div className="flex gap-2 mb-4">
+             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md">事业编</span>
+             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md">预防医学</span>
+          </div>
+           <div className="flex justify-between items-center text-[10px] font-bold border-t border-primary-100 pt-4 uppercase tracking-widest">
+            <span className="text-slate-500">截止: 05-15</span>
+            <span className="text-amber-600 px-2 py-1 bg-amber-50 rounded-md border border-amber-200 flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> 报名中
             </span>
           </div>
         </div>

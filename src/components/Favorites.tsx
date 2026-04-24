@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ChevronLeft, Bookmark, Clock, MapPin } from 'lucide-react';
+import { ChevronLeft, Bookmark, Clock, MapPin, Target } from 'lucide-react';
 
 interface FavoritesProps {
   onBack: () => void;
@@ -45,8 +45,13 @@ export default function Favorites({ onBack }: FavoritesProps) {
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">1:12竞考</span>
           </div>
           <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4 uppercase tracking-widest">
-            <span className="text-slate-400 flex items-center gap-1"><Clock size={10}/> 截止: 05-12</span>
-            <span className="text-emerald-600 px-2 py-1 bg-emerald-50 rounded-md border border-emerald-100">进行中</span>
+            <div className="flex items-center gap-2">
+              <span className="text-emerald-600 px-2 py-1 bg-emerald-50 rounded-md border border-emerald-100">进行中</span>
+              <span className="text-slate-400 flex items-center gap-1"><Clock size={10}/> 截止: 05-12</span>
+            </div>
+            <button className="bg-primary-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1 hover:bg-primary-700 transition-colors">
+              <Target size={12} /> 设为重点
+            </button>
           </div>
         </div>
 
@@ -67,8 +72,13 @@ export default function Favorites({ onBack }: FavoritesProps) {
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">硕士</span>
           </div>
           <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4 uppercase tracking-widest">
-            <span className="text-slate-400 flex items-center gap-1"><Clock size={10}/> 截止: 04-10</span>
-            <span className="text-slate-500 px-2 py-1 bg-slate-100 rounded-md border border-slate-200">已结束</span>
+            <div className="flex items-center gap-2">
+              <span className="text-slate-500 px-2 py-1 bg-slate-100 rounded-md border border-slate-200">已结束</span>
+              <span className="text-slate-400 flex items-center gap-1"><Clock size={10}/> 截止: 04-10</span>
+            </div>
+            <button className="bg-slate-100 text-slate-400 px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1 cursor-not-allowed">
+              <Target size={12} /> 无法操作
+            </button>
           </div>
         </div>
       </div>

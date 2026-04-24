@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ChevronLeft, Target, Clock, Building2, ChevronRight } from 'lucide-react';
+import { ChevronLeft, Target, Clock, Building2, ChevronRight, Bookmark } from 'lucide-react';
 
 interface TargetedProps {
   onBack: () => void;
@@ -38,8 +38,8 @@ export default function Targeted({ onBack }: TargetedProps) {
               </div>
               <p className="text-[11px] font-bold text-primary-600 mb-3">研发工程岗</p>
             </div>
-            <button className="text-primary-600 bg-primary-50 w-8 h-8 flex items-center justify-center rounded-lg border border-primary-100">
-              <Target size={14} className="fill-current" />
+            <button className="text-primary-500 bg-primary-50 p-2 rounded-lg border border-primary-100 shadow-sm">
+              <Bookmark size={14} className="fill-current" />
             </button>
           </div>
           <p className="text-[11px] text-slate-500 mb-4 flex items-center gap-1">
@@ -67,8 +67,8 @@ export default function Targeted({ onBack }: TargetedProps) {
               </div>
               <p className="text-[11px] font-bold text-emerald-600 mb-3">业务股工作人员</p>
             </div>
-            <button className="text-emerald-600 bg-emerald-50 w-8 h-8 flex items-center justify-center rounded-lg border border-emerald-100">
-              <Target size={14} className="fill-current" />
+            <button className="text-emerald-500 bg-emerald-50 p-2 rounded-lg border border-emerald-100 shadow-sm cursor-default">
+              <Bookmark size={14} className="fill-current" />
             </button>
           </div>
           <p className="text-[11px] text-slate-500 mb-4 flex items-center gap-1">
