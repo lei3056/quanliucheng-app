@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
-import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag } from 'lucide-react';
+import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark } from 'lucide-react';
 
-export default function Home() {
+export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') => void }) {
   return (
     <motion.div 
       initial={{ opacity: 0, x: -20 }}
@@ -19,10 +19,18 @@ export default function Home() {
                 <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Discovery Engine</p>
               </div>
             </div>
-            <button className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600">
-              <Bell size={16} />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
-            </button>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => onNavigate?.('favorites')}
+                className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
+              >
+                <Bookmark size={16} />
+              </button>
+              <button className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600">
+                <Bell size={16} />
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
+              </button>
+            </div>
         </div>
         <div className="bg-slate-50 rounded-xl flex items-center px-4 py-3 border border-slate-200">
           <Search size={16} className="text-slate-400 mr-3" />

@@ -413,9 +413,6 @@ export default function Profile() {
                      <h1 className="text-xl font-black tracking-tight uppercase">用户档案 / Profile</h1>
                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">李雷 · 2026届应届生</p>
                   </div>
-                   <div className="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center border border-slate-700 truncate">
-                     <UserCircle size={24} className="text-primary-400" />
-                   </div>
                 </div>
                 
                 {/* Global Progress Bar */}

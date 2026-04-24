@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Compass, Calendar as CalendarIcon, User, Crown } from 'lucide-react';
+import { AnimatePresence } from 'motion/react';
 import Home from './components/Home';
 import Schedule from './components/Schedule';
 import Profile from './components/Profile';
+import Favorites from './components/Favorites';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'schedule' | 'profile'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'schedule' | 'profile' | 'favorites'>('home');
 
   const navItems = [
     { id: 'home', icon: Compass, label: '发现' },
@@ -19,9 +21,12 @@ export default function App() {
         
         {/* Main Content Area */}
         <div className="flex-1 overflow-hidden relative">
-          {activeTab === 'home' && <Home />}
+          {activeTab === 'home' && <Home onNavigate={setActiveTab} />}
           {activeTab === 'schedule' && <Schedule />}
           {activeTab === 'profile' && <Profile />}
+          <AnimatePresence>
+            {activeTab === 'favorites' && <Favorites onBack={() => setActiveTab('home')} />}
+          </AnimatePresence>
         </div>
 
         {/* Bottom Navigation */}
