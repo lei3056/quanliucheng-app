@@ -1,11 +1,12 @@
 import { motion } from 'motion/react';
-import { ChevronLeft, Target, Clock, Building2, ChevronRight, Bookmark } from 'lucide-react';
+import { ChevronLeft, Target, Clock, Building2, ChevronRight, Bookmark, Edit3 } from 'lucide-react';
 
 interface TargetedProps {
   onBack: () => void;
+  onTrack?: (title: string, status: any) => void;
 }
 
-export default function Targeted({ onBack }: TargetedProps) {
+export default function Targeted({ onBack, onTrack }: TargetedProps) {
   return (
     <motion.div 
       initial={{ x: '100%' }}
@@ -28,7 +29,7 @@ export default function Targeted({ onBack }: TargetedProps) {
       {/* List */}
       <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4 pb-32">
         {/* Item 1 */}
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden">
+        <div className="bg-primary-50/30 p-5 rounded-2xl shadow-sm border border-primary-200 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-primary-500"></div>
           <div className="flex justify-between items-start">
              <div>
@@ -50,14 +51,17 @@ export default function Targeted({ onBack }: TargetedProps) {
                 <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">下一步</span>
                 <span className="text-[11px] font-bold text-slate-700 flex items-center gap-1"><Clock size={12} className="text-amber-500"/> 即将开始报名</span>
              </div>
-             <button className="bg-white border border-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-slate-50 transition-colors flex items-center gap-1">
-                跟进状态 <ChevronRight size={12}/>
+             <button 
+               onClick={() => onTrack?.('江西省交投数据科技 - 研发工程岗', '已报名')}
+               className="bg-white border border-slate-200 text-primary-600 px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-slate-50 transition-colors flex items-center gap-1 shadow-sm"
+             >
+                <Edit3 size={12}/> 报名状态 
              </button>
           </div>
         </div>
 
         {/* Item 2 */}
-         <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden">
+         <div className="bg-emerald-50/30 p-5 rounded-2xl shadow-sm border border-emerald-200 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
           <div className="flex justify-between items-start">
              <div>
@@ -79,8 +83,11 @@ export default function Targeted({ onBack }: TargetedProps) {
                 <span className="text-[10px] text-slate-400 font-bold tracking-wider">下一步</span>
                 <span className="text-[11px] font-bold text-slate-700 flex items-center gap-1"><Clock size={12} className="text-primary-500"/> 04/20 09:00 准考证打印</span>
              </div>
-             <button className="bg-white border border-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-slate-50 transition-colors flex items-center gap-1">
-                跟进状态 <ChevronRight size={12}/>
+             <button 
+               onClick={() => onTrack?.('软州市林业局 - 业务股工作人员', '未报名')}
+               className="bg-white border border-slate-200 text-primary-600 px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-slate-50 transition-colors flex items-center gap-1 shadow-sm"
+             >
+                <Edit3 size={12}/> 报名状态 
              </button>
           </div>
         </div>
