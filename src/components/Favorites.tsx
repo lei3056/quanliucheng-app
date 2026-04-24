@@ -21,7 +21,7 @@ export default function Favorites({ onBack }: FavoritesProps) {
         </button>
         <div>
           <h1 className="text-base font-bold text-slate-900">我的收藏夹</h1>
-          <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Saved Opportunities</p>
+          <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold"></p>
         </div>
       </div>
 

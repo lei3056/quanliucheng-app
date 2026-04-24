@@ -45,8 +45,8 @@ export default function Schedule() {
         
         {/* Urgent Section */}
         <div className="mb-10">
-          <h2 className="text-sm font-black text-slate-400 mb-6 flex items-center gap-2 uppercase tracking-tighter">
-            <div className="w-1 h-4 bg-amber-400"></div> 待办事项 / Pending
+          <h2 className="text-sm font-black text-slate-400 mb-6 flex items-center gap-2 tracking-tighter">
+            <div className="w-1 h-4 bg-amber-400"></div> 待办事项
           </h2>
           
           <div className="relative pl-6 border-l-2 border-slate-200 space-y-6">
@@ -86,8 +86,8 @@ export default function Schedule() {
 
         {/* Completed Section */}
         <div>
-           <h2 className="text-sm font-black text-slate-400 mb-6 flex items-center gap-2 uppercase tracking-tighter">
-            <div className="w-1 h-4 bg-emerald-500"></div> 已完成节点 / Completed
+           <h2 className="text-sm font-black text-slate-400 mb-6 flex items-center gap-2 tracking-tighter">
+            <div className="w-1 h-4 bg-emerald-500"></div> 已完成节点
           </h2>
 
           <div className="relative pl-6 border-l-2 border-slate-200 border-dashed space-y-6">

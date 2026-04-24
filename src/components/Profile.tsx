@@ -50,8 +50,8 @@ export default function Profile() {
     <div className="flex flex-col gap-6 p-6 pb-32">
       {/* Radar Chart Card */}
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <h2 className="text-sm font-black text-slate-400 mb-2 flex items-center gap-2 uppercase tracking-tighter">
-          <div className="w-1 h-4 bg-primary-500"></div> 能力图谱 / Radar
+        <h2 className="text-sm font-black text-slate-400 mb-2 flex items-center gap-2 tracking-tighter">
+          <div className="w-1 h-4 bg-primary-500"></div> 能力图谱
         </h2>
         <div className="h-[200px] w-full -ml-2 mb-4">
           <ResponsiveContainer width="100%" height="100%">
@@ -79,8 +79,8 @@ export default function Profile() {
 
       {/* Resume Management List (Level 1) */}
       <div className="space-y-3">
-        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 uppercase tracking-tighter">
-          <div className="w-1 h-4 bg-emerald-500"></div> 个人档案管理 / Portfolio
+        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
+          <div className="w-1 h-4 bg-emerald-500"></div> 个人档案管理
         </h2>
         
         {sections.map((section) => (
@@ -142,7 +142,7 @@ export default function Profile() {
             </div>
             <div>
               <h2 className="text-xl font-black text-slate-900 tracking-tight">{section?.title}</h2>
-              <p className="text-[10px] text-primary-600 font-black uppercase tracking-widest">Update Information</p>
+              <p className="text-[10px] text-primary-600 font-black tracking-widest"></p>
             </div>
           </div>
         </div>
@@ -161,11 +161,11 @@ export default function Profile() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">姓名 / Name</label>
+                  <label className="text-[10px] font-black text-slate-400 tracking-widest ml-1">姓名</label>
                   <input type="text" defaultValue="李雷" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 focus:bg-white outline-none transition-colors" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">性别 / Gender</label>
+                  <label className="text-[10px] font-black text-slate-400 tracking-widest ml-1">性别</label>
                   <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 focus:bg-white outline-none transition-colors appearance-none">
                     <option>男</option>
                     <option>女</option>
@@ -173,16 +173,16 @@ export default function Profile() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">证件号码 / ID Number <span className="text-rose-500">*</span></label>
+                <label className="text-[10px] font-black text-slate-400 tracking-widest ml-1">证件号码 <span className="text-rose-500">*</span></label>
                 <input type="text" defaultValue="510**********3412" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 focus:bg-white outline-none transition-colors" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">民族 / Ethnicity</label>
+                  <label className="text-[10px] font-black text-slate-400 tracking-widest ml-1">民族</label>
                   <input type="text" defaultValue="汉族" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 outline-none transition-colors" />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">政治面貌 / Politics</label>
+                  <label className="text-[10px] font-black text-slate-400 tracking-widest ml-1">政治面貌</label>
                   <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-primary-500 outline-none transition-colors appearance-none">
                     <option>中共党员</option>
                     <option>共青团员</option>
@@ -298,11 +298,11 @@ export default function Profile() {
                   </div>
                   <p className="text-xs text-primary-600 font-medium leading-relaxed">系统已为您提取：汉语言文学专业优势、3次校内奖学金背景。是否应用到自我评价中生成初稿？</p>
                   <button className="mt-3 text-[10px] font-black text-primary-700 bg-white border border-primary-200 px-3 py-1.5 rounded-lg uppercase tracking-widest hover:bg-primary-600 hover:text-white transition-colors">
-                    应用 AI 撰写 Apply Form
+                    应用 AI 撰写
                   </button>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">个人奖惩与综合评价 / Evaluation & Awards</label>
+                  <label className="text-[10px] font-black text-slate-400 tracking-widest ml-1">个人奖惩与综合评价</label>
                   <textarea 
                     rows={8}
                     placeholder="请输入您的自我评价及校内国际奖项、表彰记录。建议包含：专业能力、性格特质、核心荣誉..."
@@ -381,7 +381,7 @@ export default function Profile() {
             onClick={() => setViewMode('overview')}
             className="w-full bg-slate-900 text-white rounded-2xl py-4 font-black uppercase tracking-widest shadow-xl shadow-slate-200 transition-transform active:scale-95"
           >
-            确认并保存信息 / Save
+            确认并保存信息
           </button>
         </div>
       </div>
@@ -410,7 +410,7 @@ export default function Profile() {
               <div className="bg-slate-900 border-b border-slate-800 px-6 pt-10 pb-8 text-white relative shrink-0">
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex flex-col gap-1">
-                     <h1 className="text-xl font-black tracking-tight uppercase">用户档案 / Profile</h1>
+                     <h1 className="text-xl font-black tracking-tight">用户档案</h1>
                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">李雷 · 2026届应届生</p>
                   </div>
                 </div>
@@ -418,7 +418,7 @@ export default function Profile() {
                 {/* Global Progress Bar */}
                 <div className="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-sm">
                   <div className="flex justify-between items-center text-[10px] uppercase font-bold text-slate-300 tracking-widest mb-3">
-                     <span>Resume Completion</span>
+                     <span>档案完成度</span>
                      <span className="text-primary-400">80%</span>
                   </div>
                   <div className="w-full bg-slate-900 rounded-full h-1.5 flex overflow-hidden">

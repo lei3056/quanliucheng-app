@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
-import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark } from 'lucide-react';
+import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target } from 'lucide-react';
 
-export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') => void }) {
+export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites' | 'targeted') => void }) {
   return (
     <motion.div 
       initial={{ opacity: 0, x: -20 }}
@@ -16,10 +16,16 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') =
               <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">P</div>
               <div>
                 <h1 className="text-base font-bold text-slate-900">发现机会</h1>
-                <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Discovery Engine</p>
+                <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold"></p>
               </div>
             </div>
             <div className="flex gap-2">
+              <button 
+                onClick={() => onNavigate?.('targeted')}
+                className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
+              >
+                <Target size={16} />
+              </button>
               <button 
                 onClick={() => onNavigate?.('favorites')}
                 className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
@@ -44,8 +50,8 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') =
 
       {/* Daily Picks - Horizontal Scroll */}
       <div className="px-6 space-y-4">
-        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 uppercase tracking-tighter">
-          <div className="w-1 h-4 bg-primary-500"></div> 今日 AI 精选 / Top Picks
+        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
+          <div className="w-1 h-4 bg-primary-500"></div> 今日 AI 精选
         </h2>
         
         <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-6 px-6 scrollbar-hide">
@@ -66,11 +72,11 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') =
               <span className="text-[11px] font-bold bg-slate-50 border border-slate-100 text-slate-600 px-2 py-1 rounded-md">本科学历</span>
             </div>
             <div className="flex gap-3 mt-auto">
-              <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-slate-100">
-                忽略 Ignore
+              <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-slate-100">
+                忽略
               </button>
-              <button className="flex-[2] bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-primary-700">
-                重点关注 Target
+              <button className="flex-[2] bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-primary-700">
+                重点关注
               </button>
             </div>
           </div>
@@ -92,11 +98,11 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') =
               <span className="text-[11px] font-bold bg-slate-50 border border-slate-100 text-slate-600 px-2 py-1 rounded-md">计算机类</span>
             </div>
              <div className="flex gap-3 mt-auto">
-              <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-slate-100">
-                忽略 Ignore
+              <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-slate-100">
+                忽略
               </button>
-              <button className="flex-[2] bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-wider transition-colors hover:bg-primary-700">
-                重点关注 Target
+              <button className="flex-[2] bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-primary-700">
+                重点关注
               </button>
             </div>
           </div>
@@ -119,8 +125,8 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') =
 
       {/* Feed */}
       <div className="px-6 flex flex-col gap-4">
-        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 uppercase tracking-tighter mt-2">
-          <div className="w-1 h-4 bg-emerald-500"></div> 最新招考 / Feed
+        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter mt-2">
+          <div className="w-1 h-4 bg-emerald-500"></div> 最新招考
         </h2>
         
         {/* Feed Item 1 */}
@@ -139,7 +145,7 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') =
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">无限制</span>
           </div>
           <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4 uppercase tracking-widest">
-            <span className="text-slate-400">PUB: 04-27</span>
+            <span className="text-slate-400">发布: 04-27</span>
             <span className="text-primary-600 px-2 py-1 bg-primary-50 rounded-md border border-primary-100">报名未开始</span>
           </div>
         </div>
@@ -160,7 +166,7 @@ export default function Home({ onNavigate }: { onNavigate?: (tab: 'favorites') =
              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">汉语言文学</span>
           </div>
            <div className="flex justify-between items-center text-[10px] font-bold border-t border-slate-100 pt-4 uppercase tracking-widest">
-            <span className="text-slate-400">DUE: 05-06</span>
+            <span className="text-slate-400">截止: 05-06</span>
             <span className="text-amber-600 px-2 py-1 bg-amber-50 rounded-md border border-amber-100 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> 进行中
             </span>

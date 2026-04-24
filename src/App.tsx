@@ -5,9 +5,10 @@ import Home from './components/Home';
 import Schedule from './components/Schedule';
 import Profile from './components/Profile';
 import Favorites from './components/Favorites';
+import Targeted from './components/Targeted';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'schedule' | 'profile' | 'favorites'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'schedule' | 'profile' | 'favorites' | 'targeted'>('home');
 
   const navItems = [
     { id: 'home', icon: Compass, label: '发现' },
@@ -26,6 +27,7 @@ export default function App() {
           {activeTab === 'profile' && <Profile />}
           <AnimatePresence>
             {activeTab === 'favorites' && <Favorites onBack={() => setActiveTab('home')} />}
+            {activeTab === 'targeted' && <Targeted onBack={() => setActiveTab('home')} />}
           </AnimatePresence>
         </div>
 
