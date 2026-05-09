@@ -56,17 +56,17 @@ export default function Profile({ onNavigate }: ProfileProps) {
       <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
-            <div className="w-1 h-4 bg-indigo-500"></div> 我的简历
+            <div className="w-1 h-4 bg-primary-500"></div> 我的简历
           </h2>
           <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-bold">更新于 2 天前</span>
         </div>
         
         <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
-          <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center shrink-0">
             <FileText size={24} />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-slate-900 truncate">张三-前端开发工程师-简历.pdf</h3>
+            <h3 className="text-sm font-bold text-slate-900 truncate">李雷-前端开发工程师-简历.pdf</h3>
             <p className="text-[11px] text-slate-500 mt-0.5">服务端实时生成 · 1.2 MB</p>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function Profile({ onNavigate }: ProfileProps) {
           </button>
           <button 
              onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
-             className="flex-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border border-indigo-100 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+             className="flex-1 bg-primary-50 hover:bg-primary-100 text-primary-600 border border-primary-100 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
           >
              <Download size={14} /> 保存到本地
           </button>
@@ -101,9 +101,9 @@ export default function Profile({ onNavigate }: ProfileProps) {
               <Radar
                  name="我的竞争力"
                  dataKey="A"
-                 stroke="#4f46e5"
+                 stroke="#0d9488"
                  strokeWidth={2}
-                 fill="#6366f1"
+                 fill="#14b8a6"
                  fillOpacity={0.25}
               />
             </RadarChart>
