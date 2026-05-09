@@ -1,17 +1,19 @@
 import { useState } from 'react';
-import { Compass, Calendar as CalendarIcon, User, Crown } from 'lucide-react';
+import { Compass, Calendar as CalendarIcon, User, Crown, BookOpen } from 'lucide-react';
 import { AnimatePresence } from 'motion/react';
 import Home from './components/Home';
 import Schedule from './components/Schedule';
 import Profile from './components/Profile';
 import Favorites from './components/Favorites';
 import Targeted from './components/Targeted';
+import Study from './components/Study';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'schedule' | 'profile' | 'favorites' | 'targeted'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'study' | 'schedule' | 'profile' | 'favorites' | 'targeted'>('home');
 
   const navItems = [
     { id: 'home', icon: Compass, label: '发现' },
+    { id: 'study', icon: BookOpen, label: '学习' },
     { id: 'schedule', icon: CalendarIcon, label: '日程' },
     { id: 'profile', icon: User, label: '档案' },
   ] as const;
@@ -23,6 +25,7 @@ export default function App() {
         {/* Main Content Area */}
         <div className="flex-1 overflow-hidden relative">
           {activeTab === 'home' && <Home onNavigate={setActiveTab} />}
+          {activeTab === 'study' && <Study />}
           {activeTab === 'schedule' && <Schedule />}
           {activeTab === 'profile' && <Profile onNavigate={setActiveTab} />}
           <AnimatePresence>

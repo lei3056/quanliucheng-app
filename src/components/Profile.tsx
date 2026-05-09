@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, UserCircle, Briefcase, ChevronLeft, Plus, CheckCircle2, AlertCircle, FileText, GraduationCap, Users, Trash2, Award, Target, Bookmark, Bell } from 'lucide-react';
+import { Sparkles, UserCircle, Briefcase, ChevronLeft, Plus, CheckCircle2, AlertCircle, FileText, GraduationCap, Users, Trash2, Award, Target, Bookmark, Bell, Download, Eye } from 'lucide-react';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 type ViewMode = 'overview' | 'editor';
@@ -52,35 +52,39 @@ export default function Profile({ onNavigate }: ProfileProps) {
 
   const Overview = () => (
     <div className="flex flex-col gap-6 p-6 pb-32">
-      {/* Quick Access */}
-      <div className="grid grid-cols-3 gap-3">
-        <button 
-           onClick={() => onNavigate?.('targeted')}
-           className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-2 hover:border-primary-300 transition-colors"
-        >
-          <div className="w-10 h-10 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center">
-            <Target size={20} />
+      {/* Resume Card */}
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
+            <div className="w-1 h-4 bg-indigo-500"></div> 我的简历
+          </h2>
+          <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-bold">更新于 2 天前</span>
+        </div>
+        
+        <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
+          <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center shrink-0">
+            <FileText size={24} />
           </div>
-          <span className="text-[11px] font-bold text-slate-700">重点关注</span>
-        </button>
-        <button 
-           onClick={() => onNavigate?.('favorites')}
-           className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-2 hover:border-primary-300 transition-colors"
-        >
-          <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <Bookmark size={20} />
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold text-slate-900 truncate">张三-前端开发工程师-简历.pdf</h3>
+            <p className="text-[11px] text-slate-500 mt-0.5">服务端实时生成 · 1.2 MB</p>
           </div>
-          <span className="text-[11px] font-bold text-slate-700">我的收藏</span>
-        </button>
-        <button 
-           className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-2 hover:border-primary-300 transition-colors"
-        >
-          <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center relative">
-            <Bell size={20} />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border border-white"></span>
-          </div>
-          <span className="text-[11px] font-bold text-slate-700">消息通知</span>
-        </button>
+        </div>
+
+        <div className="flex gap-3">
+          <button 
+            onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
+            className="flex-1 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <Eye size={14} /> 在线预览
+          </button>
+          <button 
+             onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
+             className="flex-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 border border-indigo-100 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+          >
+             <Download size={14} /> 保存到本地
+          </button>
+        </div>
       </div>
 
       {/* Radar Chart Card */}

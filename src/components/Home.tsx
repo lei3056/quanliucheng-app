@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target, PenTool, Edit3, X, FileText } from 'lucide-react';
+import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target, PenTool, Edit3, X, FileText, CheckSquare, AlarmClock, CheckCircle2, Star, ChevronRight } from 'lucide-react';
 
 export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favorites' | 'targeted') => void; onTrack?: (title: string, status: any) => void }) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -80,6 +80,12 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
                 >
                   <Search size={16} />
                 </button>
+                <button 
+                  onClick={() => onNavigate?.('favorites')}
+                  className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
+                >
+                  <Bookmark size={16} />
+                </button>
                 <button className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors">
                   <Bell size={16} />
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
@@ -87,6 +93,152 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Job Overview */}
+      <div className="px-6 space-y-4">
+        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
+          <div className="w-1 h-4 bg-teal-500"></div> 岗位概览
+        </h2>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-center">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
+                <CheckSquare size={16} />
+              </div>
+              <div>
+                <div className="text-xl font-black text-blue-600 mb-0.5">17978</div>
+                <div className="text-[10px] font-bold text-slate-500">本周推荐岗位</div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-center">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+                <AlarmClock size={16} />
+              </div>
+              <div>
+                <div className="text-xl font-black text-rose-600 mb-0.5">14144</div>
+                <div className="text-[10px] font-bold text-slate-500">三日内报名截止</div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-center">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0">
+                <CheckCircle2 size={16} />
+              </div>
+              <div>
+                <div className="text-xl font-black text-emerald-600 mb-0.5">0</div>
+                <div className="text-[10px] font-bold text-slate-500">已投递简历数量</div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-center">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+                <Star size={16} />
+              </div>
+              <div>
+                <div className="text-xl font-black text-amber-600 mb-0.5">0</div>
+                <div className="text-[10px] font-bold text-slate-500">关注岗位数量</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 7-day Reminders */}
+      <div className="px-6 space-y-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
+            <div className="w-1 h-4 bg-teal-500"></div> 七日内重点提醒
+          </h2>
+          <button className="text-[11px] font-bold text-slate-500 hover:text-slate-700 transition-colors">
+            查看全部 (100) &rarr;
+          </button>
+        </div>
+        
+        <div className="flex flex-col gap-3">
+           <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3">
+             <div className="flex items-start gap-2">
+               <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
+               <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- 弥勒市元亨社会工作服务中心</h3>
+             </div>
+             <div className="flex items-center gap-2 pl-6">
+               <span className="text-[10px] font-bold text-teal-600 px-2 py-0.5 bg-teal-50 rounded border border-teal-100">事业单位</span>
+               <span className="text-[10px] font-bold text-rose-600">截止 04/23</span>
+             </div>
+           </div>
+           
+           <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3">
+             <div className="flex items-start gap-2">
+               <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
+               <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- 反兴奋剂中心</h3>
+             </div>
+             <div className="flex items-center gap-2 pl-6">
+               <span className="text-[10px] font-bold text-teal-600 px-2 py-0.5 bg-teal-50 rounded border border-teal-100">事业单位</span>
+               <span className="text-[10px] font-bold text-rose-600">截止 04/23</span>
+             </div>
+           </div>
+
+           <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3">
+             <div className="flex items-start gap-2">
+               <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
+               <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- 深圳市公安局</h3>
+             </div>
+             <div className="flex items-center gap-2 pl-6">
+               <span className="text-[10px] font-bold text-teal-600 px-2 py-0.5 bg-teal-50 rounded border border-teal-100">事业单位</span>
+               <span className="text-[10px] font-bold text-rose-600">截止 04/23</span>
+             </div>
+           </div>
+
+           <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3">
+             <div className="flex items-start gap-2">
+               <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
+               <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- 柳北区民政局</h3>
+             </div>
+             <div className="flex items-center gap-2 pl-6">
+               <span className="text-[10px] font-bold text-amber-600 px-2 py-0.5 bg-amber-50 rounded border border-amber-100">公益性岗位</span>
+               <span className="text-[10px] font-bold text-rose-600">截止 04/23</span>
+             </div>
+           </div>
+        </div>
+      </div>
+
+      {/* New Jobs Today */}
+      <div className="px-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
+            <div className="w-1 h-4 bg-teal-500"></div> 今日新增岗位
+          </h2>
+          <span className="text-[11px] font-bold text-slate-400">共 1187 个岗位</span>
+        </div>
+        
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { title: '人才引进', count: 372, icon: '人', color: 'bg-purple-100 text-purple-600' },
+            { title: '事业单位', count: 325, icon: '事', color: 'bg-teal-100 text-teal-600' },
+            { title: '国企招聘', count: 188, icon: '国', color: 'bg-blue-100 text-blue-600' },
+            { title: '医疗卫生招聘', count: 151, icon: '医', color: 'bg-indigo-100 text-indigo-600' },
+            { title: '教师招聘', count: 110, icon: '教', color: 'bg-violet-100 text-violet-600' },
+            { title: '社区工作者', count: 29, icon: '社', color: 'bg-orange-100 text-orange-600' },
+            { title: '警法考试', count: 9, icon: '警', color: 'bg-emerald-100 text-emerald-600' },
+            { title: '公益性岗位', count: 2, icon: '公', color: 'bg-amber-100 text-amber-600' },
+            { title: '银行', count: 1, icon: '银', color: 'bg-blue-100 text-blue-600' }
+          ].map((item, index) => (
+            <div key={index} className="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center justify-center gap-2">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black ${item.color}`}>
+                {item.icon}
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-[10px] font-bold text-slate-600 mb-0.5">{item.title}</span>
+                <span className="text-sm font-black text-slate-900 leading-none">{item.count}</span>
+                <span className="text-[9px] text-slate-400 mt-0.5">个岗位</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
