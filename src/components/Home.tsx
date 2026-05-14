@@ -1,10 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target, PenTool, Edit3, X, FileText, CheckSquare, AlarmClock, CheckCircle2, Star, ChevronRight } from 'lucide-react';
+import { Search, Bell, Clock, Building2, Flame, ThumbsUp, Tag, Bookmark, Target, PenTool, Edit3, X, FileText, CheckSquare, AlarmClock, CheckCircle2, Star, ChevronRight, MapPin, RefreshCw, Loader2 } from 'lucide-react';
 
 export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favorites' | 'targeted') => void; onTrack?: (title: string, status: any) => void }) {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<'overview' | 'focused' | 'favorites'>('overview');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  const [pullY, setPullY] = useState(0);
+  const startY = useRef(0);
 
   useEffect(() => {
     if (isSearchExpanded && searchInputRef.current) {
@@ -12,15 +19,58 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
     }
   }, [isSearchExpanded]);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (scrollContainerRef.current?.scrollTop === 0 && activeFilter === 'focused') {
+      startY.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (startY.current > 0 && activeFilter === 'focused') {
+      const y = e.touches[0].clientY - startY.current;
+      if (y > 0 && y < 100) {
+        setPullY(y);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (pullY > 50 && activeFilter === 'focused') {
+      setIsRefreshing(true);
+      setTimeout(() => {
+        setIsRefreshing(false);
+      }, 1500);
+    }
+    startY.current = 0;
+    setPullY(0);
+  };
+
+  const handleScroll = () => {
+    if (activeFilter === 'focused' && scrollContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+      if (scrollTop + clientHeight >= scrollHeight - 20 && !isLoadingMore) {
+        setIsLoadingMore(true);
+        setTimeout(() => {
+          setIsLoadingMore(false);
+        }, 1500);
+      }
+    }
+  };
+
   return (
     <motion.div 
+      ref={scrollContainerRef}
+      onScroll={handleScroll}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       className="flex flex-col gap-6 pb-24 bg-slate-50 h-full overflow-y-auto"
     >
       {/* Header */}
-      <div className="flex flex-col px-6 pt-8 pb-4 bg-white border-b border-slate-200 shrink-0 sticky top-0 z-20 min-h-[80px] justify-center">
+      <div className="flex flex-col px-6 pt-6 pb-3 bg-white border-b border-slate-200 shrink-0 sticky top-0 z-20 justify-center">
         <div className="flex items-center justify-between relative h-10 w-full">
           <AnimatePresence>
             {!isSearchExpanded && (
@@ -28,12 +78,27 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="flex items-center absolute left-0"
+                className="flex items-center absolute left-0 right-[88px]"
               >
-                <div className="flex items-center gap-3">
-                  <div>
-                    <h1 className="text-xl font-black text-slate-900 tracking-tight">发现机会</h1>
-                  </div>
+                <div className="flex bg-slate-100 p-1 rounded-xl w-full">
+                  <button 
+                    onClick={() => setActiveFilter('overview')}
+                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeFilter === 'overview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    岗位概览
+                  </button>
+                  <button 
+                    onClick={() => setActiveFilter('focused')}
+                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeFilter === 'focused' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    重点关注
+                  </button>
+                  <button 
+                    onClick={() => setActiveFilter('favorites')}
+                    className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-colors ${activeFilter === 'favorites' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    我的收藏
+                  </button>
                 </div>
               </motion.div>
             )}
@@ -76,18 +141,12 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
               >
                 <button 
                   onClick={() => setIsSearchExpanded(true)}
-                  className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
+                  className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
                 >
-                  <Search size={16} />
+                  <Search size={18} />
                 </button>
-                <button 
-                  onClick={() => onNavigate?.('favorites')}
-                  className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors"
-                >
-                  <Bookmark size={16} />
-                </button>
-                <button className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors">
-                  <Bell size={16} />
+                <button className="relative w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-200 transition-colors">
+                  <Bell size={18} />
                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
                 </button>
               </motion.div>
@@ -97,6 +156,7 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
       </div>
 
       {/* Job Overview */}
+      {activeFilter === 'overview' && (
       <div className="px-6 space-y-4">
         <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
           <div className="w-1 h-4 bg-teal-500"></div> 岗位概览
@@ -148,66 +208,60 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
           </div>
         </div>
       </div>
+      )}
 
-      {/* 7-day Reminders */}
-      <div className="px-6 space-y-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
-            <div className="w-1 h-4 bg-teal-500"></div> 七日内重点提醒
-          </h2>
-          <button className="text-[11px] font-bold text-slate-500 hover:text-slate-700 transition-colors">
-            查看全部 (100) &rarr;
-          </button>
+      {/* Focused Items */}
+      {activeFilter === 'focused' && (
+      <div className="px-6 space-y-3 mt-2">
+        <div 
+          className="flex justify-center items-center overflow-hidden transition-all duration-200"
+          style={{ 
+            height: isRefreshing ? '32px' : Math.min(pullY, 32) + 'px',
+            opacity: isRefreshing || pullY > 0 ? 1 : 0
+          }}
+        >
+           {isRefreshing ? <RefreshCw className="animate-spin text-slate-400" size={16} /> : <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{pullY > 50 ? '释放刷新' : '下拉刷新'}</span>}
         </div>
         
         <div className="flex flex-col gap-3">
-           <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3">
-             <div className="flex items-start gap-2">
-               <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
-               <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- 弥勒市元亨社会工作服务中心</h3>
+          {[
+            { unit: '弥勒市元亨社会工作服务中心', type: '事业单位', color: 'teal', deadline: '04/23' },
+            { unit: '反兴奋剂中心', type: '事业单位', color: 'teal', deadline: '04/23' },
+            { unit: '深圳市公安局', type: '事业单位', color: 'teal', deadline: '04/23' },
+            { unit: '柳北区民政局', type: '公益性岗位', color: 'amber', deadline: '04/23' },
+            { unit: '成都市武侯区教育局', type: '事业编', color: 'teal', deadline: '05/12' },
+            { unit: '杭州市余杭区政府', type: '公务员', color: 'blue', deadline: '04/10' },
+            { unit: '绵阳经济技术开发区三江小学', type: '事业编', color: 'teal', deadline: '04/27' },
+            { unit: '吉安东管理中心', type: '国企', color: 'indigo', deadline: '05/06' },
+            { unit: '南昌市青云谱区卫健委', type: '事业编', color: 'teal', deadline: '05/15' },
+            { unit: '成都市某区税务局', type: '公务员', color: 'blue', deadline: '05/20' },
+            { unit: '杭州某知名研究机构', type: '事业单位', color: 'teal', deadline: '05/30' },
+            { unit: '宁波市交通警察局', type: '辅警', color: 'slate', deadline: '05/01' },
+            { unit: '上海市人民法院', type: '公务员', color: 'blue', deadline: '05/05' },
+            { unit: '北京市东城区教委', type: '事业编', color: 'teal', deadline: '05/18' },
+            { unit: '广州市天河区税务局', type: '劳务派遣', color: 'slate', deadline: '05/10' },
+          ].map((item, index) => (
+             <div key={index} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3 relative overflow-hidden group hover:border-slate-300 transition-colors">
+               <div className="absolute top-0 left-0 w-1 h-full bg-slate-200 group-hover:bg-slate-300 transition-colors"></div>
+               <div className="flex items-start gap-2">
+                 <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
+                 <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- {item.unit}</h3>
+               </div>
+               <div className="flex items-center gap-2 pl-6">
+                 <span className={`text-[10px] font-bold text-${item.color}-600 px-2 py-0.5 bg-${item.color}-50 rounded border border-${item.color}-100`}>{item.type}</span>
+                 <span className="text-[10px] font-bold text-rose-600">截止 {item.deadline}</span>
+               </div>
              </div>
-             <div className="flex items-center gap-2 pl-6">
-               <span className="text-[10px] font-bold text-teal-600 px-2 py-0.5 bg-teal-50 rounded border border-teal-100">事业单位</span>
-               <span className="text-[10px] font-bold text-rose-600">截止 04/23</span>
-             </div>
-           </div>
-           
-           <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3">
-             <div className="flex items-start gap-2">
-               <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
-               <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- 反兴奋剂中心</h3>
-             </div>
-             <div className="flex items-center gap-2 pl-6">
-               <span className="text-[10px] font-bold text-teal-600 px-2 py-0.5 bg-teal-50 rounded border border-teal-100">事业单位</span>
-               <span className="text-[10px] font-bold text-rose-600">截止 04/23</span>
-             </div>
-           </div>
-
-           <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3">
-             <div className="flex items-start gap-2">
-               <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
-               <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- 深圳市公安局</h3>
-             </div>
-             <div className="flex items-center gap-2 pl-6">
-               <span className="text-[10px] font-bold text-teal-600 px-2 py-0.5 bg-teal-50 rounded border border-teal-100">事业单位</span>
-               <span className="text-[10px] font-bold text-rose-600">截止 04/23</span>
-             </div>
-           </div>
-
-           <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-3">
-             <div className="flex items-start gap-2">
-               <div className="mt-0.5 text-rose-500"><AlarmClock size={14} /></div>
-               <h3 className="text-sm font-bold text-slate-900 leading-tight flex-1">- 柳北区民政局</h3>
-             </div>
-             <div className="flex items-center gap-2 pl-6">
-               <span className="text-[10px] font-bold text-amber-600 px-2 py-0.5 bg-amber-50 rounded border border-amber-100">公益性岗位</span>
-               <span className="text-[10px] font-bold text-rose-600">截止 04/23</span>
-             </div>
-           </div>
+          ))}
+        </div>
+        <div className="flex justify-center py-4 h-12">
+           {isLoadingMore ? <Loader2 className="animate-spin text-slate-400" size={16} /> : <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">上拉加载更多</span>}
         </div>
       </div>
+      )}
 
       {/* New Jobs Today */}
+      {activeFilter === 'overview' && (
       <div className="px-6 space-y-4">
         <div className="flex items-center gap-2">
           <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
@@ -241,196 +295,221 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
           ))}
         </div>
       </div>
+      )}
 
-      {/* Daily Picks - Horizontal Scroll */}
-      <div className="px-6 space-y-4">
-        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
-          <div className="w-1 h-4 bg-primary-500"></div> 今日 AI 精选
-        </h2>
-        
-        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-6 px-6 scrollbar-hide scroll-smooth">
-          {/* Card 1 */}
-          <div className="snap-center shrink-0 w-[85%] bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col">
-            <div className="flex justify-between items-start mb-4">
-              <span className="bg-rose-50 border border-rose-100 text-rose-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 uppercase tracking-wider">
-                <Clock size={10} /> 剩余 1天 04时
-              </span>
-              <span className="text-primary-700 font-bold text-[10px] bg-primary-50 border border-primary-100 px-2 py-1 rounded-md tracking-wider uppercase">匹配度 98%</span>
-            </div>
-            <h3 className="text-base font-bold text-slate-900 mb-2 leading-tight">成都市武侯区教育局 - 数学教师</h3>
-            <p className="text-[11px] text-slate-500 mb-4 flex items-center gap-1">
-              <Building2 size={12} /> 事业单位 · 竞争比 1:12
-            </p>
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-[11px] font-bold bg-slate-50 border border-slate-100 text-slate-600 px-2 py-1 rounded-md">¥ 7-9K</span>
-              <span className="text-[11px] font-bold bg-slate-50 border border-slate-100 text-slate-600 px-2 py-1 rounded-md">本科学历</span>
-            </div>
-            <div className="flex gap-3 mt-auto">
-              <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-slate-100 flex items-center justify-center gap-1">
-                <FileText size={14} /> 公告详情
-              </button>
-              <button className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-primary-700">
-                加入收藏
-              </button>
-            </div>
-          </div>
-          
-          {/* Card 2 */}
-          <div className="snap-center shrink-0 w-[85%] bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex flex-col">
-             <div className="flex justify-between items-start mb-4">
-              <span className="bg-amber-50 border border-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 uppercase tracking-wider">
-                <Clock size={10} /> 即将开始报名
-              </span>
-              <span className="text-primary-700 font-bold text-[10px] bg-primary-50 border border-primary-100 px-2 py-1 rounded-md tracking-wider uppercase">匹配度 92%</span>
-            </div>
-            <h3 className="text-base font-bold text-slate-900 mb-2 leading-tight">江西省交投数据科技 - 研发工程岗</h3>
-            <p className="text-[11px] text-slate-500 mb-4 flex items-center gap-1">
-              <Building2 size={12} /> 央国企 · 扩招扩容
-            </p>
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-[11px] font-bold bg-slate-50 border border-slate-100 text-slate-600 px-2 py-1 rounded-md">应届生</span>
-              <span className="text-[11px] font-bold bg-slate-50 border border-slate-100 text-slate-600 px-2 py-1 rounded-md">计算机类</span>
-            </div>
-             <div className="flex gap-3 mt-auto">
-              <button className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-slate-100 flex items-center justify-center gap-1">
-                <FileText size={14} /> 公告详情
-              </button>
-              <button className="flex-1 bg-primary-600 text-white py-2.5 rounded-xl font-bold text-[11px] tracking-wider transition-colors hover:bg-primary-700">
-                加入收藏
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Categories */}
-      <div className="px-6">
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-6 px-6">
-          {['全部', '公务员', '事业单位', '央国企', '特岗教师', '社区工作者'].map((cat, i) => (
-            <button 
-              key={cat}
-              className={`whitespace-nowrap px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-colors ${i === 0 ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200 shadow-sm hover:bg-slate-50'}`}
-            >
-              {cat}
-            </button>
+
+
+      {/* Favorites */}
+      {activeFilter === 'favorites' && (
+        <div className="px-6 flex flex-col gap-4 mt-2">
+          {[
+            {
+              unit: '成都市武侯区教育局',
+              position: '数学教师 (事业编)',
+              location: '成都',
+              edu: '本科',
+              special: '1:12竞考',
+              deadline: '截止: 05-12',
+              status: '进行中',
+              statusColor: 'emerald',
+              isHot: true
+            },
+            {
+              unit: '杭州市余杭区政府',
+              position: '综合管理储备干部',
+              location: '杭州',
+              edu: '硕士',
+              special: '无限制',
+              deadline: '截止: 04-10',
+              status: '已结束',
+              statusColor: 'slate',
+              isHot: false
+            },
+            {
+              unit: '绵阳经济技术开发区三江小学',
+              position: '小学语文教师',
+              location: '绵阳',
+              edu: '本科',
+              special: '无限制',
+              deadline: '发布: 04-27',
+              status: '报名未开始',
+              statusColor: 'primary',
+              isHot: true
+            },
+            {
+              unit: '吉安东管理中心',
+              position: '文秘宣传岗',
+              location: '吉安',
+              edu: '本科',
+              special: '校招',
+              deadline: '截止: 05-06',
+              status: '进行中',
+              statusColor: 'amber',
+              isHot: true
+            },
+            {
+              unit: '南昌市青云谱区卫健委',
+              position: '公共卫生干事',
+              location: '南昌',
+              edu: '本科',
+              special: '事业编',
+              deadline: '截止: 05-15',
+              status: '报名中',
+              statusColor: 'amber',
+              isHot: true
+            },
+            {
+              unit: '弥勒市元亨社会工作服务中心',
+              position: '综合岗位',
+              location: '弥勒',
+              edu: '本科',
+              special: '事业编',
+              deadline: '截止: 04-23',
+              status: '已结束',
+              statusColor: 'slate',
+              isHot: false
+            },
+            {
+              unit: '反兴奋剂中心',
+              position: '宣传干事',
+              location: '北京',
+              edu: '硕士',
+              special: '事业编',
+              deadline: '截止: 04-23',
+              status: '已结束',
+              statusColor: 'slate',
+              isHot: false
+            },
+            {
+              unit: '深圳市公安局',
+              position: '辅警',
+              location: '深圳',
+              edu: '大专',
+              special: '事业编',
+              deadline: '截止: 04-23',
+              status: '已结束',
+              statusColor: 'slate',
+              isHot: false
+            },
+            {
+              unit: '柳北区民政局',
+              position: '社会救助协理员',
+              location: '柳州',
+              edu: '大专',
+              special: '公益岗',
+              deadline: '截止: 04-23',
+              status: '已结束',
+              statusColor: 'slate',
+              isHot: false
+            },
+            {
+              unit: '成都市某区税务局',
+              position: '信息记录员',
+              location: '成都',
+              edu: '本科',
+              special: '编外',
+              deadline: '截止: 05-20',
+              status: '报名中',
+              statusColor: 'amber',
+              isHot: true
+            },
+            {
+              unit: '杭州某知名研究机构',
+              position: '研究员助理',
+              location: '杭州',
+              edu: '硕士',
+              special: '合同制',
+              deadline: '截止: 05-30',
+              status: '报名未开始',
+              statusColor: 'primary',
+              isHot: false
+            },
+            {
+              unit: '宁波市交通警察局',
+              position: '交通辅警',
+              location: '宁波',
+              edu: '大专',
+              special: '编外',
+              deadline: '截止: 05-01',
+              status: '进行中',
+              statusColor: 'emerald',
+              isHot: false
+            },
+            {
+              unit: '上海市人民法院',
+              position: '书记员',
+              location: '上海',
+              edu: '本科',
+              special: '法学',
+              deadline: '截止: 05-05',
+              status: '进行中',
+              statusColor: 'emerald',
+              isHot: true
+            },
+            {
+              unit: '北京市东城区教委',
+              position: '初中英语教师',
+              location: '北京',
+              edu: '本科',
+              special: '师范',
+              deadline: '截止: 05-18',
+              status: '报名中',
+              statusColor: 'amber',
+              isHot: true
+            },
+            {
+              unit: '广州市天河区税务局',
+              position: '办税服务员',
+              location: '广州',
+              edu: '本科',
+              special: '劳务',
+              deadline: '截止: 05-10',
+              status: '进行中',
+              statusColor: 'emerald',
+              isHot: false
+            }
+          ].map((item, index) => (
+            <div key={index} className={`${item.isHot ? 'bg-primary-50/30 border-primary-200' : 'bg-white border-slate-200'} ${item.status === '已结束' ? 'opacity-75' : ''} p-5 rounded-2xl shadow-sm border relative overflow-hidden`}>
+              {item.isHot && <div className="absolute top-0 left-0 w-1 h-full bg-primary-500"></div>}
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-sm mb-1">{item.unit}</h3>
+                  <p className={`text-[11px] font-bold ${item.isHot ? 'text-primary-600' : 'text-slate-500'} mb-3`}>{item.position}</p>
+                </div>
+                <button className="text-primary-500 bg-primary-50 p-2 rounded-lg border border-primary-100 shadow-sm cursor-default">
+                  <Bookmark size={14} className="fill-current" />
+                </button>
+              </div>
+              <div className="flex gap-2 mb-4">
+                 <span className={`text-[10px] font-bold uppercase tracking-wider text-slate-500 ${item.isHot ? 'bg-white border-slate-200' : 'bg-slate-50 border-slate-100'} px-2 py-1 rounded-md flex items-center gap-1`}><MapPin size={10}/> {item.location}</span>
+                 <span className={`text-[10px] font-bold uppercase tracking-wider text-slate-500 ${item.isHot ? 'bg-white border-slate-200' : 'bg-slate-50 border-slate-100'} px-2 py-1 rounded-md`}>{item.edu}</span>
+                 <span className={`text-[10px] font-bold uppercase tracking-wider text-slate-500 ${item.isHot ? 'bg-white border-slate-200' : 'bg-slate-50 border-slate-100'} px-2 py-1 rounded-md`}>{item.special}</span>
+              </div>
+              <div className={`flex flex-col gap-3 border-t ${item.isHot ? 'border-primary-100' : 'border-slate-100'} pt-4`}>
+                <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+                  <span className="text-slate-400 flex items-center gap-1"><Clock size={10}/> {item.deadline}</span>
+                  <span className={`text-${item.statusColor}-600 px-2 py-1 bg-${item.statusColor}-50 rounded-md border border-${item.statusColor}-100`}>
+                    {item.status}
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <button className={`flex-[4] ${item.isHot ? 'bg-white hover:bg-slate-50 border-slate-200' : 'bg-slate-50 hover:bg-slate-100 border-slate-200'} text-slate-600 py-2 rounded-xl border shadow-sm transition-colors flex justify-center items-center gap-1 font-bold text-[11px]`}>
+                    <FileText size={14} /> 公告详情
+                  </button>
+                  <button 
+                    onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
+                    className={`flex-[5] ${item.status === '已结束' ? 'bg-slate-100 text-slate-500 cursor-not-allowed border-slate-200' : (item.isHot ? 'bg-white text-primary-600 hover:bg-primary-50 border-primary-200' : 'bg-slate-50 text-slate-600 hover:text-primary-600 hover:bg-primary-50 border-slate-200 hover:border-primary-200')} py-2 rounded-xl border shadow-sm transition-colors flex justify-center items-center gap-1 font-bold text-[11px]`}
+                    disabled={item.status === '已结束'}
+                  >
+                    <Edit3 size={14} /> 更新状态
+                  </button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
-      </div>
-
-      {/* Feed */}
-      <div className="px-6 flex flex-col gap-4">
-        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter mt-2">
-          <div className="w-1 h-4 bg-emerald-500"></div> 最新招考
-        </h2>
-        
-        {/* Feed Item 1 */}
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-bold text-slate-900 text-sm mb-1">绵阳经济技术开发区三江小学</h3>
-              <p className="text-[11px] font-bold text-primary-600 mb-3">小学语文教师</p>
-            </div>
-            <button className="text-slate-300 hover:text-primary-500 transition-colors bg-slate-50 p-2 rounded-lg border border-slate-100 shadow-sm">
-              <Bookmark size={14} />
-            </button>
-          </div>
-          <div className="flex gap-2 mb-4">
-             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">本科</span>
-             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">无限制</span>
-          </div>
-          <div className="flex flex-col gap-3 border-t border-slate-100 pt-4">
-            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
-              <span className="text-slate-400">发布: 04-27</span>
-              <span className="text-primary-600 px-2 py-1 bg-primary-50 rounded-md border border-primary-100">报名未开始</span>
-            </div>
-            <div className="flex gap-2">
-              <button className="flex-[4] bg-slate-50 text-slate-600 hover:bg-slate-100 py-2 rounded-xl border border-slate-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]">
-                <FileText size={14} /> 公告详情
-              </button>
-              <button 
-                onClick={() => onTrack?.('绵阳经济技术开发区三江小学 - 小学语文教师', '未报名')}
-                className="flex-[5] bg-slate-50 text-slate-600 hover:text-primary-600 hover:bg-primary-50 py-2 rounded-xl border border-slate-200 hover:border-primary-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]"
-              >
-                <Edit3 size={14} /> 更新状态
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Feed Item 2 */}
-        <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-bold text-slate-900 text-sm mb-1">吉安东管理中心</h3>
-              <p className="text-[11px] font-bold text-primary-600 mb-3">文秘宣传岗</p>
-            </div>
-            <button className="text-primary-500 bg-primary-50 p-2 rounded-lg border border-primary-100 shadow-sm">
-              <Bookmark size={14} className="fill-current" />
-            </button>
-          </div>
-          <div className="flex gap-2 mb-4">
-             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">校招</span>
-             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">汉语言文学</span>
-          </div>
-           <div className="flex flex-col gap-3 border-t border-slate-100 pt-4">
-            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
-              <span className="text-slate-400">截止: 05-06</span>
-              <span className="text-amber-600 px-2 py-1 bg-amber-50 rounded-md border border-amber-100 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> 进行中
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <button className="flex-[4] bg-slate-50 text-slate-600 hover:bg-slate-100 py-2 rounded-xl border border-slate-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]">
-                <FileText size={14} /> 公告详情
-              </button>
-              <button 
-                onClick={() => onTrack?.('吉安东管理中心 - 文秘宣传岗', '已报名')}
-                className="flex-[5] bg-slate-50 text-slate-600 hover:text-primary-600 hover:bg-primary-50 py-2 rounded-xl border border-slate-200 hover:border-primary-200 transition-colors flex justify-center items-center gap-1 font-bold text-[11px]"
-              >
-                <Edit3 size={14} /> 更新状态
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Feed Item 3 (Bookmarked & Targeted) */}
-        <div className="bg-primary-50/30 p-5 rounded-2xl shadow-sm border border-primary-200 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-1 h-full bg-primary-500"></div>
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-bold text-slate-900 text-sm mb-1">南昌市青云谱区卫健委</h3>
-              <p className="text-[11px] font-bold text-primary-600 mb-3">公共卫生干事</p>
-            </div>
-            <button className="text-primary-500 bg-primary-50 p-2 rounded-lg border border-primary-100 shadow-sm cursor-default">
-              <Bookmark size={14} className="fill-current" />
-            </button>
-          </div>
-          <div className="flex gap-2 mb-4">
-             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md">事业编</span>
-             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white border border-slate-200 px-2 py-1 rounded-md">预防医学</span>
-          </div>
-           <div className="flex flex-col gap-3 border-t border-primary-100 pt-4">
-            <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
-              <span className="text-slate-500">截止: 05-15</span>
-              <span className="text-amber-600 px-2 py-1 bg-amber-50 rounded-md border border-amber-200 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> 报名中
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <button className="flex-[4] bg-white text-slate-600 hover:bg-slate-50 py-2 rounded-xl border border-slate-200 shadow-sm transition-colors flex justify-center items-center gap-1 font-bold text-[11px]">
-                <FileText size={14} /> 公告详情
-              </button>
-              <button 
-                onClick={() => onTrack?.('南昌市青云谱区卫健委 - 公共卫生干事', '未报名')}
-                className="flex-[5] bg-white text-primary-600 hover:bg-primary-50 py-2 rounded-xl border border-primary-200 shadow-sm transition-colors flex justify-center items-center gap-1 font-bold text-[11px]"
-              >
-                <Edit3 size={14} /> 更新状态
-              </button>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      )}
     </motion.div>
   );
 }
