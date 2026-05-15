@@ -7,9 +7,16 @@ import Profile from './components/Profile';
 import Favorites from './components/Favorites';
 import Targeted from './components/Targeted';
 import Study from './components/Study';
+import JobList from './components/JobList';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'home' | 'study' | 'schedule' | 'profile' | 'favorites' | 'targeted'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'study' | 'schedule' | 'profile' | 'favorites' | 'targeted' | 'jobListing'>('home');
+  const [listingTitle, setListingTitle] = useState('职位列表');
+
+  const handleNavigateToList = (title: string) => {
+    setListingTitle(title);
+    setActiveTab('jobListing');
+  };
 
   const navItems = [
     { id: 'home', icon: Compass, label: '发现' },
@@ -24,13 +31,14 @@ export default function App() {
         
         {/* Main Content Area */}
         <div className="flex-1 overflow-hidden relative">
-          {activeTab === 'home' && <Home onNavigate={setActiveTab} />}
+          {activeTab === 'home' && <Home onNavigate={setActiveTab} onShowList={handleNavigateToList} />}
           {activeTab === 'study' && <Study />}
           {activeTab === 'schedule' && <Schedule />}
           {activeTab === 'profile' && <Profile onNavigate={setActiveTab} />}
           <AnimatePresence>
             {activeTab === 'favorites' && <Favorites onBack={() => setActiveTab('home')} />}
             {activeTab === 'targeted' && <Targeted onBack={() => setActiveTab('home')} />}
+            {activeTab === 'jobListing' && <JobList title={listingTitle} onBack={() => setActiveTab('home')} />}
           </AnimatePresence>
         </div>
 

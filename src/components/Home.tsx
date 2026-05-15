@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Bookmark, Building2, CheckCircle2, CheckSquare, ChevronRight, Clock, Edit3, FileText, Flame, Loader2, MapPin, MoreHorizontal, MessageSquare, RefreshCw, Search, Star, Target, AlarmClock } from 'lucide-react';
 
-export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favorites' | 'targeted') => void; onTrack?: (title: string, status: any) => void }) {
+export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?: (tab: 'home' | 'study' | 'schedule' | 'profile' | 'favorites' | 'targeted' | 'jobListing') => void; onTrack?: (title: string, status: any) => void; onShowList?: (title: string) => void }) {
   const [activeFilter, setActiveFilter] = useState<'overview' | 'focused' | 'favorites'>('overview');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -46,6 +46,14 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
         }, 1500);
       }
     }
+  };
+
+  const colorStyles: Record<string, { bg: string, text: string, badgeBg: string, badgeBorder: string }> = {
+    teal: { bg: 'bg-teal-500', text: 'text-teal-600', badgeBg: 'bg-teal-50', badgeBorder: 'border-teal-100/50' },
+    amber: { bg: 'bg-amber-500', text: 'text-amber-600', badgeBg: 'bg-amber-50', badgeBorder: 'border-amber-100/50' },
+    blue: { bg: 'bg-blue-500', text: 'text-blue-600', badgeBg: 'bg-blue-50', badgeBorder: 'border-blue-100/50' },
+    indigo: { bg: 'bg-indigo-500', text: 'text-indigo-600', badgeBg: 'bg-indigo-50', badgeBorder: 'border-indigo-100/50' },
+    slate: { bg: 'bg-slate-500', text: 'text-slate-600', badgeBg: 'bg-slate-50', badgeBorder: 'border-slate-100/50' },
   };
 
   const focusedItems = [
@@ -94,33 +102,33 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
       className="flex flex-col bg-[#F2F2F7] h-full font-sans overflow-y-auto pb-24"
     >
       {/* GitHub Style Header */}
-      <div className="pt-12 pb-2 px-4 sticky top-0 bg-[#F2F2F7] z-20">
-        <div className="flex justify-between items-center mb-3 px-1">
+      <div className="pt-12 pb-1.5 px-4 sticky top-0 bg-[#F2F2F7] z-20">
+        <div className="flex justify-between items-center mb-1.5 px-1">
           <div className="w-8 h-8 flex items-center justify-center bg-slate-200/50 rounded-full">
             <Target className="text-slate-900" size={18} />
           </div>
           <button className="text-blue-500">
-             <MessageSquare size={24} />
+             <MessageSquare size={22} />
           </button>
         </div>
 
         {/* Filter Segmented Control */}
-        <div className="flex bg-slate-200/60 p-1 rounded-[10px] w-full mt-1">
+        <div className="flex bg-slate-200/60 p-1 rounded-[10px] w-full mt-0">
           <button 
             onClick={() => setActiveFilter('overview')}
-            className={`flex-1 py-1.5 text-[14px] font-medium rounded-[7px] transition-colors ${activeFilter === 'overview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
+            className={`flex-1 py-1 text-[13px] font-medium rounded-[7px] transition-colors ${activeFilter === 'overview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
           >
             我的数据
           </button>
           <button 
             onClick={() => setActiveFilter('focused')}
-            className={`flex-1 py-1.5 text-[14px] font-medium rounded-[7px] transition-colors ${activeFilter === 'focused' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
+            className={`flex-1 py-1 text-[13px] font-medium rounded-[7px] transition-colors ${activeFilter === 'focused' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
           >
-            关注提醒
+            重点关注
           </button>
           <button 
             onClick={() => setActiveFilter('favorites')}
-            className={`flex-1 py-1.5 text-[14px] font-medium rounded-[7px] transition-colors ${activeFilter === 'favorites' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
+            className={`flex-1 py-1 text-[13px] font-medium rounded-[7px] transition-colors ${activeFilter === 'favorites' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
           >
              收藏库
           </button>
@@ -128,28 +136,33 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
       </div>
 
       {/* Search Bar */}
-      <div className="px-4 mt-3">
-        <div className="bg-slate-200/70 rounded-[10px] flex items-center px-2 py-1.5 border border-slate-200/50 shadow-sm relative overflow-hidden group">
-          <Search size={18} className="text-slate-500 mx-1 relative z-10" />
+      {activeFilter === 'overview' && (
+      <div className="px-4 mt-1.5 mb-1">
+        <div className="bg-slate-200/70 rounded-[8px] flex items-center px-1.5 py-1 border border-slate-200/50 shadow-sm relative overflow-hidden group">
+          <Search size={16} className="text-slate-500 mx-1 relative z-10" />
           <input 
             type="text" 
             placeholder="搜索职位、单位名称..." 
-            className="bg-transparent text-slate-800 placeholder-slate-500 focus:outline-none w-full text-[15px] mx-1 relative z-10"
+            className="bg-transparent text-slate-800 placeholder-slate-500 focus:outline-none w-full text-[14px] mx-1 relative z-10"
           />
         </div>
       </div>
+      )}
 
       <div className="flex-1 mt-1">
         {/* Job Overview */}
         {activeFilter === 'overview' && (
           <div>
-            <div className="flex justify-between items-center px-4 mt-6 mb-2">
+            <div className="flex justify-between items-center px-4 mt-3 mb-2">
               <h2 className="text-[16px] text-slate-900 tracking-tight">我的数据</h2>
             </div>
             
             <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40">
-              <div className="flex items-center pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors">
-                <div className="w-[30px] h-[30px] rounded-[8px] bg-[#34d399] flex items-center justify-center shrink-0 mr-3 my-3">
+              <div 
+                onClick={() => onShowList?.('本周推荐岗位')}
+                className="flex items-center pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors"
+              >
+                <div className="w-[28px] h-[28px] rounded-[8px] bg-[#34d399] flex items-center justify-center shrink-0 mr-3 my-3">
                   <CheckSquare className="text-white" size={16} />
                 </div>
                 <div className="flex-1 flex items-center pr-4 py-3 border-b border-slate-100">
@@ -159,8 +172,11 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
                 </div>
               </div>
 
-              <div className="flex items-center pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors">
-                <div className="w-[30px] h-[30px] rounded-[8px] bg-[#60a5fa] flex items-center justify-center shrink-0 mr-3 my-3">
+              <div 
+                onClick={() => onShowList?.('三日内报名截止')}
+                className="flex items-center pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors"
+              >
+                <div className="w-[28px] h-[28px] rounded-[8px] bg-[#60a5fa] flex items-center justify-center shrink-0 mr-3 my-3">
                   <AlarmClock className="text-white" size={16} />
                 </div>
                 <div className="flex-1 flex items-center pr-4 py-3 border-b border-slate-100">
@@ -170,8 +186,11 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
                 </div>
               </div>
 
-              <div className="flex items-center pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors">
-                <div className="w-[30px] h-[30px] rounded-[8px] bg-[#a78bfa] flex items-center justify-center shrink-0 mr-3 my-3">
+              <div 
+                onClick={() => onShowList?.('已投递简历')}
+                className="flex items-center pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors"
+              >
+                <div className="w-[28px] h-[28px] rounded-[8px] bg-[#a78bfa] flex items-center justify-center shrink-0 mr-3 my-3">
                   <CheckCircle2 className="text-white" size={16} />
                 </div>
                 <div className="flex-1 flex items-center pr-4 py-3 border-b border-slate-100">
@@ -181,8 +200,11 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
                 </div>
               </div>
 
-              <div className="flex items-center pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors">
-                <div className="w-[30px] h-[30px] rounded-[8px] bg-[#fb923c] flex items-center justify-center shrink-0 mr-3 my-3">
+              <div 
+                onClick={() => onShowList?.('关注岗位')}
+                className="flex items-center pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors"
+              >
+                <div className="w-[28px] h-[28px] rounded-[8px] bg-[#fb923c] flex items-center justify-center shrink-0 mr-3 my-3">
                   <Star className="text-white" size={16} />
                 </div>
                 <div className="flex-1 flex items-center pr-4 py-3">
@@ -195,7 +217,7 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
 
             {/* 新增数据 */}
             <div>
-              <div className="flex justify-between items-end px-4 mt-6 mb-2">
+              <div className="flex justify-between items-end px-4 mt-3 mb-2">
                 <div className="flex items-baseline gap-2">
                   <h2 className="text-[16px] text-slate-900 tracking-tight">新增数据</h2>
                   <span className="text-[13px] text-slate-500 font-normal">共 1187 个岗位</span>
@@ -214,9 +236,13 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
                   { name: '公益性岗位', count: 2, icon: '公', bg: '#f59e0b' },
                   { name: '银行', count: 1, icon: '银', bg: '#60a5fa' },
                 ].map((item, i, arr) => (
-                  <div key={i} className="flex items-center pl-4 bg-white hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors">
+                  <div 
+                    key={i} 
+                    onClick={() => onShowList?.(item.name)}
+                    className="flex items-center pl-4 bg-white hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors"
+                  >
                      <div 
-                       className="w-[30px] h-[30px] rounded-[8px] flex items-center justify-center shrink-0 mr-3 my-3"
+                       className="w-[28px] h-[28px] rounded-[8px] flex items-center justify-center shrink-0 mr-3 my-3"
                        style={{ backgroundColor: item.bg }}
                      >
                         <span className="text-white text-[14px] font-bold">{item.icon}</span>
@@ -236,11 +262,6 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
         {/* Focused Items */}
         {activeFilter === 'focused' && (
           <div>
-            <div className="flex justify-between items-center px-4 mt-6 mb-2">
-              <h2 className="text-[16px] text-slate-900 tracking-tight">重点关注</h2>
-              <button><MoreHorizontal className="text-slate-400 hover:text-slate-600" size={20} /></button>
-            </div>
-
             {/* Pull to refresh visual */}
             <div className="flex justify-center items-center overflow-hidden transition-all duration-200"
                  style={{ height: isRefreshing ? '32px' : Math.min(pullY, 32) + 'px', opacity: isRefreshing || pullY > 0 ? 1 : 0 }}>
@@ -248,17 +269,19 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
             </div>
 
             <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40">
-              {focusedItems.map((item, i, arr) => (
+              {focusedItems.map((item, i, arr) => {
+                const styles = colorStyles[item.color] || colorStyles.slate;
+                return (
                 <div key={i} className="flex flex-col pl-4 hover:bg-slate-50 active:bg-slate-100 cursor-pointer transition-colors">
                    <div className="flex items-center">
-                     <div className={`w-[30px] h-[30px] rounded-[8px] bg-${item.color}-500 flex items-center justify-center shrink-0 mr-3 my-3`}>
+                     <div className={`w-[28px] h-[28px] rounded-[8px] ${styles.bg} flex items-center justify-center shrink-0 mr-3 my-3`}>
                         <AlarmClock className="text-white" size={16} />
                      </div>
                      <div className={`flex-1 flex items-center pr-4 py-3 ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''}`}>
                        <div className="flex-1 min-w-0">
                          <h3 className="text-[14px] text-slate-900 leading-tight truncate">{item.unit}</h3>
                          <div className="flex items-center gap-2 mt-1">
-                           <span className={`text-[12px] text-${item.color}-600 bg-${item.color}-50 px-1.5 py-0.5 rounded border border-${item.color}-100/50`}>{item.type}</span>
+                           <span className={`text-[12px] ${styles.text} ${styles.badgeBg} px-1.5 py-0.5 rounded border ${styles.badgeBorder}`}>{item.type}</span>
                            <span className="text-[13px] text-slate-500">截止 {item.deadline}</span>
                          </div>
                        </div>
@@ -266,7 +289,7 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
                      </div>
                    </div>
                 </div>
-              ))}
+              )})}
             </div>
             
             <div className="flex justify-center pb-4 h-12">
@@ -278,16 +301,11 @@ export default function Home({ onNavigate, onTrack }: { onNavigate?: (tab: 'favo
         {/* Favorites */}
         {activeFilter === 'favorites' && (
           <div>
-            <div className="flex justify-between items-center px-4 mt-6 mb-2">
-              <h2 className="text-[16px] text-slate-900 tracking-tight">收藏库</h2>
-              <button><MoreHorizontal className="text-slate-400 hover:text-slate-600" size={20} /></button>
-            </div>
-
-            <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40">
+            <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40 mt-3">
               {favoritesItems.map((item, i, arr) => (
                 <div key={i} className={`flex flex-col pl-4 ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}>
                    <div className={`flex items-start pr-4 py-3 ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''}`}>
-                     <div className="w-[30px] h-[30px] rounded-[8px] bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200 mt-0.5 mr-3">
+                     <div className="w-[28px] h-[28px] rounded-[8px] bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200 mt-0.5 mr-3">
                         <Bookmark className={`text-${item.statusColor !== 'slate' ? 'blue' : 'slate'}-500`} size={16} fill="currentColor" />
                      </div>
                      <div className="flex-1 min-w-0">
