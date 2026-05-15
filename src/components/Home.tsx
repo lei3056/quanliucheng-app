@@ -215,11 +215,11 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
               </div>
             </div>
 
-            {/* 新增招考 */}
+            {/* 今日新增 */}
             <div>
               <div className="flex justify-between items-end px-4 mt-3 mb-2">
                 <div className="flex items-baseline gap-2">
-                  <h2 className="text-[16px] text-slate-900 tracking-tight">新增招考</h2>
+                  <h2 className="text-[16px] text-slate-900 tracking-tight">今日新增</h2>
                   <span className="text-[13px] text-slate-500 font-normal">共 1187 个岗位</span>
                 </div>
               </div>
