@@ -118,7 +118,7 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
             onClick={() => setActiveFilter('overview')}
             className={`flex-1 py-1 text-[13px] font-medium rounded-[7px] transition-colors ${activeFilter === 'overview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
           >
-            我的数据
+            我的岗位
           </button>
           <button 
             onClick={() => setActiveFilter('focused')}
@@ -130,7 +130,7 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
             onClick={() => setActiveFilter('favorites')}
             className={`flex-1 py-1 text-[13px] font-medium rounded-[7px] transition-colors ${activeFilter === 'favorites' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
           >
-             收藏库
+             我的收藏
           </button>
         </div>
       </div>
@@ -154,7 +154,7 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
         {activeFilter === 'overview' && (
           <div>
             <div className="flex justify-between items-center px-4 mt-3 mb-2">
-              <h2 className="text-[16px] text-slate-900 tracking-tight">我的数据</h2>
+              <h2 className="text-[16px] text-slate-900 tracking-tight">我的岗位</h2>
             </div>
             
             <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40">
@@ -215,11 +215,11 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
               </div>
             </div>
 
-            {/* 新增数据 */}
+            {/* 新增招考 */}
             <div>
               <div className="flex justify-between items-end px-4 mt-3 mb-2">
                 <div className="flex items-baseline gap-2">
-                  <h2 className="text-[16px] text-slate-900 tracking-tight">新增数据</h2>
+                  <h2 className="text-[16px] text-slate-900 tracking-tight">新增招考</h2>
                   <span className="text-[13px] text-slate-500 font-normal">共 1187 个岗位</span>
                 </div>
               </div>
@@ -303,40 +303,53 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
           <div>
             <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40 mt-3">
               {favoritesItems.map((item, i, arr) => (
-                <div key={i} className={`flex flex-col pl-4 ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}>
-                   <div className={`flex items-start pr-4 py-3 ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''}`}>
-                     <div className="w-[28px] h-[28px] rounded-[8px] bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200 mt-0.5 mr-3">
-                        <Bookmark className={`text-${item.statusColor !== 'slate' ? 'blue' : 'slate'}-500`} size={16} fill="currentColor" />
-                     </div>
-                     <div className="flex-1 min-w-0">
-                       <h3 className="text-[14px] text-slate-900 leading-tight mb-1 truncate">{item.unit}</h3>
-                       <p className="text-[13px] text-slate-500 mb-2.5 truncate">{item.position}</p>
-                       
-                       <div className="flex flex-wrap gap-1.5 mb-2.5">
-                         <span className="text-[12px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded flex items-center gap-0.5"><MapPin size={11}/> {item.location}</span>
-                         <span className="text-[12px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">{item.edu}</span>
-                         <span className="text-[12px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">{item.special}</span>
-                       </div>
-                       
-                       <div className="flex justify-between items-center mt-1 mb-3.5 pr-1">
-                         <span className="text-[13px] text-slate-500 flex items-center gap-1"><Clock size={12}/> {item.deadline}</span>
-                         <span className={`text-[12px] font-medium text-${item.statusColor}-600 bg-${item.statusColor}-50 px-2 py-0.5 rounded-sm`}>{item.status}</span>
-                       </div>
-                       
-                       <div className="flex gap-2 text-sm pr-1">
-                         <button className="flex-1 py-[7px] bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-[8px] font-medium text-[13px] text-center flex items-center justify-center gap-1 transition-colors">
-                            <FileText size={14} /> 详情
-                         </button>
-                         <button 
-                            disabled={item.status === '已结束'}
-                            onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
-                            className={`flex-1 py-[7px] rounded-[8px] font-medium text-[13px] text-center flex items-center justify-center gap-1 transition-colors ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-[#eef2ff] text-blue-600 hover:bg-[#e0e7ff] active:bg-[#c7d2fe]'}`}
-                         >
-                            <Edit3 size={14} /> 状态
-                         </button>
-                       </div>
-                     </div>
-                   </div>
+                <div key={i} className={`p-4 group active:bg-slate-50 transition-colors ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''} ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}>
+                  <div className="mb-2">
+                    <div className="flex justify-between items-start mb-1">
+                      <h3 className="text-[15px] font-semibold text-slate-900 leading-snug group-active:text-blue-600 transition-colors">
+                        {item.unit}
+                      </h3>
+                      <Bookmark className={`text-${item.statusColor !== 'slate' ? 'blue' : 'slate'}-500 shrink-0 mt-0.5 ml-2`} size={16} fill="currentColor" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
+                        {item.position}
+                      </span>
+                      <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
+                        考试类型
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3 mb-4">
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-[11px] font-bold uppercase tracking-wider text-${item.statusColor}-600 bg-${item.statusColor}-50 px-1.5 py-0.5 rounded border border-${item.statusColor}-100`}>
+                        {item.status}
+                      </span>
+                    </div>
+                    <div className="flex items-center text-slate-500 gap-1.5">
+                      <MapPin size={14} className="text-slate-400" />
+                      <span className="text-[12px]">{item.location}</span>
+                    </div>
+                    <div className="flex items-center text-slate-500 gap-1.5">
+                      <Clock size={14} className="text-slate-400" />
+                      <span className="text-[12px]">{item.deadline.replace('截止: ', '').replace('发布: ', '')}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 text-sm">
+                    <button className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-[10px] font-bold text-[13px] text-center flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                      <FileText size={14} /> 详情
+                    </button>
+                    <button 
+                      disabled={item.status === '已结束'}
+                      onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
+                      className={`flex-1 ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 border border-slate-200/50 cursor-not-allowed' : 'bg-[#EEF2FF] text-blue-600 active:bg-[#E0E7FF] border border-blue-100/50 shadow-sm'} py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors`}
+                    >
+                      <Edit3 size={14} />
+                      状态
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

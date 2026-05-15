@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ChevronLeft, MapPin, Clock, Edit3, Building2, Search, Filter } from 'lucide-react';
+import { ChevronLeft, MapPin, Clock, Edit3, Building2, Search, Filter, FileText } from 'lucide-react';
 
 interface JobItem {
   id: string;
@@ -49,8 +49,8 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
             onClick={onBack}
             className="flex items-center text-blue-600 font-medium"
           >
-            <ChevronLeft size={24} />
-            <span className="text-[17px] -ml-1">返回</span>
+            <ChevronLeft size={28} strokeWidth={2.5} className="-ml-1.5" />
+            <span className="text-[14px] ml-0.5">返回</span>
           </button>
           <div className="flex gap-4">
             <button className="text-blue-600"><Search size={22} /></button>
@@ -58,7 +58,7 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
           </div>
         </div>
         <div>
-          <h1 className="text-[28px] font-bold text-slate-900 tracking-tight leading-tight px-1">{title}</h1>
+          <h1 className="text-[20px] font-bold text-slate-900 tracking-tight leading-tight px-1">{title}</h1>
         </div>
       </div>
 
@@ -72,25 +72,26 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                 className={`group active:bg-slate-50 transition-colors ${index !== mockJobs.length - 1 ? 'border-b border-slate-100' : ''}`}
               >
                 <div className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex-1 mr-4">
-                      <h3 className="text-[15px] font-semibold text-slate-900 mb-1 leading-snug group-active:text-blue-600 transition-colors">
-                        {job.unit}
-                      </h3>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
-                          {job.position}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end shrink-0">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-                        {job.status}
+                  <div className="mb-2">
+                    <h3 className="text-[15px] font-semibold text-slate-900 mb-1 leading-snug group-active:text-blue-600 transition-colors">
+                      {job.unit}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
+                        {job.position}
+                      </span>
+                      <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
+                        {job.type}
                       </span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-y-2 mt-3 mb-4">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3 mb-4">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200/50">
+                        {job.status}
+                      </span>
+                    </div>
                     <div className="flex items-center text-slate-500 gap-1.5">
                       <MapPin size={14} className="text-slate-400" />
                       <span className="text-[12px]">{job.location}</span>
@@ -99,16 +100,15 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                       <Clock size={14} className="text-slate-400" />
                       <span className="text-[12px]">{job.time}</span>
                     </div>
-                    <div className="flex items-center text-slate-500 gap-1.5 col-span-2">
-                      <Building2 size={14} className="text-slate-400" />
-                      <span className="text-[12px]">{job.type}</span>
-                    </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 text-sm">
+                    <button className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-[10px] font-bold text-[13px] text-center flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                      <FileText size={14} /> 详情
+                    </button>
                     <button 
                       onClick={() => onTrack?.(`${job.unit} - ${job.position}`, '已投递')}
-                      className="flex-1 bg-[#EEF2FF] text-blue-600 py-2.5 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 active:bg-[#E0E7FF] transition-colors border border-blue-100/50 shadow-sm"
+                      className="flex-1 bg-[#EEF2FF] text-blue-600 py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 active:bg-[#E0E7FF] transition-colors border border-blue-100/50 shadow-sm"
                     >
                       <Edit3 size={14} />
                       记录报名状态
