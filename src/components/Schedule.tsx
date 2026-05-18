@@ -63,18 +63,18 @@ export default function Schedule() {
 
   const renderActionBtn = (type: string) => {
     if (type.includes('缴费')) {
-      return <button className="px-5 py-[7px] bg-blue-600 text-white rounded-[8px] text-[13px] font-bold active:bg-blue-700 transition-colors">去缴费</button>;
+      return <button className="px-4 py-1.5 bg-blue-600 text-white rounded-[8px] text-[12px] font-bold active:bg-blue-700 transition-colors shadow-sm">去缴费</button>;
     }
     if (type.includes('打印')) {
-      return <button className="px-3 py-[7px] text-blue-600 font-medium text-[13px] active:bg-blue-50 rounded-[8px] transition-colors">去打印准考证</button>;
+      return <button className="px-3 py-1.5 text-blue-600 bg-blue-50 border border-blue-100 font-medium text-[12px] active:bg-blue-100 rounded-[8px] transition-colors shadow-sm">去打印准考证</button>;
     }
     if (type.includes('笔试')) {
-      return <button className="px-3 py-[7px] text-slate-500 font-medium text-[13px] active:bg-slate-100 rounded-[8px] transition-colors">设置提醒</button>;
+      return <button className="px-3 py-1.5 text-slate-500 bg-slate-50 border border-slate-200 font-medium text-[12px] active:bg-slate-100 rounded-[8px] transition-colors shadow-sm">设置提醒</button>;
     }
     if (type.includes('完成')) {
-      return <button disabled className="px-5 py-[7px] bg-slate-100 text-slate-400 rounded-[8px] text-[13px] font-medium cursor-not-allowed">已结束</button>;
+      return <button disabled className="px-4 py-1.5 bg-slate-100 text-slate-400 rounded-[8px] text-[12px] font-medium cursor-not-allowed">已结束</button>;
     }
-    return <button className="px-3 py-[7px] text-slate-500 font-medium text-[13px] active:bg-slate-100 rounded-[8px] transition-colors">查看详情</button>;
+    return <button className="px-3 py-1.5 text-slate-500 bg-slate-50 border border-slate-200 font-medium text-[12px] active:bg-slate-100 rounded-[8px] transition-colors shadow-sm">查看详情</button>;
   };
 
   return (
@@ -144,19 +144,17 @@ export default function Schedule() {
                   </div>
                   
                   {/* Card Body */}
-                  <div className="mb-4">
+                  <div>
                     <h3 className="text-[15px] font-bold text-slate-900 leading-snug mb-1">{item.unit}</h3>
-                    <p className="text-[14px] text-slate-600 mb-2.5">{item.position}</p>
-                    <div className="flex">
+                    <p className="text-[14px] text-slate-600 mb-3">{item.position}</p>
+                    <div className="flex justify-between items-center mt-1">
                       <span className={`text-[11px] font-bold px-2 py-0.5 rounded border ${getStatusStyle(item.statusType)}`}>
                         {item.status}
                       </span>
+                      <div>
+                        {renderActionBtn(item.statusType)}
+                      </div>
                     </div>
-                  </div>
-                  
-                  {/* Card Footer */}
-                  <div className="flex justify-end pt-3 border-t border-slate-100/80">
-                    {renderActionBtn(item.statusType)}
                   </div>
                 </div>
               ))}
