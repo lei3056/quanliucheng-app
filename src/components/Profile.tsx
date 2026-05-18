@@ -12,6 +12,7 @@ interface ProfileProps {
 export default function Profile({ onNavigate }: ProfileProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
+  const [showProfileCards, setShowProfileCards] = useState(false);
 
   // 模拟数据状态，用于演示增加填写的业务逻辑效果
   const [educationList, setEducationList] = useState([
@@ -56,13 +57,13 @@ export default function Profile({ onNavigate }: ProfileProps) {
               <FileText size={20} className="text-blue-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-[14px] font-medium text-slate-900 truncate">李雷-中共党员·2026届</h3>
+              <h3 className="text-[14px] font-medium text-slate-900 truncate">在线简历</h3>
             </div>
             <button 
               onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
-              className="bg-[#EEF2FF] text-blue-600 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-blue-100/50 active:bg-blue-50 transition-colors flex items-center gap-1 shadow-sm"
+              className="bg-[#EEF2FF] text-blue-600 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-blue-100/50 active:bg-blue-50 transition-colors flex items-center justify-center shadow-sm"
             >
-              <Eye size={14} /> 预览
+              预览/修改
             </button>
           </div>
         </div>
@@ -86,7 +87,10 @@ export default function Profile({ onNavigate }: ProfileProps) {
       </div>
 
       {/* AI Tool CTA */}
-      <div className="mx-4 mb-6 cursor-pointer active:scale-[0.98] transition-transform">
+      <div 
+        className="mx-4 mb-6 cursor-pointer active:scale-[0.98] transition-transform"
+        onClick={() => setShowProfileCards(!showProfileCards)}
+      >
         <div className="bg-[#0b9488] rounded-[20px] p-6 text-white relative overflow-hidden flex flex-col items-start shadow-md shadow-teal-500/20">
           <Sparkles size={110} className="absolute -right-6 -top-6 text-white/10" strokeWidth={1} />
           
@@ -101,43 +105,45 @@ export default function Profile({ onNavigate }: ProfileProps) {
       </div>
 
       {/* Resume Management List */}
-      <div className="bg-white mx-4 rounded-[10px] border border-slate-200/60 shadow-sm overflow-hidden text-left mb-24">
-        <div className="px-4 py-3 border-b border-slate-100/60 bg-slate-50 flex items-center justify-between">
-          <h2 className="text-[13px] font-semibold text-slate-600 tracking-tight">个人档案卡片</h2>
-        </div>
-        
-        {sections.map((section, index) => (
-          <button 
-            key={section.id}
-            onClick={() => handleEdit(section.id as SectionType)}
-            className={`w-full flex items-center gap-3 p-4 bg-white active:bg-slate-50 transition-colors text-left ${
-              index !== sections.length - 1 ? 'border-b border-slate-100' : ''
-            }`}
-          >
-            <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-              section.status === 'complete' ? 'bg-blue-50 text-blue-600' : 
-              section.status === 'warning' ? 'bg-orange-50 text-orange-600' : 'bg-slate-100 text-slate-400'
-            }`}>
-              <section.icon size={18} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="font-medium text-slate-900 text-[14px]">{section.title}</span>
+      {showProfileCards && (
+        <div className="bg-white mx-4 rounded-[10px] border border-slate-200/60 shadow-sm overflow-hidden text-left mb-24">
+          <div className="px-4 py-3 border-b border-slate-100/60 bg-slate-50 flex items-center justify-between">
+            <h2 className="text-[13px] font-semibold text-slate-600 tracking-tight">个人档案卡片</h2>
+          </div>
+          
+          {sections.map((section, index) => (
+            <button 
+              key={section.id}
+              onClick={() => handleEdit(section.id as SectionType)}
+              className={`w-full flex items-center gap-3 p-4 bg-white active:bg-slate-50 transition-colors text-left ${
+                index !== sections.length - 1 ? 'border-b border-slate-100' : ''
+              }`}
+            >
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+                section.status === 'complete' ? 'bg-blue-50 text-blue-600' : 
+                section.status === 'warning' ? 'bg-orange-50 text-orange-600' : 'bg-slate-100 text-slate-400'
+              }`}>
+                <section.icon size={18} />
               </div>
-              <p className="text-[12px] text-slate-500 truncate">{section.summary}</p>
-            </div>
-            <div className="shrink-0 flex items-center">
-              {section.status === 'complete' ? (
-                <CheckCircle2 size={16} className="text-blue-500" />
-              ) : section.status === 'warning' ? (
-                <AlertCircle size={16} className="text-orange-500" />
-              ) : (
-                <span className="text-[12px] text-slate-400 px-2 bg-slate-50 border border-slate-100 rounded-full font-medium">待补充</span>
-              )}
-            </div>
-          </button>
-        ))}
-      </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="font-medium text-slate-900 text-[14px]">{section.title}</span>
+                </div>
+                <p className="text-[12px] text-slate-500 truncate">{section.summary}</p>
+              </div>
+              <div className="shrink-0 flex items-center">
+                {section.status === 'complete' ? (
+                  <CheckCircle2 size={16} className="text-blue-500" />
+                ) : section.status === 'warning' ? (
+                  <AlertCircle size={16} className="text-orange-500" />
+                ) : (
+                  <span className="text-[12px] text-slate-400 px-2 bg-slate-50 border border-slate-100 rounded-full font-medium">待补充</span>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 
