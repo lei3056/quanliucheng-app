@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, UserCircle, Briefcase, ChevronLeft, Plus, CheckCircle2, AlertCircle, FileText, GraduationCap, Users, Trash2, Award, Target, Bookmark, Bell, Download, Eye } from 'lucide-react';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 type ViewMode = 'overview' | 'editor';
 type SectionType = 'basic' | 'education' | 'experience' | 'certifications' | 'family' | 'evaluation';
@@ -28,14 +27,6 @@ export default function Profile({ onNavigate }: ProfileProps) {
     { id: 1, relation: '父亲', name: '李建国', company: '市直属机关事务中心', politics: '中共党员' }
   ]);
 
-  const radarData = [
-    { subject: '院校背景', A: 95, fullMark: 100 },
-    { subject: '职业素养', A: 65, fullMark: 100 },
-    { subject: '实践素养', A: 40, fullMark: 100 },
-    { subject: '专业素养', A: 50, fullMark: 100 },
-    { subject: '政治素养', A: 85, fullMark: 100 },
-  ];
-
   const sections = [
     { id: 'basic', title: '基础身份', icon: UserCircle, status: 'complete', summary: '李雷, 男, 党员' },
     { id: 'education', title: '教育经历', icon: GraduationCap, status: educationList.length > 0 ? 'complete' : 'warning', summary: educationList.length > 0 ? `${educationList[0].school} · ${educationList[0].major}` : '请补充最高学历' },
@@ -51,114 +42,101 @@ export default function Profile({ onNavigate }: ProfileProps) {
   };
 
   const Overview = () => (
-    <div className="flex flex-col gap-6 p-6 pb-32">
-      {/* Resume Card */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
-            <div className="w-1 h-4 bg-primary-500"></div> 我的简历
-          </h2>
-          <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-bold">更新于 2 天前</span>
+    <div className="flex flex-col">
+      {/* Resumes Module */}
+      <div className="bg-white mx-4 mt-6 rounded-[10px] border border-slate-200/60 shadow-sm overflow-hidden text-left mb-6">
+        <div className="px-4 py-3 border-b border-slate-100/60 bg-slate-50 flex items-center justify-between">
+          <h2 className="text-[13px] font-semibold text-slate-600 tracking-tight">我的简历</h2>
         </div>
         
-        <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4">
-          <div className="w-12 h-12 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center shrink-0">
-            <FileText size={24} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-slate-900 truncate">李雷-前端开发工程师-简历.pdf</h3>
-            <p className="text-[11px] text-slate-500 mt-0.5">服务端实时生成 · 1.2 MB</p>
-          </div>
-        </div>
-
-        <div className="flex gap-3">
-          <button 
-            onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
-            className="flex-1 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-          >
-            <Eye size={14} /> 在线预览
-          </button>
-          <button 
-             onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
-             className="flex-1 bg-primary-50 hover:bg-primary-100 text-primary-600 border border-primary-100 py-2.5 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-          >
-             <Download size={14} /> 保存到本地
-          </button>
-        </div>
-      </div>
-
-      {/* Radar Chart Card */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-        <h2 className="text-sm font-black text-slate-400 mb-2 flex items-center gap-2 tracking-tighter">
-          <div className="w-1 h-4 bg-primary-500"></div> 能力图谱
-        </h2>
-        <div className="h-[200px] w-full -ml-2 mb-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-              <PolarGrid stroke="#e2e8f0" strokeDasharray="3 3"/>
-              <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 10, fontWeight: 800 }} />
-              <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-              <Radar
-                 name="我的竞争力"
-                 dataKey="A"
-                 stroke="#0d9488"
-                 strokeWidth={2}
-                 fill="#14b8a6"
-                 fillOpacity={0.25}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
-        
-        <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl">
-           <p className="text-[10px] text-primary-600 font-black uppercase tracking-widest mb-1">综合诊断</p>
-           <p className="text-xs text-slate-600 leading-relaxed font-medium">您的表单基础完整度较好，但在<span className="font-bold text-slate-900">家庭社会关系</span>核查项中存在风险空白点。</p>
-        </div>
-      </div>
-
-      {/* Resume Management List (Level 1) */}
-      <div className="space-y-3">
-        <h2 className="text-sm font-black text-slate-400 flex items-center gap-2 tracking-tighter">
-          <div className="w-1 h-4 bg-emerald-500"></div> 个人档案管理
-        </h2>
-        
-        {sections.map((section) => (
-          <button 
-            key={section.id}
-            onClick={() => handleEdit(section.id as SectionType)}
-            className="w-full bg-white p-4 rounded-2xl border border-slate-200 flex items-center gap-4 hover:border-primary-300 transition-colors group text-left shadow-sm"
-          >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              section.status === 'complete' ? 'bg-emerald-50 border border-emerald-100 text-emerald-600' : 
-              section.status === 'warning' ? 'bg-amber-50 border border-amber-100 text-amber-600' : 'bg-slate-50 border border-slate-100 text-slate-400'
-            }`}>
-              <section.icon size={20} />
+        {/* 在线简历 (我的简历) */}
+        <div className="p-4 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-50 border border-blue-100/50 rounded-[10px] flex items-center justify-center shrink-0">
+              <FileText size={20} className="text-blue-600" />
             </div>
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-1">
-                <span className="font-bold text-slate-800 text-sm">{section.title}</span>
-                {section.status === 'complete' ? (
-                  <CheckCircle2 size={16} className="text-emerald-500" />
-                ) : section.status === 'warning' ? (
-                  <AlertCircle size={16} className="text-amber-500" />
-                ) : (
-                  <Plus size={16} className="text-slate-300" />
-                )}
-              </div>
-              <p className="text-[10px] text-slate-500 font-medium uppercase tracking-widest">{section.summary}</p>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-[14px] font-medium text-slate-900 truncate">李雷-中共党员·2026届</h3>
             </div>
-          </button>
-        ))}
+            <button 
+              onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
+              className="bg-[#EEF2FF] text-blue-600 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-blue-100/50 active:bg-blue-50 transition-colors flex items-center gap-1 shadow-sm"
+            >
+              <Eye size={14} /> 预览
+            </button>
+          </div>
+        </div>
+
+        {/* 一页纸简历 */}
+        <div className="p-4">
+           <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-emerald-50 border border-emerald-100/50 rounded-[10px] flex items-center justify-center shrink-0">
+              <FileText size={20} className="text-emerald-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-[14px] font-medium text-slate-900 truncate">一页纸简历</h3>
+            </div>
+            <button 
+              className="bg-slate-50 text-slate-700 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-slate-200/60 active:bg-slate-100 transition-colors shadow-sm flex items-center gap-1"
+            >
+               保存本地
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* AI Tool CTA */}
-      <div className="group bg-primary-600 p-6 rounded-2xl text-white relative overflow-hidden shadow-lg shadow-primary-100 cursor-pointer transition-transform active:scale-95 mt-4">
-        <Sparkles size={100} className="absolute -right-6 -top-6 text-white/10" />
-        <h3 className="font-bold mb-1 text-base">不想一项项填写？</h3>
-        <p className="text-[11px] text-primary-100 mb-4 font-medium leading-relaxed">上传现有 PDF / Word 简历，系统自动提取识别并填充所有档案数据。</p>
-        <button className="bg-white text-primary-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest pointer-events-none">
-          智能解析简历
-        </button>
+      <div className="mx-4 mb-6 cursor-pointer active:scale-[0.98] transition-transform">
+        <div className="bg-[#0b9488] rounded-[20px] p-6 text-white relative overflow-hidden flex flex-col items-start shadow-md shadow-teal-500/20">
+          <Sparkles size={110} className="absolute -right-6 -top-6 text-white/10" strokeWidth={1} />
+          
+          <div className="relative z-10">
+            <h3 className="font-bold text-[16px] mb-2 text-white">不想一项项填写？</h3>
+            <p className="text-[12px] text-teal-50 mb-5 leading-relaxed pr-6">上传现有 PDF / Word 简历，系统自动提取识别并填充所有档案数据。</p>
+            <button className="bg-white text-[#0b9488] px-5 py-2.5 rounded-[12px] text-[13px] font-bold pointer-events-none tracking-wide">
+              智能解析简历
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Resume Management List */}
+      <div className="bg-white mx-4 rounded-[10px] border border-slate-200/60 shadow-sm overflow-hidden text-left mb-24">
+        <div className="px-4 py-3 border-b border-slate-100/60 bg-slate-50 flex items-center justify-between">
+          <h2 className="text-[13px] font-semibold text-slate-600 tracking-tight">个人档案卡片</h2>
+        </div>
+        
+        {sections.map((section, index) => (
+          <button 
+            key={section.id}
+            onClick={() => handleEdit(section.id as SectionType)}
+            className={`w-full flex items-center gap-3 p-4 bg-white active:bg-slate-50 transition-colors text-left ${
+              index !== sections.length - 1 ? 'border-b border-slate-100' : ''
+            }`}
+          >
+            <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+              section.status === 'complete' ? 'bg-blue-50 text-blue-600' : 
+              section.status === 'warning' ? 'bg-orange-50 text-orange-600' : 'bg-slate-100 text-slate-400'
+            }`}>
+              <section.icon size={18} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="font-medium text-slate-900 text-[14px]">{section.title}</span>
+              </div>
+              <p className="text-[12px] text-slate-500 truncate">{section.summary}</p>
+            </div>
+            <div className="shrink-0 flex items-center">
+              {section.status === 'complete' ? (
+                <CheckCircle2 size={16} className="text-blue-500" />
+              ) : section.status === 'warning' ? (
+                <AlertCircle size={16} className="text-orange-500" />
+              ) : (
+                <span className="text-[12px] text-slate-400 px-2 bg-slate-50 border border-slate-100 rounded-full font-medium">待补充</span>
+              )}
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -446,23 +424,22 @@ export default function Profile({ onNavigate }: ProfileProps) {
               className="flex flex-col"
             >
               {/* Profile Header */}
-              <div className="bg-slate-900 border-b border-slate-800 px-6 pt-10 pb-8 text-white relative shrink-0">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="flex flex-col gap-1">
-                     <h1 className="text-xl font-black tracking-tight">用户档案</h1>
-                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">李雷 · 2026届应届生</p>
+              <div className="bg-white px-4 pt-12 pb-6 shrink-0 border-b border-slate-200/60 z-30 sticky top-0">
+                <div className="flex items-center gap-4">
+                  <div className="w-[60px] h-[60px] rounded-full overflow-hidden border border-slate-200 shadow-sm shrink-0">
+                    <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=f1f5f9" alt="User Avatar" className="w-full h-full object-cover" />
                   </div>
-                </div>
-                
-                {/* Global Progress Bar */}
-                <div className="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-sm">
-                  <div className="flex justify-between items-center text-[10px] uppercase font-bold text-slate-300 tracking-widest mb-3">
-                     <span>档案完成度</span>
-                     <span className="text-primary-400">80%</span>
-                  </div>
-                  <div className="w-full bg-slate-900 rounded-full h-1.5 flex overflow-hidden">
-                    <div className="bg-primary-500 h-full rounded-full w-[80%] relative transition-all duration-1000">
-                       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white/20 rounded-full blur-sm"></div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-2 mb-0.5">
+                      <h1 className="text-[18px] font-bold tracking-tight text-slate-900 mt-1">李雷</h1>
+                      <span className="text-[12px] text-slate-500 font-medium">中共党员 · 2026届</span>
+                    </div>
+                    {/* 档案完成度 */}
+                    <div className="flex items-center gap-2.5 mt-2.5">
+                      <div className="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                        <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-full rounded-full w-[80%]"></div>
+                      </div>
+                      <span className="text-[11px] font-bold text-slate-500">完成度 80%</span>
                     </div>
                   </div>
                 </div>

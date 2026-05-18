@@ -1,116 +1,176 @@
+import React, { useState, useRef } from 'react';
 import { motion } from 'motion/react';
-import { Calendar as CalendarIcon, CheckCircle2, CircleDashed, Clock, ChevronRight } from 'lucide-react';
+import { Calendar as CalendarIcon, RefreshCw } from 'lucide-react';
+
+const scheduleItems = [
+  { id: 1, dateLabel: '05-15 周四', unit: '北京市人社局事业单位', position: '综合管理岗', status: '待笔试', statusType: '待笔试' },
+  { id: 2, dateLabel: '05-18 周日', unit: '上海市人民法院', position: '法官助理', status: '待缴费', statusType: '待缴费' },
+  { id: 3, dateLabel: '05-20 周二', unit: '杭州市余杭区政府', position: '综合管理储备干部', status: '待打印准考证', statusType: '待打印' },
+  { id: 4, dateLabel: '05-01 周四', unit: '绵阳经济技术开发区三江小学', position: '小学语文教师', status: '报名阶段', statusType: '其他' },
+  { id: 5, dateLabel: '04-10 周三', unit: '吉安东管理中心', position: '文秘宣传岗', status: '已结束', statusType: '已完成' },
+];
 
 export default function Schedule() {
-  const days = [
-    { day: '一', date: '15', active: false },
-    { day: '二', date: '16', active: false },
-    { day: '三', date: '17', active: true },
-    { day: '四', date: '18', active: false },
-    { day: '五', date: '19', active: false },
-    { day: '六', date: '20', active: false },
-  ];
+  const [activeFilter, setActiveFilter] = useState('全部');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  const [pullY, setPullY] = useState(0);
+  const startY = useRef(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (scrollContainerRef.current?.scrollTop === 0) {
+      startY.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (startY.current > 0) {
+      const y = e.touches[0].clientY - startY.current;
+      if (y > 0 && y < 100) {
+        setPullY(y);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (pullY > 50) {
+      setIsRefreshing(true);
+      setTimeout(() => {
+        setIsRefreshing(false);
+        setPullY(0);
+      }, 1500);
+    } else {
+      setPullY(0);
+    }
+    startY.current = 0;
+  };
+
+  const filters = ['全部', '待缴费', '待打印', '待笔试', '已完成'];
+
+  const filteredItems = scheduleItems.filter(item => {
+    if (activeFilter === '全部') return true;
+    return item.statusType === activeFilter;
+  });
+
+  const getStatusStyle = (type: string) => {
+    if (type.includes('缴费')) return 'text-orange-600 bg-orange-50 border-orange-100';
+    if (type.includes('打印')) return 'text-blue-600 bg-blue-50 border-blue-100';
+    if (type.includes('笔试')) return 'text-red-600 bg-red-50 border-red-100';
+    if (type.includes('完成')) return 'text-slate-500 bg-slate-100 border-slate-200';
+    return 'text-slate-600 bg-slate-50 border-slate-200';
+  };
+
+  const renderActionBtn = (type: string) => {
+    if (type.includes('缴费')) {
+      return <button className="px-5 py-[7px] bg-blue-600 text-white rounded-[8px] text-[13px] font-bold active:bg-blue-700 transition-colors">去缴费</button>;
+    }
+    if (type.includes('打印')) {
+      return <button className="px-3 py-[7px] text-blue-600 font-medium text-[13px] active:bg-blue-50 rounded-[8px] transition-colors">去打印准考证</button>;
+    }
+    if (type.includes('笔试')) {
+      return <button className="px-3 py-[7px] text-slate-500 font-medium text-[13px] active:bg-slate-100 rounded-[8px] transition-colors">设置提醒</button>;
+    }
+    if (type.includes('完成')) {
+      return <button disabled className="px-5 py-[7px] bg-slate-100 text-slate-400 rounded-[8px] text-[13px] font-medium cursor-not-allowed">已结束</button>;
+    }
+    return <button className="px-3 py-[7px] text-slate-500 font-medium text-[13px] active:bg-slate-100 rounded-[8px] transition-colors">查看详情</button>;
+  };
 
   return (
     <motion.div 
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className="flex flex-col h-full bg-slate-50 pb-24 overflow-y-auto"
+      className="flex flex-col h-full bg-[#f6f7f9] pb-24"
     >
-      {/* Header & Mini Calendar */}
-      <div className="bg-white px-6 pt-8 pb-6 border-b border-slate-200 z-10 shrink-0">
-        <h1 className="text-xl font-bold text-slate-900 mb-6 flex items-center justify-between">
-          <span>日程追踪</span>
-          <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500">
-            <CalendarIcon size={16} />
-          </div>
-        </h1>
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-sm font-black text-slate-800 uppercase tracking-widest">2026 / 04</span>
-          <span className="text-[10px] font-bold text-primary-700 px-3 py-1 bg-primary-50 border border-primary-100 rounded-md uppercase tracking-widest">回到今天</span>
-        </div>
-        <div className="flex justify-between mt-4">
-          {days.map((d, i) => (
-            <div key={i} className={`flex flex-col items-center justify-center p-2 rounded-xl w-11 h-14 transition-all border ${d.active ? 'bg-primary-600 border-primary-700 text-white shadow-sm' : 'bg-slate-50 border-slate-100 text-slate-500'}`}>
-              <span className={`text-[10px] font-bold mb-1 ${d.active ? 'opacity-80' : ''}`}>{d.day}</span>
-              <span className={`text-sm font-black ${d.active ? '' : 'text-slate-800'}`}>{d.date}</span>
-            </div>
+      {/* Header */}
+      <div className="bg-white pt-12 pb-3 px-4 border-b border-slate-200/60 sticky top-0 z-30 shrink-0">
+        <h1 className="text-[16px] font-bold text-slate-900 text-center tracking-tight mb-4">日程</h1>
+        
+        {/* Filters */}
+        <div className="flex justify-between gap-1.5 pb-1 w-full">
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`flex-1 py-1.5 rounded-full text-[12px] font-medium transition-colors border text-center whitespace-nowrap px-1 ${
+                activeFilter === filter 
+                ? 'bg-blue-600 text-white border-blue-600' 
+                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              {filter}
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Timeline */}
-      <div className="flex-1 px-6 pt-8 pb-8">
-        
-        {/* Urgent Section */}
-        <div className="mb-10">
-          <h2 className="text-sm font-black text-slate-400 mb-6 flex items-center gap-2 tracking-tighter">
-            <div className="w-1 h-4 bg-amber-400"></div> 待办事项
-          </h2>
-          
-          <div className="relative pl-6 border-l-2 border-slate-200 space-y-6">
-            
-            {/* Urgent Item */}
-            <div className="relative">
-              <span className="absolute -left-[31px] top-1 w-[18px] h-[18px] rounded-full bg-white border-[4px] border-amber-400 z-10 ring-4 ring-slate-50"></span>
-              <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <div className="text-[10px] font-bold text-amber-600 mb-2 flex items-center gap-1 uppercase tracking-wider bg-amber-50 w-fit px-2 py-1 rounded-md border border-amber-100">
-                  <Clock size={12} /> 今天 14:00 截止
-                </div>
-                <h3 className="font-bold text-slate-900 mb-2 text-sm">吉安车管中心-宣传统筹岗位</h3>
-                <p className="text-[11px] text-slate-500 mb-4 leading-relaxed font-medium">若未按时缴费将视为自动放弃报名资格。</p>
-                <button className="w-full bg-slate-900 text-white py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors flex justify-center items-center gap-2">
-                  前往缴费平台 <ChevronRight size={14} />
-                </button>
-              </div>
-            </div>
-
-            {/* Upcoming Item */}
-            <div className="relative">
-              <span className="absolute -left-[31px] top-1 w-[18px] h-[18px] rounded-full bg-slate-50 border-[4px] border-primary-400 z-10 ring-4 ring-slate-50"></span>
-              <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <div className="text-[10px] font-bold flex items-center gap-1 uppercase tracking-wider mb-2 text-primary-700 bg-primary-50 border border-primary-100 w-fit px-2 py-1 rounded-md">
-                  <Clock size={12} /> 04/20 09:00 开启
-                </div>
-                <h3 className="font-bold text-slate-900 mb-2 text-sm">软州市林业局-业务股工作人员</h3>
-                <p className="text-[11px] text-slate-500 mb-4 leading-relaxed font-medium">准考证打印系统开启，请提前准备设备并下载。</p>
-                <button className="w-full bg-slate-50 border border-slate-200 text-slate-700 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-slate-100 transition-colors">
-                  设置日历提醒
-                </button>
-              </div>
-            </div>
-
-          </div>
+      {/* Scrollable Area */}
+      <div 
+        className="flex-1 overflow-y-auto"
+        ref={scrollContainerRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Pull to refresh visual */}
+        <div className="flex justify-center items-center overflow-hidden transition-all duration-200"
+             style={{ height: isRefreshing ? '40px' : Math.min(pullY, 40) + 'px', opacity: isRefreshing || pullY > 0 ? 1 : 0 }}>
+           {isRefreshing ? <RefreshCw className="animate-spin text-slate-400" size={16} /> : <span className="text-[12px] text-slate-400 font-medium">{pullY > 50 ? '释放刷新...' : '下拉刷新...'}</span>}
         </div>
 
-        {/* Completed Section */}
-        <div>
-           <h2 className="text-sm font-black text-slate-400 mb-6 flex items-center gap-2 tracking-tighter">
-            <div className="w-1 h-4 bg-emerald-500"></div> 已完成节点
-          </h2>
-
-          <div className="relative pl-6 border-l-2 border-slate-200 border-dashed space-y-6">
-            
-            <div className="relative opacity-60">
-              <span className="absolute -left-[31px] top-1 w-[18px] h-[18px] rounded-full bg-slate-100 border-[4px] border-emerald-500 z-10 ring-4 ring-slate-50 flex items-center justify-center"></span>
-              <div className="bg-white p-4 rounded-xl border border-slate-200">
-                <div className="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-widest">04-10 / 16:30</div>
-                <h3 className="font-bold text-slate-700 text-[11px]">提交报名申请 (江西省交投数据)</h3>
-              </div>
+        <div className="pt-4 px-4 pb-6">
+          {/* Highlight Notification Bar */}
+          <div className="flex gap-2.5 mb-4 max-w-full">
+            <div className="flex-1 bg-red-50/80 rounded-[8px] p-2.5 flex items-center gap-1.5 border border-red-100/60 min-w-0">
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></div>
+              <span className="text-[12px] text-red-600 truncate"><span className="font-bold">今日待办：</span>1 项</span>
             </div>
-
-            <div className="relative opacity-50 pb-8">
-              <span className="absolute -left-[31px] top-1 w-[18px] h-[18px] rounded-full bg-slate-100 border-[4px] border-emerald-500 z-10 ring-4 ring-slate-50 flex items-center justify-center"></span>
-              <div className="bg-white p-4 rounded-xl border border-slate-200">
-                <div className="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-widest">04-05 / 09:12</div>
-                <h3 className="font-bold text-slate-700 text-[11px]">完成简历 AI 托管诊断</h3>
-              </div>
+            <div className="flex-1 bg-orange-50/80 rounded-[8px] p-2.5 flex items-center gap-1.5 border border-orange-100/60 min-w-0">
+              <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"></div>
+              <span className="text-[12px] text-orange-600 truncate"><span className="font-bold">即将截止：</span>3 项</span>
             </div>
-
           </div>
-        </div>
 
+          {/* Schedule List */}
+          {filteredItems.length > 0 ? (
+            <div className="flex flex-col gap-3">
+              {filteredItems.map(item => (
+                <div key={item.id} className="bg-white rounded-[10px] border border-slate-200/60 p-3.5 shadow-sm active:bg-slate-50/80 transition-colors">
+                  {/* Card Header: Date */}
+                  <div className="text-[12px] text-slate-500 mb-2.5">
+                    {item.dateLabel}
+                  </div>
+                  
+                  {/* Card Body */}
+                  <div className="mb-4">
+                    <h3 className="text-[15px] font-bold text-slate-900 leading-snug mb-1">{item.unit}</h3>
+                    <p className="text-[14px] text-slate-600 mb-2.5">{item.position}</p>
+                    <div className="flex">
+                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded border ${getStatusStyle(item.statusType)}`}>
+                        {item.status}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Card Footer */}
+                  <div className="flex justify-end pt-3 border-t border-slate-100/80">
+                    {renderActionBtn(item.statusType)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 border border-slate-200/50">
+                <CalendarIcon size={28} className="text-slate-300" strokeWidth={1.5} />
+              </div>
+              <h3 className="text-[15px] font-medium text-slate-700 mb-1.5">暂无考试日程</h3>
+              <p className="text-[13px] text-slate-500">去首页添加岗位，自动生成日程</p>
+            </div>
+          )}
+        </div>
       </div>
     </motion.div>
   );
