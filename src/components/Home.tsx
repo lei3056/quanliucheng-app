@@ -330,7 +330,7 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
         {/* Favorites */}
         {activeFilter === 'favorites' && (
           <div>
-            <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40 mt-3">
+            <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40">
               {favoritesItems.map((item, i, arr) => (
                 <div key={i} className={`p-4 group active:bg-slate-50 transition-colors ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''} ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}>
                   <div className="mb-2">
