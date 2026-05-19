@@ -63,7 +63,7 @@ export default function Profile({ onNavigate }: ProfileProps) {
               onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
               className="bg-[#EEF2FF] text-blue-600 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-blue-100/50 active:bg-blue-50 transition-colors flex items-center justify-center shadow-sm"
             >
-              预览/修改
+              预览
             </button>
           </div>
         </div>

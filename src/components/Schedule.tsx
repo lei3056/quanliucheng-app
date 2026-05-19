@@ -3,15 +3,16 @@ import { motion } from 'motion/react';
 import { Calendar as CalendarIcon, RefreshCw } from 'lucide-react';
 
 const scheduleItems = [
-  { id: 1, dateLabel: '05-15 周四', unit: '北京市人社局事业单位', position: '综合管理岗', status: '待笔试', statusType: '待笔试' },
-  { id: 2, dateLabel: '05-18 周日', unit: '上海市人民法院', position: '法官助理', status: '待缴费', statusType: '待缴费' },
-  { id: 3, dateLabel: '05-20 周二', unit: '杭州市余杭区政府', position: '综合管理储备干部', status: '待打印准考证', statusType: '待打印' },
-  { id: 4, dateLabel: '05-01 周四', unit: '绵阳经济技术开发区三江小学', position: '小学语文教师', status: '报名阶段', statusType: '其他' },
-  { id: 5, dateLabel: '04-10 周三', unit: '吉安东管理中心', position: '文秘宣传岗', status: '已结束', statusType: '已完成' },
+  { id: 1, dateLabel: '05-15', unit: '北京市人社局事业单位', position: '综合管理岗', status: '待笔试', statusType: '待笔试' },
+  { id: 2, dateLabel: '05-18', unit: '上海市人民法院', position: '法官助理', status: '待缴费', statusType: '待缴费' },
+  { id: 3, dateLabel: '05-20', unit: '杭州市余杭区政府', position: '综合管理储备干部', status: '待打印准考证', statusType: '待打印' },
+  { id: 4, dateLabel: '05-01', unit: '绵阳经济技术开发区三江小学', position: '小学语文教师', status: '报名阶段', statusType: '其他' },
+  { id: 5, dateLabel: '04-10', unit: '吉安东管理中心', position: '文秘宣传岗', status: '已结束', statusType: '已完成' },
 ];
 
 export default function Schedule() {
   const [activeFilter, setActiveFilter] = useState('全部');
+  const [subFilter, setSubFilter] = useState<null | 'today' | 'upcoming'>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
@@ -49,9 +50,33 @@ export default function Schedule() {
   const filters = ['全部', '待缴费', '待打印', '待笔试', '已完成'];
 
   const filteredItems = scheduleItems.filter(item => {
-    if (activeFilter === '全部') return true;
-    return item.statusType === activeFilter;
+    // Top filter overrides sub-filter if it's not "全部"
+    if (activeFilter !== '全部') return item.statusType === activeFilter;
+    
+    // If we are in "全部", check for sub-filters
+    if (subFilter === 'today') {
+      return item.dateLabel.includes('05-18');
+    }
+    if (subFilter === 'upcoming') {
+      // 3 days range: 05-18, 05-19, 05-20
+      return item.dateLabel.includes('05-18') || item.dateLabel.includes('05-19') || item.dateLabel.includes('05-20');
+    }
+    
+    return true;
   });
+
+  const handleTopFilterClick = (filter: string) => {
+    setActiveFilter(filter);
+    setSubFilter(null); // Reset sub-filter when switching main categories
+  };
+
+  const handleSubFilterClick = (filter: 'today' | 'upcoming') => {
+    if (subFilter === filter) {
+      setSubFilter(null); // Toggle off if clicked again
+    } else {
+      setSubFilter(filter);
+    }
+  };
 
   const getStatusStyle = (type: string) => {
     if (type.includes('缴费')) return 'text-orange-600 bg-orange-50 border-orange-100';
@@ -93,10 +118,10 @@ export default function Schedule() {
           {filters.map((filter) => (
             <button
               key={filter}
-              onClick={() => setActiveFilter(filter)}
+              onClick={() => handleTopFilterClick(filter)}
               className={`flex-1 py-1.5 rounded-full text-[12px] font-medium transition-colors border text-center whitespace-nowrap px-1 ${
                 activeFilter === filter 
-                ? 'bg-blue-600 text-white border-blue-600' 
+                ? 'bg-blue-600 text-white border-blue-600 shadow-sm' 
                 : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
@@ -122,38 +147,49 @@ export default function Schedule() {
 
         <div className="pt-4 px-4 pb-6">
           {/* Highlight Notification Bar */}
-          <div className="flex gap-2.5 mb-4 max-w-full">
-            <div className="flex-1 bg-red-50/80 rounded-[8px] p-2.5 flex items-center gap-1.5 border border-red-100/60 min-w-0">
-              <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></div>
-              <span className="text-[12px] text-red-600 truncate"><span className="font-bold">今日待办：</span>1 项</span>
+          {activeFilter === '全部' && (
+            <div className="flex gap-2.5 mb-4 max-w-full">
+              <button 
+                onClick={() => handleSubFilterClick('today')}
+                className={`flex-1 rounded-[8px] p-2.5 flex items-center gap-1.5 border transition-all active:scale-[0.98] min-w-0 ${
+                  subFilter === 'today' 
+                  ? 'bg-red-100/50 border-red-300 ring-1 ring-red-300 shadow-inner' 
+                  : 'bg-red-50/80 border-red-100/60 shadow-sm'
+                }`}
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0"></div>
+                <span className="text-[12px] text-red-600 truncate"><span className="font-bold">今日待办：</span>1 项</span>
+              </button>
+              <button 
+                onClick={() => handleSubFilterClick('upcoming')}
+                className={`flex-1 rounded-[8px] p-2.5 flex items-center gap-1.5 border transition-all active:scale-[0.98] min-w-0 ${
+                  subFilter === 'upcoming' 
+                  ? 'bg-orange-100/50 border-orange-300 ring-1 ring-orange-300 shadow-inner' 
+                  : 'bg-orange-50/80 border-orange-100/60 shadow-sm'
+                }`}
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"></div>
+                <span className="text-[12px] text-orange-600 truncate"><span className="font-bold">即将截止：</span>3 项</span>
+              </button>
             </div>
-            <div className="flex-1 bg-orange-50/80 rounded-[8px] p-2.5 flex items-center gap-1.5 border border-orange-100/60 min-w-0">
-              <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0"></div>
-              <span className="text-[12px] text-orange-600 truncate"><span className="font-bold">即将截止：</span>3 项</span>
-            </div>
-          </div>
+          )}
 
           {/* Schedule List */}
           {filteredItems.length > 0 ? (
             <div className="flex flex-col gap-3">
               {filteredItems.map(item => (
                 <div key={item.id} className="bg-white rounded-[10px] border border-slate-200/60 p-3.5 shadow-sm active:bg-slate-50/80 transition-colors">
-                  {/* Card Header: Date */}
-                  <div className="text-[12px] text-slate-500 mb-2.5">
-                    {item.dateLabel}
-                  </div>
-                  
-                  {/* Card Body */}
-                  <div>
-                    <h3 className="text-[15px] font-bold text-slate-900 leading-snug mb-1">{item.unit}</h3>
-                    <p className="text-[14px] text-slate-600 mb-3">{item.position}</p>
-                    <div className="flex justify-between items-center mt-1">
+                  <h3 className="text-[15px] font-bold text-slate-900 leading-snug mb-1">{item.unit}</h3>
+                  <p className="text-[14px] text-slate-600 mb-3">{item.position}</p>
+                  <div className="flex justify-between items-center mt-1">
+                    <div className="flex items-center gap-3">
                       <span className={`text-[11px] font-bold px-2 py-0.5 rounded border ${getStatusStyle(item.statusType)}`}>
                         {item.status}
                       </span>
-                      <div>
-                        {renderActionBtn(item.statusType)}
-                      </div>
+                      <span className="text-[12px] text-slate-400 font-medium">{item.dateLabel}</span>
+                    </div>
+                    <div>
+                      {renderActionBtn(item.statusType)}
                     </div>
                   </div>
                 </div>
