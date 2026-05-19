@@ -294,13 +294,13 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                   onClick={() => setIsSearchMode(true)} 
                   className="text-[#007AFF]"
                 >
-                  <Search size={22} strokeWidth={2.5} />
+                  <Search size={22} />
                 </button>
                 <button 
                   onClick={() => setIsFilterOpen(true)} 
                   className="text-[#007AFF]"
                 >
-                  <Filter size={22} strokeWidth={2.5} />
+                  <Filter size={22} />
                 </button>
               </div>
             </div>
