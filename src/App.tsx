@@ -19,10 +19,10 @@ export default function App() {
   };
 
   const navItems = [
-    { id: 'home', icon: Compass, label: '发现' },
+    { id: 'home', icon: Compass, label: '岗位' },
+    { id: 'schedule', icon: CalendarIcon, label: '提醒' },
     { id: 'study', icon: BookOpen, label: '学习' },
-    { id: 'schedule', icon: CalendarIcon, label: '日程' },
-    { id: 'profile', icon: User, label: '档案' },
+    { id: 'profile', icon: User, label: '我的' },
   ] as const;
 
   return (
@@ -43,24 +43,26 @@ export default function App() {
         </div>
 
         {/* Bottom Navigation */}
-        <div className="absolute bottom-0 w-full bg-white border-t border-slate-200 px-6 py-4 pb-safe flex justify-around items-center z-50 rounded-b-[24px]">
-          {navItems.map((item) => {
-            const isActive = activeTab === item.id;
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id as any)}
-                className={`flex flex-col items-center gap-1.5 transition-all ${isActive ? 'text-primary-600 scale-105' : 'text-slate-400 hover:text-slate-600'}`}
-              >
-                <div className={`relative flex items-center justify-center w-10 h-8 rounded-lg transition-colors ${isActive ? 'bg-primary-50 border border-primary-100' : ''}`}>
-                  <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
-                </div>
-                <span className={`text-[10px] uppercase font-black tracking-widest`}>{item.label}</span>
-              </button>
-            );
-          })}
-        </div>
+        {['home', 'study', 'schedule', 'profile'].includes(activeTab) && (
+          <div className="absolute bottom-0 w-full bg-white border-t border-slate-200 px-6 py-4 pb-safe flex justify-around items-center z-50 rounded-b-[24px]">
+            {navItems.map((item) => {
+              const isActive = activeTab === item.id;
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id as any)}
+                  className={`flex flex-col items-center gap-1.5 transition-all ${isActive ? 'text-primary-600 scale-105' : 'text-slate-400 hover:text-slate-600'}`}
+                >
+                  <div className={`relative flex items-center justify-center w-10 h-8 rounded-lg transition-colors ${isActive ? 'bg-primary-50 border border-primary-100' : ''}`}>
+                    <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+                  </div>
+                  <span className={`text-[10px] uppercase font-black tracking-widest`}>{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
 
       </div>
     </div>

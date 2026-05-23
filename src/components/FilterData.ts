@@ -1,14 +1,28 @@
-export const examTypes = Array.from({length: 65}, (_, i) => {
-  const prefixes = ['国家', '省级', '市级', '县级', '乡镇'];
-  const types = ['公务员', '事业单位', '教师编制', '医疗卫生', '三支一扶', '特岗教师', '社区工作者', '辅警', '银行招聘', '国企招聘', '法院检察院', '军队文职'];
-  return `${prefixes[i % prefixes.length]}${types[Math.floor(i / prefixes.length) % types.length]}${i + 1}类`;
-});
+export const examTypes = [
+  '医疗卫生招聘',
+  '公务员招聘',
+  '事业单位招聘',
+  '教师编制招聘',
+  ...Array.from({length: 65}, (_, i) => {
+    const prefixes = ['国家', '省级', '市级', '县级', '乡镇'];
+    const types = ['公务员', '事业单位', '教师编制', '医疗卫生', '三支一扶', '特岗教师', '社区工作者', '辅警', '银行招聘', '国企招聘', '法院检察院', '军队文职'];
+    return `${prefixes[i % prefixes.length]}${types[Math.floor(i / prefixes.length) % types.length]}${i + 1}类`;
+  })
+];
 
 export const locationData = [
   {
     province: '北京',
     cities: [
       { city: '北京市', counties: ['东城区', '西城区', '朝阳区', '丰台区', '石景山区', '海淀区', '门头沟区', '房山区', '通州区', '顺义区', '昌平区', '大兴区'] }
+    ]
+  },
+  {
+    province: '山东省',
+    cities: [
+      { city: '淄博市', counties: ['博山区', '张店区', '临淄区', '淄川区', '周村区', '桓台县', '高青县', '沂源县'] },
+      { city: '济南市', counties: ['历下区', '市中区', '槐荫区', '天桥区', '历城区', '长清区', '章丘区', '济阳区', '莱芜区', '钢城区'] },
+      { city: '青岛市', counties: ['市南区', '市北区', '李沧区', '崂山区', '黄岛区', '城阳区', '即墨区', '胶州市', '平度市', '莱西市'] }
     ]
   },
   {

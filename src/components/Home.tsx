@@ -124,7 +124,7 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
             onClick={() => setActiveFilter('focused')}
             className={`flex-1 py-1 text-[13px] font-medium rounded-[7px] transition-colors ${activeFilter === 'focused' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
           >
-            重点关注
+            1V1精筛
           </button>
           <button 
             onClick={() => setActiveFilter('favorites')}
