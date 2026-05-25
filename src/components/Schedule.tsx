@@ -356,7 +356,7 @@ export default function Schedule() {
     >
       {/* Header */}
       <div className="bg-white pt-12 pb-3 px-4 border-b border-slate-200/60 sticky top-0 z-30 shrink-0">
-        <h1 className="text-[16px] font-bold text-slate-900 text-center tracking-tight mb-4">提醒</h1>
+        <h1 className="text-xl font-black text-slate-900 tracking-tight mb-4 px-2">提醒</h1>
         
         {/* Filters */}
         <div className="flex justify-between gap-1.5 pb-1 w-full">
