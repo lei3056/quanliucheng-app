@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, UserCircle, Briefcase, ChevronLeft, Plus, CheckCircle2, AlertCircle, FileText, GraduationCap, Users, Trash2, Award, Target, Bookmark, Bell, Download, Eye } from 'lucide-react';
+import { Sparkles, UserCircle, Briefcase, ChevronLeft, ChevronRight, Plus, CheckCircle2, AlertCircle, FileText, GraduationCap, Users, Trash2, Award, Target, Bookmark, Bell, Download, Eye } from 'lucide-react';
 
 type ViewMode = 'overview' | 'editor';
 type SectionType = 'basic' | 'education' | 'experience' | 'certifications' | 'family' | 'evaluation';
@@ -44,12 +44,62 @@ export default function Profile({ onNavigate }: ProfileProps) {
 
   const Overview = () => (
     <div className="flex flex-col">
-      {/* Resumes Module */}
-      <div className="bg-white mx-4 mt-6 rounded-[10px] border border-slate-200/60 shadow-sm overflow-hidden text-left mb-6">
-        <div className="px-4 py-3 border-b border-slate-100/60 bg-slate-50 flex items-center justify-between">
-          <h2 className="text-[13px] font-semibold text-slate-600 tracking-tight">我的简历</h2>
+      {/* Completeness & Resumes Module */}
+      <div className="bg-white mx-4 mt-6 rounded-[16px] border border-slate-200/60 shadow-sm overflow-hidden text-left mb-6">
+        {/* Profile Completeness Circular Section */}
+        <div className="relative px-5 pt-14 pb-6 flex flex-col items-center text-center gap-5 border-b border-slate-100/60">
+          <div className="absolute top-4 left-5 right-4 flex items-center justify-between">
+            <h2 className="text-[15px] font-black text-slate-900 tracking-tight">我的简历</h2>
+            <span className="text-[11px] font-extrabold text-blue-600 bg-blue-50/80 px-3 py-1.5 rounded-[8px] flex items-center gap-0.5 border border-blue-100/50 shadow-sm">
+              请去PC端完善
+            </span>
+          </div>
+          {/* Circular Progress */}
+          <div className="relative flex items-center justify-center shrink-0 w-[140px] h-[140px]">
+            <svg width="140" height="140" className="transform -rotate-90 drop-shadow-sm">
+              <defs>
+                <linearGradient id="completedGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#FB923C" /> {/* orange-400 */}
+                  <stop offset="100%" stopColor="#EF4444" /> {/* red-500 */}
+                </linearGradient>
+              </defs>
+              <circle
+                cx="70"
+                cy="70"
+                r="58"
+                stroke="#F4F5F7" // Soft light gray track
+                strokeWidth="14"
+                fill="none"
+              />
+              <circle
+                cx="70"
+                cy="70"
+                r="58"
+                stroke="url(#completedGradient)"
+                strokeWidth="14"
+                fill="none"
+                strokeLinecap="round"
+                strokeDasharray={2 * Math.PI * 58}
+                strokeDashoffset={2 * Math.PI * 58 * (1 - 0.8)}
+                className="transition-all duration-1000 ease-out"
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center pt-1 pointer-events-none select-none">
+              <div className="flex items-baseline text-slate-800">
+                <span className="text-[44px] font-[900] tracking-tighter leading-none shrink-0" style={{ letterSpacing: "-0.05em" }}>80</span>
+                <span className="text-[16px] font-[800] ml-[2px] leading-none mb-1">%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center">
+             <h3 className="text-[17px] font-black text-slate-900 mb-1.5">档案资料完成极佳</h3>
+             <p className="text-[13px] text-slate-500 leading-relaxed max-w-[260px]">
+               丰富档案资料可提升职位精准度，更有机会获得用人单位主动青睐。
+             </p>
+          </div>
         </div>
-        
+
         {/* 在线简历 (我的简历) */}
         <div className="p-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
@@ -427,10 +477,10 @@ export default function Profile({ onNavigate }: ProfileProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col"
+              className="flex flex-col pb-24"
             >
               {/* Profile Header */}
-              <div className="bg-white px-4 pt-12 pb-6 shrink-0 border-b border-slate-200/60 z-30 sticky top-0">
+              <div className="bg-white px-4 pt-12 pb-5 shrink-0 border-b border-slate-200/60 z-30 sticky top-0">
                 <div className="flex items-center gap-4">
                   <div className="w-[60px] h-[60px] rounded-full overflow-hidden border border-slate-200 shadow-sm shrink-0">
                     <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=f1f5f9" alt="User Avatar" className="w-full h-full object-cover" />
@@ -439,13 +489,6 @@ export default function Profile({ onNavigate }: ProfileProps) {
                     <div className="flex items-baseline gap-2 mb-0.5">
                       <h1 className="text-[18px] font-bold tracking-tight text-slate-900 mt-1">李雷</h1>
                       <span className="text-[12px] text-slate-500 font-medium">中共党员 · 2026届</span>
-                    </div>
-                    {/* 档案完成度 */}
-                    <div className="flex items-center gap-2.5 mt-2.5">
-                      <div className="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                        <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-full rounded-full w-[80%]"></div>
-                      </div>
-                      <span className="text-[11px] font-bold text-slate-500">完成度 80%</span>
                     </div>
                   </div>
                 </div>

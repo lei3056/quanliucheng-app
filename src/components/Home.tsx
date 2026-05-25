@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bookmark, Building2, CheckCircle2, CheckSquare, ChevronRight, Clock, Edit3, FileText, Flame, Loader2, MapPin, MoreHorizontal, MessageSquare, RefreshCw, Search, Star, Target, AlarmClock } from 'lucide-react';
+import { Bookmark, Building2, CheckCircle2, CheckSquare, ChevronRight, Clock, Edit3, FileText, Flame, Loader2, MapPin, MoreHorizontal, MessageSquare, RefreshCw, Search, Star, Target, AlarmClock, ThumbsDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?: (tab: 'home' | 'study' | 'schedule' | 'profile' | 'favorites' | 'targeted' | 'jobListing') => void; onTrack?: (title: string, status: any) => void; onShowList?: (title: string) => void }) {
   const [activeFilter, setActiveFilter] = useState<'overview' | 'focused' | 'favorites'>('overview');
@@ -91,6 +92,57 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
     { unit: '北京市东城区教委', position: '初中英语教师', location: '北京', edu: '本科', special: '师范', deadline: '截止: 05-18', status: '报名中', statusColor: 'amber', isHot: true },
     { unit: '广州市天河区税务局', position: '办税服务员', location: '广州', edu: '本科', special: '劳务', deadline: '截止: 05-10', status: '进行中', statusColor: 'emerald', isHot: false }
   ];
+
+  const [bookmarkedKeys, setBookmarkedKeys] = useState<string[]>(() => 
+    favoritesItems.map(item => `${item.unit}_${item.position}`)
+  );
+  const [hiddenKeys, setHiddenKeys] = useState<string[]>([]);
+  const [lastHiddenKey, setLastHiddenKey] = useState<string | null>(null);
+  const [showUndoToast, setShowUndoToast] = useState(false);
+
+  const toggleBookmark = (key: string) => {
+    setBookmarkedKeys(prev =>
+      prev.includes(key) ? prev.filter(x => x !== key) : [...prev, key]
+    );
+  };
+
+  const hideJob = (key: string) => {
+    setHiddenKeys(prev => [...prev, key]);
+    setLastHiddenKey(key);
+    setShowUndoToast(true);
+  };
+
+  const undoLastHide = () => {
+    if (lastHiddenKey) {
+      setHiddenKeys(prev => prev.filter(k => k !== lastHiddenKey));
+      setLastHiddenKey(null);
+      setShowUndoToast(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showUndoToast) {
+      const timer = setTimeout(() => {
+        setShowUndoToast(false);
+      }, 4500);
+      return () => clearTimeout(timer);
+    }
+  }, [showUndoToast, lastHiddenKey]);
+
+  // Dynamic focused items (excluding hidden ones)
+  const displayFocused = focusedItems.filter(item => {
+    const key = `${item.unit}_${item.position}`;
+    return !hiddenKeys.includes(key);
+  });
+
+  // Dynamic favorites: merge both, filter down to bookmarked keys, excluding hidden ones
+  const displayFavorites = [
+    ...favoritesItems,
+    ...focusedItems.filter(focused => !favoritesItems.some(fav => fav.unit === focused.unit && fav.position === focused.position))
+  ].filter(item => {
+    const key = `${item.unit}_${item.position}`;
+    return bookmarkedKeys.includes(key) && !hiddenKeys.includes(key);
+  });
 
   return (
     <div 
@@ -269,56 +321,97 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
             </div>
 
             <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40">
-              {focusedItems.map((item, i, arr) => (
-                <div key={i} className={`p-4 group active:bg-slate-50 transition-colors ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''} ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}>
-                  <div className="mb-2">
-                    <div className="flex justify-between items-start mb-1">
-                      <h3 className="text-[15px] font-semibold text-slate-900 leading-snug group-active:text-blue-600 transition-colors">
-                        {item.unit}
-                      </h3>
-                      <AlarmClock className={`text-${item.statusColor !== 'slate' ? 'blue' : 'slate'}-500 shrink-0 mt-0.5 ml-2`} size={16} />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
-                        {item.position}
-                      </span>
-                      <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
-                        考试类型
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3 mb-4">
-                    <div className="flex items-center gap-1.5">
-                      <span className={`text-[11px] font-bold uppercase tracking-wider text-${item.statusColor}-600 bg-${item.statusColor}-50 px-1.5 py-0.5 rounded border border-${item.statusColor}-100`}>
-                        {item.status}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-slate-500 gap-1.5">
-                      <MapPin size={14} className="text-slate-400" />
-                      <span className="text-[12px]">{item.location}</span>
-                    </div>
-                    <div className="flex items-center text-slate-500 gap-1.5">
-                      <Clock size={14} className="text-slate-400" />
-                      <span className="text-[12px]">{item.deadline.replace('截止: ', '').replace('发布: ', '')}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2 text-sm">
-                    <button className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-[10px] font-bold text-[13px] text-center flex items-center justify-center gap-1.5 transition-colors shadow-sm">
-                      <FileText size={14} /> 详情
-                    </button>
-                    <button 
-                      disabled={item.status === '已结束'}
-                      onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
-                      className={`flex-1 ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 border border-slate-200/50 cursor-not-allowed' : 'bg-[#EEF2FF] text-blue-600 active:bg-[#E0E7FF] border border-blue-100/50 shadow-sm'} py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors`}
+              <AnimatePresence initial={false}>
+                {displayFocused.map((item, i, arr) => {
+                  const key = `${item.unit}_${item.position}`;
+                  return (
+                    <motion.div 
+                      key={key}
+                      layout
+                      initial={{ opacity: 1, x: 0 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -100, height: 0, transition: { duration: 0.2 } }}
+                      className={`p-4 pr-12 relative group transition-colors ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''} ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}
                     >
-                      <Edit3 size={14} />
-                      状态
-                    </button>
-                  </div>
-                </div>
-              ))}
+                      <div className="mb-2">
+                        <div className="mb-1 text-left">
+                          <h3 className="text-[15px] font-semibold text-slate-900 leading-snug group-active:text-blue-600 transition-colors pr-6">
+                            {item.unit}
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
+                            {item.position}
+                          </span>
+                          <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
+                            考试类型
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3 mb-4">
+                        <div className="flex items-center gap-1.5">
+                          <span className={`text-[11px] font-bold uppercase tracking-wider text-${item.statusColor}-600 bg-${item.statusColor}-50 px-1.5 py-0.5 rounded border border-${item.statusColor}-100`}>
+                            {item.status}
+                          </span>
+                        </div>
+                        <div className="flex items-center text-slate-500 gap-1.5">
+                          <MapPin size={14} className="text-slate-400" />
+                          <span className="text-[12px]">{item.location}</span>
+                        </div>
+                        <div className="flex items-center text-slate-500 gap-1.5">
+                          <Clock size={14} className="text-slate-400" />
+                          <span className="text-[12px]">{item.deadline.replace('截止: ', '').replace('发布: ', '')}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 text-sm">
+                        <button className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-[10px] font-bold text-[13px] text-center flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                          <FileText size={14} /> 详情
+                        </button>
+                        <button 
+                          disabled={item.status === '已结束'}
+                          onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
+                          className={`flex-1 ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 border border-slate-200/50 cursor-not-allowed' : 'bg-[#EEF2FF] text-blue-600 active:bg-[#E0E7FF] border border-blue-100/50 shadow-sm'} py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors`}
+                        >
+                          <Edit3 size={14} />
+                          状态
+                        </button>
+                      </div>
+
+                      {/* Top Right Actions Stack */}
+                      <div className="absolute top-4 right-3.5 flex flex-col items-center gap-2.5 z-10">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleBookmark(key);
+                          }}
+                          className="p-1 rounded-full hover:bg-slate-100 active:scale-110 transition-transform flex items-center justify-center text-[#8E8E93]"
+                        >
+                          <Bookmark 
+                            size={18} 
+                            className={bookmarkedKeys.includes(key) ? "text-[#007AFF] fill-[#007AFF]" : ""}
+                          />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            hideJob(key);
+                          }}
+                          className="p-1 rounded-full hover:bg-slate-100 active:scale-110 transition-transform flex items-center justify-center text-[#8E8E93]"
+                        >
+                          <ThumbsDown 
+                            size={18} 
+                            className="hover:text-[#FF3B30]"
+                          />
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             </div>
             
             <div className="flex justify-center pb-4 h-12">
@@ -330,61 +423,137 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
         {/* Favorites */}
         {activeFilter === 'favorites' && (
           <div>
-            <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40">
-              {favoritesItems.map((item, i, arr) => (
-                <div key={i} className={`p-4 group active:bg-slate-50 transition-colors ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''} ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}>
-                  <div className="mb-2">
-                    <div className="flex justify-between items-start mb-1">
-                      <h3 className="text-[15px] font-semibold text-slate-900 leading-snug group-active:text-blue-600 transition-colors">
-                        {item.unit}
-                      </h3>
-                      <Bookmark className={`text-${item.statusColor !== 'slate' ? 'blue' : 'slate'}-500 shrink-0 mt-0.5 ml-2`} size={16} fill="currentColor" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
-                        {item.position}
-                      </span>
-                      <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
-                        考试类型
-                      </span>
-                    </div>
-                  </div>
+            {displayFavorites.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white rounded-[10px] mx-4 shadow-sm border border-slate-200/40">
+                <Bookmark className="text-slate-300 w-12 h-12 mb-3" />
+                <p className="text-slate-500 text-[14px]">暂无收藏岗位</p>
+              </div>
+            ) : (
+              <div className="bg-white rounded-[10px] mx-4 overflow-hidden mb-6 shadow-sm border border-slate-200/40">
+                <AnimatePresence initial={false}>
+                  {displayFavorites.map((item, i, arr) => {
+                    const key = `${item.unit}_${item.position}`;
+                    return (
+                      <motion.div 
+                        key={key}
+                        layout
+                        initial={{ opacity: 1, x: 0 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -100, height: 0, transition: { duration: 0.2 } }}
+                        className={`p-4 pr-12 relative group transition-colors ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''} ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}
+                      >
+                        <div className="mb-2">
+                          <div className="mb-1 text-left">
+                            <h3 className="text-[15px] font-semibold text-slate-900 leading-snug group-active:text-blue-600 transition-colors pr-6">
+                              {item.unit}
+                            </h3>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
+                              {item.position}
+                            </span>
+                            <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
+                              考试类型
+                            </span>
+                          </div>
+                        </div>
 
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3 mb-4">
-                    <div className="flex items-center gap-1.5">
-                      <span className={`text-[11px] font-bold uppercase tracking-wider text-${item.statusColor}-600 bg-${item.statusColor}-50 px-1.5 py-0.5 rounded border border-${item.statusColor}-100`}>
-                        {item.status}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-slate-500 gap-1.5">
-                      <MapPin size={14} className="text-slate-400" />
-                      <span className="text-[12px]">{item.location}</span>
-                    </div>
-                    <div className="flex items-center text-slate-500 gap-1.5">
-                      <Clock size={14} className="text-slate-400" />
-                      <span className="text-[12px]">{item.deadline.replace('截止: ', '').replace('发布: ', '')}</span>
-                    </div>
-                  </div>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3 mb-4">
+                          <div className="flex items-center gap-1.5">
+                            <span className={`text-[11px] font-bold uppercase tracking-wider text-${item.statusColor || 'teal'}-600 bg-${item.statusColor || 'teal'}-50 px-1.5 py-0.5 rounded border border-${item.statusColor || 'teal'}-100`}>
+                              {item.status}
+                            </span>
+                          </div>
+                          <div className="flex items-center text-slate-500 gap-1.5">
+                            <MapPin size={14} className="text-slate-400" />
+                            <span className="text-[12px]">{item.location}</span>
+                          </div>
+                          <div className="flex items-center text-slate-500 gap-1.5">
+                            <Clock size={14} className="text-slate-400" />
+                            <span className="text-[12px]">{item.deadline.replace('截止: ', '').replace('发布: ', '')}</span>
+                          </div>
+                        </div>
 
-                  <div className="flex gap-2 text-sm">
-                    <button className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-[10px] font-bold text-[13px] text-center flex items-center justify-center gap-1.5 transition-colors shadow-sm">
-                      <FileText size={14} /> 详情
-                    </button>
-                    <button 
-                      disabled={item.status === '已结束'}
-                      onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
-                      className={`flex-1 ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 border border-slate-200/50 cursor-not-allowed' : 'bg-[#EEF2FF] text-blue-600 active:bg-[#E0E7FF] border border-blue-100/50 shadow-sm'} py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors`}
-                    >
-                      <Edit3 size={14} />
-                      状态
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                        <div className="flex gap-2 text-sm">
+                          <button className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-[10px] font-bold text-[13px] text-center flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                            <FileText size={14} /> 详情
+                          </button>
+                          <button 
+                            disabled={item.status === '已结束'}
+                            onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
+                            className={`flex-1 ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 border border-slate-200/50 cursor-not-allowed' : 'bg-[#EEF2FF] text-blue-600 active:bg-[#E0E7FF] border border-blue-100/50 shadow-sm'} py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors`}
+                          >
+                            <Edit3 size={14} />
+                            状态
+                          </button>
+                        </div>
+
+                        {/* Top Right Actions Stack */}
+                        <div className="absolute top-4 right-3.5 flex flex-col items-center gap-2.5 z-10">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleBookmark(key);
+                            }}
+                            className="p-1 rounded-full hover:bg-slate-100 active:scale-110 transition-transform flex items-center justify-center text-[#8E8E93]"
+                          >
+                            <Bookmark 
+                              size={18} 
+                              className={bookmarkedKeys.includes(key) ? "text-[#007AFF] fill-[#007AFF]" : ""}
+                            />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              hideJob(key);
+                            }}
+                            className="p-1 rounded-full hover:bg-slate-100 active:scale-110 transition-transform flex items-center justify-center text-[#8E8E93]"
+                          >
+                            <ThumbsDown 
+                              size={18} 
+                              className="hover:text-[#FF3B30]"
+                            />
+                          </button>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
         )}
       </div>
+
+      {/* iOS Style Undo Toast Bar */}
+      <AnimatePresence>
+        {showUndoToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 55, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 35, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 220 }}
+            className="fixed bottom-24 left-4 right-4 bg-[#1C1C1E]/95 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-white/10 flex items-center justify-between z-50 overflow-hidden"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-5 h-5 bg-[#3A3A3C] rounded-full flex items-center justify-center">
+                <ThumbsDown size={11} className="text-white fill-current" />
+              </div>
+              <span className="text-[14px] font-medium text-slate-200">
+                已隐藏此岗位
+              </span>
+            </div>
+            <button
+              onClick={undoLastHide}
+              className="text-[#0A84FF] text-[14px] font-bold tracking-wide hover:brightness-125 px-2 py-0.5 select-none active:opacity-50"
+            >
+              撤销
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

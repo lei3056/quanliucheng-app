@@ -278,11 +278,16 @@ export default function Schedule() {
     startY.current = 0;
   };
 
-  const filters = ['全部', '待缴费', '待打印', '待笔试', '已完成'];
+  const filters = ['全部', '待缴费', '待打印', '待考试', '已完成'];
 
   const filteredItems = items.filter(item => {
     // Top filter overrides sub-filter if it's not "全部"
-    if (activeFilter !== '全部') return item.statusType === activeFilter;
+    if (activeFilter !== '全部') {
+      if (activeFilter === '待考试') {
+        return item.statusType === '待笔试';
+      }
+      return item.statusType === activeFilter;
+    }
     
     // If we are in "全部", check for sub-filters
     if (subFilter === 'today') {
@@ -494,7 +499,7 @@ export default function Schedule() {
                                   <span>共 {itemsInDate.length} 个提醒</span>
                                   {itemsInDate.some(item => item.statusType === '待缴费') && <span className="w-1.5 h-1.5 rounded-full bg-orange-400" title="待缴费" />}
                                   {itemsInDate.some(item => item.statusType === '待打印') && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" title="待打印" />}
-                                  {itemsInDate.some(item => item.statusType === '待笔试') && <span className="w-1.5 h-1.5 rounded-full bg-red-500" title="待笔试" />}
+                                  {itemsInDate.some(item => item.statusType === '待笔试') && <span className="w-1.5 h-1.5 rounded-full bg-red-500" title="待考试" />}
                                 </span>
                               )}
                             </div>
