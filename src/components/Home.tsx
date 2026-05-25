@@ -328,85 +328,81 @@ export default function Home({ onNavigate, onTrack, onShowList }: { onNavigate?:
                     <motion.div 
                       key={key}
                       layout
-                      initial={{ opacity: 1, x: 0 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -100, height: 0, transition: { duration: 0.2 } }}
-                      className={`p-4 pr-12 relative group transition-colors ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''} ${item.status === '已结束' ? 'opacity-[0.65]' : ''}`}
+                      initial={{ opacity: 1, x: 0, height: 'auto' }}
+                      animate={{ opacity: 1, x: 0, height: 'auto' }}
+                      exit={{ 
+                        opacity: 0, 
+                        x: -250, 
+                        height: 0,
+                        transition: { 
+                          x: { type: 'spring', damping: 25, stiffness: 200 },
+                          opacity: { duration: 0.15 },
+                          height: { delay: 0.08, duration: 0.2 }
+                        } 
+                      }}
+                      onClick={() => onTrack?.(`${item.unit} - ${item.position}`, '已投递')}
+                      className={`group select-none cursor-pointer transition-all duration-150 active:scale-[0.985] active:bg-slate-100/80 hover:bg-slate-50/40 relative overflow-hidden ${i !== arr.length - 1 ? 'border-b border-slate-100' : ''}`}
                     >
-                      <div className="mb-2">
-                        <div className="mb-1 text-left">
-                          <h3 className="text-[15px] font-semibold text-slate-900 leading-snug group-active:text-blue-600 transition-colors pr-6">
+                      <div className="p-4 pr-12 relative">
+                        <div className="mb-2 pr-4 text-left">
+                          <h3 className="text-[15px] font-semibold text-slate-900 mb-1 leading-snug group-active:text-blue-600 transition-colors">
                             {item.unit}
                           </h3>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
+                              {item.position}
+                            </span>
+                            <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
+                              考试类型
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
-                            {item.position}
-                          </span>
-                          <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
-                            考试类型
-                          </span>
-                        </div>
-                      </div>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3 mb-4">
-                        <div className="flex items-center gap-1.5">
-                          <span className={`text-[11px] font-bold uppercase tracking-wider text-${item.statusColor}-600 bg-${item.statusColor}-50 px-1.5 py-0.5 rounded border border-${item.statusColor}-100`}>
-                            {item.status}
-                          </span>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-2.5 mb-1 text-slate-500 text-left">
+                          <div className="flex items-center gap-1.5">
+                            <span className={`text-[11px] font-bold uppercase tracking-wider text-${item.statusColor}-600 bg-${item.statusColor}-50 px-1.5 py-0.5 rounded border border-${item.statusColor}-100`}>
+                              {item.status}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <MapPin size={14} className="text-slate-400 animate-pulse" />
+                            <span className="text-[12px]">{item.location}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Clock size={14} className="text-slate-400" />
+                            <span className="text-[12px]">{item.deadline.replace('截止: ', '').replace('发布: ', '')}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center text-slate-500 gap-1.5">
-                          <MapPin size={14} className="text-slate-400" />
-                          <span className="text-[12px]">{item.location}</span>
-                        </div>
-                        <div className="flex items-center text-slate-500 gap-1.5">
-                          <Clock size={14} className="text-slate-400" />
-                          <span className="text-[12px]">{item.deadline.replace('截止: ', '').replace('发布: ', '')}</span>
-                        </div>
-                      </div>
 
-                      <div className="flex gap-2 text-sm">
-                        <button className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 rounded-[10px] font-bold text-[13px] text-center flex items-center justify-center gap-1.5 transition-colors shadow-sm">
-                          <FileText size={14} /> 详情
-                        </button>
-                        <button 
-                          disabled={item.status === '已结束'}
-                          onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
-                          className={`flex-1 ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 border border-slate-200/50 cursor-not-allowed' : 'bg-[#EEF2FF] text-blue-600 active:bg-[#E0E7FF] border border-blue-100/50 shadow-sm'} py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors`}
-                        >
-                          <Edit3 size={14} />
-                          状态
-                        </button>
-                      </div>
-
-                      {/* Top Right Actions Stack */}
-                      <div className="absolute top-4 right-3.5 flex flex-col items-center gap-2.5 z-10">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleBookmark(key);
-                          }}
-                          className="p-1 rounded-full hover:bg-slate-100 active:scale-110 transition-transform flex items-center justify-center text-[#8E8E93]"
-                        >
-                          <Bookmark 
-                            size={18} 
-                            className={bookmarkedKeys.includes(key) ? "text-[#007AFF] fill-[#007AFF]" : ""}
-                          />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            hideJob(key);
-                          }}
-                          className="p-1 rounded-full hover:bg-slate-100 active:scale-110 transition-transform flex items-center justify-center text-[#8E8E93]"
-                        >
-                          <ThumbsDown 
-                            size={18} 
-                            className="hover:text-[#FF3B30]"
-                          />
-                        </button>
+                        {/* Top Right Actions Stack */}
+                        <div className="absolute top-4 right-3.5 flex flex-col items-center gap-2.5 z-10">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleBookmark(key);
+                            }}
+                            className="p-1 rounded-full hover:bg-slate-100 active:scale-110 transition-transform flex items-center justify-center text-[#8E8E93]"
+                          >
+                            <Bookmark 
+                              size={18} 
+                              className={bookmarkedKeys.includes(key) ? "text-[#007AFF] fill-[#007AFF]" : ""}
+                            />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              hideJob(key);
+                            }}
+                            className="p-1 rounded-full hover:bg-slate-100 active:scale-110 transition-transform flex items-center justify-center text-[#8E8E93]"
+                          >
+                            <ThumbsDown 
+                              size={18} 
+                              className="hover:text-[#FF3B30]"
+                            />
+                          </button>
+                        </div>
                       </div>
                     </motion.div>
                   );

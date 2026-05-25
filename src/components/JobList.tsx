@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronLeft, MapPin, Clock, Edit3, Building2, Search, Filter, FileText, ChevronRight, Check, Bookmark, ThumbsDown } from 'lucide-react';
+import { ChevronLeft, MapPin, Clock, Edit3, Building2, Search, Filter, FileText, ChevronRight, Check, Bookmark, ThumbsDown, ChevronDown } from 'lucide-react';
 import { examTypes, locationData } from './FilterData';
 
 interface JobItem {
@@ -264,6 +264,9 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
+  const [isTimeDropdownOpen, setIsTimeDropdownOpen] = useState(false);
+  const [selectedTimeFilter, setSelectedTimeFilter] = useState('全部');
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [appliedExamType, setAppliedExamType] = useState('全部');
   const [appliedLocation, setAppliedLocation] = useState('全部');
@@ -371,8 +374,49 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                 </button>
               </div>
             </div>
-            <div>
+            <div className="flex items-center justify-between">
               <h1 className="text-[20px] font-bold text-slate-900 tracking-tight leading-tight px-1">{title}</h1>
+              <div className="relative">
+                <button 
+                  onClick={() => setIsTimeDropdownOpen(!isTimeDropdownOpen)}
+                  className="flex items-center gap-1.5 text-[13px] bg-white border border-slate-200/60 pl-2.5 pr-2 py-1.5 rounded-[8px] active:bg-slate-50 shadow-sm transition-colors"
+                >
+                  <span className="text-slate-500 font-medium">报名时间</span>
+                  <div className="flex items-center gap-0.5 border-l border-slate-200/80 pl-1.5 text-slate-800">
+                    <span className="font-semibold">{selectedTimeFilter}</span>
+                    <ChevronDown size={14} className={`text-slate-400 transition-transform ${isTimeDropdownOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                </button>
+                <AnimatePresence>
+                  {isTimeDropdownOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setIsTimeDropdownOpen(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: -5, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -5, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-[110%] w-[110px] bg-white border border-slate-200/60 rounded-[10px] shadow-lg z-50 py-1 overflow-hidden origin-top-right"
+                      >
+                        {['全部', '今日', '三日内', '七日内'].map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => {
+                              setSelectedTimeFilter(option);
+                              setIsTimeDropdownOpen(false);
+                            }}
+                            className={`w-full text-center px-4 py-2.5 text-[14px] transition-colors ${
+                              selectedTimeFilter === option ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700 hover:bg-slate-50'
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </>
         ) : (
