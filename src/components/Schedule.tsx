@@ -1,22 +1,40 @@
-import React, { useState, useRef } from 'react';
-import { motion } from 'motion/react';
-import { Calendar as CalendarIcon, RefreshCw, Clock, Activity } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Calendar as CalendarIcon, RefreshCw, Clock, Activity, ArrowUpDown, X, Check, MessageSquare } from 'lucide-react';
 
-const scheduleItems = [
-  { id: 1, dateLabel: '05-15', unit: '北京市人社局事业单位', position: '综合管理岗', status: '待笔试', statusType: '待笔试' },
-  { id: 2, dateLabel: '05-18', endDateLabel: '05-22', unit: '上海市人民法院', position: '法官助理', status: '待缴费', statusType: '待缴费' },
-  { id: 3, dateLabel: '05-20', unit: '杭州市余杭区政府', position: '综合管理储备干部', status: '待打印准考证', statusType: '待打印' },
-  { id: 4, dateLabel: '05-01', endDateLabel: '05-07', unit: '绵阳经济技术开发区三江小学', position: '小学语文教师', status: '已缴费', statusType: '其他' },
-  { id: 5, dateLabel: '04-10', unit: '吉安东管理中心', position: '文秘宣传岗', status: '已结束', statusType: '已完成' },
+interface StatusLog {
+  id: string;
+  status: string;
+  remark: string;
+  timestamp: string;
+}
+
+interface ScheduleItem {
+  id: number;
+  dateLabel: string;
+  endDateLabel?: string;
+  unit: string;
+  position: string;
+  status: string;
+  statusType: string;
+  logs?: StatusLog[];
+}
+
+const initialScheduleItems: ScheduleItem[] = [
+  { id: 1, dateLabel: '05-15', unit: '北京市人社局事业单位', position: '综合管理岗', status: '待笔试', statusType: '待笔试', logs: [{ id: 'init-1', status: '已缴费', remark: '笔试报名成功，已于05-15完成交费，准备笔试。', timestamp: '2026-05-15 10:24' }] },
+  { id: 2, dateLabel: '05-18', endDateLabel: '05-22', unit: '上海市人民法院', position: '法官助理', status: '待缴费', statusType: '待缴费', logs: [{ id: 'init-2-1', status: '未报名', remark: '关注岗位，了解招生公告及各阶段时间安排', timestamp: '2026-05-18 09:00' }, { id: 'init-2-2', status: '已报名', remark: '通过政法系统统一报名渠道提交了岗位意愿，等待资格审核。', timestamp: '2026-05-18 14:35' }] },
+  { id: 3, dateLabel: '05-20', unit: '杭州市余杭区政府', position: '综合管理储备干部', status: '待打印准考证', statusType: '待打印', logs: [{ id: 'init-3', status: '已缴费', remark: '费用已缴，预计05-20通道开放后可执行网上准考证打印', timestamp: '2026-05-12 11:15' }] },
+  { id: 4, dateLabel: '05-01', endDateLabel: '05-07', unit: '绵阳经济技术开发区三江小学', position: '小学语文教师', status: '已缴费', statusType: '其他', logs: [{ id: 'init-4', status: '已缴费', remark: '缴费成功，首轮选录资格获取', timestamp: '2026-05-02 16:40' }] },
+  { id: 5, dateLabel: '04-10', unit: '吉安东管理中心', position: '文秘宣传岗', status: '已结束', statusType: '已完成', logs: [{ id: 'init-5-1', status: '已报名', remark: '报名成功，提交个人简历与对应证件材料', timestamp: '2026-04-10 10:00' }, { id: 'init-5-2', status: '已进入面试', remark: '笔试资格通过，进入线下面试考核，发挥符合预期。', timestamp: '2026-04-28 15:30' }] },
   { id: 6, dateLabel: '05-18', endDateLabel: '05-24', unit: '国家税务总局浙江省税务局', position: '征收管理科一级行政执法员', status: '资格审核中', statusType: '其他' },
   { id: 7, dateLabel: '05-19', endDateLabel: '05-25', unit: '淄博市博山区中医医院', position: '肿瘤科（招1人）', status: '待缴报名费', statusType: '待缴费' },
   { id: 8, dateLabel: '05-19', endDateLabel: '05-25', unit: '淄博市博山区中医医院', position: '介入科主任助理', status: '准考证待打印', statusType: '待打印' },
   { id: 9, dateLabel: '05-25', unit: '淄博市博山区中医医院', position: '中医科中医师', status: '待参加笔试', statusType: '待笔试' },
-  { id: 10, dateLabel: '05-12', unit: '淄博市博山区中医医院', position: '麻醉科医师', status: '招录考核已完成', statusType: '已完成' },
+  { id: 10, dateLabel: '05-12', unit: '淄博市博山区中医医院', position: '麻醉科医师', status: '考试已通过', statusType: '已完成', logs: [{ id: 'init-10', status: '已进入面试', remark: '面试成绩优秀，最终笔面试总成绩位居第一，顺利录取。', timestamp: '2026-05-20 17:00' }] },
   { id: 11, dateLabel: '05-19', endDateLabel: '05-25', unit: '淄博市博山区人民医院', position: '中医科骨干研发人', status: '笔试科目确认中', statusType: '待笔试' },
   { id: 12, dateLabel: '05-22', unit: '淄博市博山区人民医院', position: '眼科住院医师', status: '准考证下载中', statusType: '待打印' },
   { id: 13, dateLabel: '05-19', endDateLabel: '05-25', unit: '淄博市博山区人民医院', position: '心内科技术骨干', status: '待交审核服务费', statusType: '待缴费' },
-  { id: 14, dateLabel: '05-24', unit: '淄博市博山区人民医院', position: '普外科临床医师', status: '考核已通过', statusType: '已完成' },
+  { id: 14, dateLabel: '05-24', unit: '淄博市博山区人民医院', position: '普外科临床医师', status: '考试已通过', statusType: '已完成', logs: [{ id: 'init-14', status: '已进入面试', remark: '面试成绩在录取名单内，顺利通过第二轮最终测试', timestamp: '2026-05-24 18:25' }] },
 ];
 
 const getProgressInfo = (startStr: string, endStrStr?: string) => {
@@ -59,7 +77,7 @@ const getProgressInfo = (startStr: string, endStrStr?: string) => {
   }
 };
 
-const renderDurationTrack = (item: typeof scheduleItems[number]) => {
+const renderDurationTrack = (item: ScheduleItem) => {
   if (!item.endDateLabel) return null;
   const progressInfo = getProgressInfo(item.dateLabel, item.endDateLabel);
   if (!progressInfo) return null;
@@ -115,9 +133,118 @@ const renderDurationTrack = (item: typeof scheduleItems[number]) => {
 };
 
 export default function Schedule() {
+  const [items, setItems] = useState<ScheduleItem[]>(() => {
+    const saved = localStorage.getItem('schedule_items_v2');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // use default
+      }
+    }
+    return initialScheduleItems;
+  });
+
+  // Modal States
+  const [selectedItem, setSelectedItem] = useState<ScheduleItem | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [remark, setRemark] = useState<string>('');
+
+  // Persist items to localStore whenever they change
+  useEffect(() => {
+    localStorage.setItem('schedule_items_v2', JSON.stringify(items));
+  }, [items]);
+
+  const handleOpenRecord = (item: ScheduleItem, defaultStatus?: string) => {
+    setSelectedItem(item);
+    
+    // Map current status to corresponding status options for high fidelity loading
+    let statusToSelect = '未报名';
+    const cleanStatus = item.status || '';
+    if (defaultStatus) {
+      statusToSelect = defaultStatus;
+    } else if (cleanStatus.includes('缴费')) {
+      statusToSelect = '已缴费';
+    } else if (cleanStatus.includes('笔试') || cleanStatus.includes('准考证') || cleanStatus.includes('打印')) {
+      statusToSelect = '已报名';
+    } else if (cleanStatus.includes('通过') || cleanStatus.includes('面试')) {
+      statusToSelect = '已进入面试';
+    } else if (cleanStatus.includes('结束') || cleanStatus.includes('放弃')) {
+      statusToSelect = '已放弃';
+    } else if (cleanStatus.includes('报名') || cleanStatus.includes('审核')) {
+      statusToSelect = '已报名';
+    }
+    
+    setSelectedStatus(statusToSelect);
+    setRemark('');
+    setModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    if (!selectedItem) return;
+
+    // Create log entry with formatted UTC date relative:
+    const timestampStr = new Date().toLocaleString('zh-CN', {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).replace(/\//g, '-'); // "05-25 15:30"
+
+    const newLog: StatusLog = {
+      id: String(Date.now()),
+      status: selectedStatus,
+      remark: remark.trim() || `${selectedStatus}: 已记录进展`,
+      timestamp: timestampStr,
+    };
+
+    // Auto-map user choice back to status / statusType lists for consistent filtering
+    let newStatusType = selectedItem.statusType;
+    let newStatusText = selectedItem.status;
+
+    if (selectedStatus === '未报名') {
+      newStatusType = '其他';
+      newStatusText = '未报名';
+    } else if (selectedStatus === '已报名') {
+      newStatusType = '其他';
+      newStatusText = '资格审核中';
+    } else if (selectedStatus === '已缴费') {
+      newStatusType = '其他';
+      newStatusText = '已缴费';
+    } else if (selectedStatus === '已进入面试') {
+      newStatusType = '已完成';
+      newStatusText = '考试已通过';
+    } else if (selectedStatus === '已放弃') {
+      newStatusType = '已完成';
+      newStatusText = '已放弃';
+    }
+
+    setItems(prevItems => {
+      const updated = prevItems.map(item => {
+        if (item.id === selectedItem.id) {
+          const currentLogs = item.logs || [];
+          return {
+            ...item,
+            status: newStatusText,
+            statusType: newStatusType,
+            logs: [newLog, ...currentLogs]
+          };
+        }
+        return item;
+      });
+      return updated;
+    });
+
+    setModalOpen(false);
+    setSelectedItem(null);
+  };
+
   const [activeFilter, setActiveFilter] = useState('全部');
   const [subFilter, setSubFilter] = useState<null | 'today' | 'upcoming'>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
   const [pullY, setPullY] = useState(0);
@@ -153,7 +280,7 @@ export default function Schedule() {
 
   const filters = ['全部', '待缴费', '待打印', '待笔试', '已完成'];
 
-  const filteredItems = scheduleItems.filter(item => {
+  const filteredItems = items.filter(item => {
     // Top filter overrides sub-filter if it's not "全部"
     if (activeFilter !== '全部') return item.statusType === activeFilter;
     
@@ -198,20 +325,21 @@ export default function Schedule() {
     return 'border-l-[4px] border-l-indigo-400';
   };
 
-  const renderActionBtn = (type: string) => {
+  const renderActionBtn = (item: ScheduleItem) => {
+    const type = item.statusType;
     if (type.includes('缴费')) {
-      return <button className="px-4 py-1.5 bg-blue-600 text-white rounded-[8px] text-[12px] font-bold active:bg-blue-700 transition-colors shadow-sm">去缴费</button>;
+      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-4 py-1.5 bg-blue-600 text-white rounded-[8px] text-[12px] font-bold active:bg-blue-700 transition-[#007AFF] shadow-sm transform active:scale-95 duration-75">去缴费</button>;
     }
     if (type.includes('打印')) {
-      return <button className="px-3 py-1.5 text-blue-600 bg-blue-50 border border-blue-100 font-medium text-[12px] active:bg-blue-100 rounded-[8px] transition-colors shadow-sm">去打印准考证</button>;
+      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-3 py-1.5 text-blue-600 bg-blue-50 border border-blue-100 font-medium text-[12px] active:bg-blue-100 rounded-[8px] transition-colors shadow-sm active:scale-95 duration-75">去打印准考证</button>;
     }
     if (type.includes('笔试')) {
-      return <button className="px-3 py-1.5 text-slate-500 bg-slate-50 border border-slate-200 font-medium text-[12px] active:bg-slate-100 rounded-[8px] transition-colors shadow-sm">设置提醒</button>;
+      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item); }} className="px-3 py-1.5 text-slate-500 bg-slate-50 border border-slate-200 font-medium text-[12px] active:bg-slate-100 rounded-[8px] transition-colors shadow-sm active:scale-95 duration-75">记录状态</button>;
     }
     if (type.includes('完成')) {
-      return <button disabled className="px-4 py-1.5 bg-slate-100 text-slate-400 rounded-[8px] text-[12px] font-medium cursor-not-allowed">已结束</button>;
+      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item); }} className="px-3.5 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-[8px] text-[12px] font-bold active:bg-slate-150 transition-colors">历史记录</button>;
     }
-    return <button className="px-3 py-1.5 text-slate-500 bg-slate-50 border border-slate-200 font-medium text-[12px] active:bg-slate-100 rounded-[8px] transition-colors shadow-sm">查看详情</button>;
+    return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item); }} className="px-3 py-1.5 text-slate-500 bg-slate-50 border border-slate-200 font-medium text-[12px] active:bg-slate-100 rounded-[8px] transition-colors shadow-sm active:scale-95 duration-75">记录状态</button>;
   };
 
   return (
@@ -295,17 +423,19 @@ export default function Schedule() {
                 
                 {(() => {
                   // Group items by dateLabel
-                  const grouped: { [key: string]: typeof scheduleItems } = {};
+                  const grouped: { [key: string]: ScheduleItem[] } = {};
                   filteredItems.forEach(item => {
                     if (!grouped[item.dateLabel]) grouped[item.dateLabel] = [];
                     grouped[item.dateLabel].push(item);
                   });
                   
-                  // Sort dates descending
-                  const sortedDates = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+                  // Sort dates by dynamic sortOrder (desc: from soonest/latest date to furthest, asc: earlier date to later)
+                  const sortedDates = Object.keys(grouped).sort((a, b) => {
+                    return sortOrder === 'desc' ? b.localeCompare(a) : a.localeCompare(b);
+                  });
                   
-                  return sortedDates.map((date) => {
-                    const items = grouped[date];
+                  return sortedDates.map((date, index) => {
+                    const itemsInDate = grouped[date];
                     const isToday = date === '05-18'; 
                     const parts = date.split('-');
                     const monthNum = parts[0] ? parseInt(parts[0], 10) : 5;
@@ -327,54 +457,68 @@ export default function Schedule() {
                         </div>
                         
                         {/* Day Info Header Bar */}
-                        <div className="flex items-center gap-3 mb-3 pl-3 select-none">
-                          {/* Mini Calendar Widget Card */}
-                          <div className={`flex flex-col items-center justify-center rounded-[8px] bg-white border ${
-                            isToday 
-                              ? 'border-blue-500 shadow-[0_2px_8px_rgba(0,122,255,0.12)] ring-1 ring-blue-500/10' 
-                              : 'border-slate-200/85 shadow-sm'
-                          } w-[38px] h-[40px] overflow-hidden shrink-0`}>
-                            <div className={`text-[8px] font-extrabold tracking-wider text-center w-full py-0.5 ${
-                              isToday ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500 border-b border-slate-150'
-                            }`}>
-                              {isToday ? 'TODAY' : `${monthNum}月`}
-                            </div>
-                            <div className="text-[13px] font-black leading-none py-1 text-slate-800 tracking-tight">
-                              {dayNum}
-                            </div>
-                          </div>
-
-                          {/* Info Labels */}
-                          <div className="flex flex-col">
-                            <div className="flex items-center gap-1.5">
-                              <h4 className={`text-[13px] font-bold tracking-tight ${
-                                isToday ? 'text-blue-600' : 'text-slate-800'
+                        <div className="flex items-center justify-between mb-3 pl-3 select-none">
+                          <div className="flex items-center gap-3">
+                            {/* Mini Calendar Widget Card */}
+                            <div className={`flex flex-col items-center justify-center rounded-[8px] bg-white border ${
+                              isToday 
+                                ? 'border-blue-500 shadow-[0_2px_8px_rgba(0,122,255,0.12)] ring-1 ring-blue-500/10' 
+                                : 'border-slate-200/85 shadow-sm'
+                            } w-[38px] h-[40px] overflow-hidden shrink-0`}>
+                              <div className={`text-[8px] font-extrabold tracking-wider text-center w-full py-0.5 ${
+                                isToday ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500 border-b border-slate-150'
                               }`}>
-                                {isToday ? '今日提醒' : `${monthNum}月${parseInt(dayNum, 10)}日提醒`}
-                              </h4>
+                                {isToday ? 'TODAY' : `${monthNum}月`}
+                              </div>
+                              <div className="text-[13px] font-black leading-none py-1 text-slate-800 tracking-tight">
+                                {dayNum}
+                              </div>
+                            </div>
+
+                            {/* Info Labels */}
+                            <div className="flex flex-col">
+                              <div className="flex items-center gap-1.5">
+                                <h4 className={`text-[13px] font-bold tracking-tight ${
+                                  isToday ? 'text-blue-600' : 'text-slate-800'
+                                }`}>
+                                  {isToday ? '今日提醒' : `${monthNum}月${parseInt(dayNum, 10)}日提醒`}
+                                </h4>
+                                {isToday && (
+                                  <span className="text-[9px] font-bold text-white bg-emerald-500 px-1.5 py-0.5 rounded-[4px]">
+                                    今天
+                                  </span>
+                                )}
+                              </div>
                               {isToday && (
-                                <span className="text-[9px] font-bold text-white bg-emerald-500 px-1.5 py-0.5 rounded-[4px]">
-                                  今天
+                                <span className="text-[11px] text-slate-400 font-medium select-none mt-0.5 flex items-center gap-1">
+                                  <span>共 {itemsInDate.length} 个提醒</span>
+                                  {itemsInDate.some(item => item.statusType === '待缴费') && <span className="w-1.5 h-1.5 rounded-full bg-orange-400" title="待缴费" />}
+                                  {itemsInDate.some(item => item.statusType === '待打印') && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" title="待打印" />}
+                                  {itemsInDate.some(item => item.statusType === '待笔试') && <span className="w-1.5 h-1.5 rounded-full bg-red-500" title="待笔试" />}
                                 </span>
                               )}
                             </div>
-                            {isToday && (
-                              <span className="text-[11px] text-slate-400 font-medium select-none mt-0.5 flex items-center gap-1">
-                                <span>共 {items.length} 个提醒</span>
-                                {items.some(item => item.statusType === '待缴费') && <span className="w-1.5 h-1.5 rounded-full bg-orange-400" title="待缴费" />}
-                                {items.some(item => item.statusType === '待打印') && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" title="待打印" />}
-                                {items.some(item => item.statusType === '待笔试') && <span className="w-1.5 h-1.5 rounded-full bg-red-500" title="待笔试" />}
-                              </span>
-                            )}
                           </div>
+
+                          {/* Dynamic Sorting Label Toggle (Display only on the first item in the list) */}
+                          {index === 0 && (
+                            <button
+                              onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
+                              className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 active:scale-95 text-[#007AFF] hover:text-blue-700 rounded-full text-[11px] font-semibold border border-slate-200/85 shadow-sm transition-all cursor-pointer mr-0.5 shrink-0"
+                            >
+                              <ArrowUpDown size={11} className="text-[#007AFF]" />
+                              <span>{sortOrder === 'desc' ? '时间：由近及远' : '时间：由远及近'}</span>
+                            </button>
+                          )}
                         </div>
                         
                         {/* Card of the Day */}
                         <div className="bg-white rounded-[14px] border border-slate-200/50 shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden divide-y divide-slate-100 flex flex-col">
-                          {items.map((item) => (
+                          {itemsInDate.map((item) => (
                             <div 
                               key={item.id} 
-                              className={`p-3.5 hover:bg-slate-50/50 active:bg-slate-100/60 transition-all duration-150 relative cursor-default group/item ${getBorderAccentClass(item.statusType)}`}
+                              onClick={() => handleOpenRecord(item)}
+                              className={`p-3.5 hover:bg-slate-50/50 active:bg-slate-100/60 transition-all duration-150 relative cursor-pointer hover:border-slate-350 group/item ${getBorderAccentClass(item.statusType)}`}
                             >
                               <h3 className="text-[14px] font-bold text-slate-900 leading-snug mb-1 group-hover/item:text-blue-600 transition-colors">
                                 {item.unit}
@@ -386,7 +530,7 @@ export default function Schedule() {
                                   {item.status}
                                 </span>
                                 <div>
-                                  {renderActionBtn(item.statusType)}
+                                  {renderActionBtn(item)}
                                 </div>
                               </div>
                               {renderDurationTrack(item)}
@@ -401,7 +545,11 @@ export default function Schedule() {
             ) : (
               <div className="flex flex-col gap-3">
                 {filteredItems.map(item => (
-                  <div key={item.id} className={`bg-white rounded-[14px] border border-slate-200/60 p-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] active:bg-slate-50/80 transition-colors ${getBorderAccentClass(item.statusType)}`}>
+                  <div 
+                    key={item.id} 
+                    onClick={() => handleOpenRecord(item)}
+                    className={`bg-white rounded-[14px] border border-slate-200/60 p-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] active:bg-slate-50/80 hover:bg-slate-50/50 hover:border-slate-300 cursor-pointer transition-colors ${getBorderAccentClass(item.statusType)}`}
+                  >
                     <h3 className="text-[15px] font-bold text-slate-900 leading-snug mb-1">{item.unit}</h3>
                     <p className="text-[14px] text-slate-600 mb-3">{item.position}</p>
                     <div className="flex justify-between items-center mt-1">
@@ -412,7 +560,7 @@ export default function Schedule() {
                         <span className="text-[12px] text-slate-400 font-medium">{item.dateLabel}</span>
                       </div>
                       <div>
-                        {renderActionBtn(item.statusType)}
+                        {renderActionBtn(item)}
                       </div>
                     </div>
                     {renderDurationTrack(item)}
@@ -431,6 +579,167 @@ export default function Schedule() {
           )}
         </div>
       </div>
+
+      {/* State Recording In-App Bottom Sheet Modal */}
+      <AnimatePresence>
+        {modalOpen && selectedItem && (
+          <div className="absolute inset-0 z-55 overflow-hidden flex flex-col justify-end">
+            {/* Backdrop (constrained to the app container) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                setModalOpen(false);
+                setSelectedItem(null);
+              }}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-[1.5px]"
+            />
+
+            {/* Bottom Sheet Modal Box (Slides up beautifully from the bottom) */}
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+              className="relative w-full bg-white rounded-t-[24px] shadow-[0_-8px_32px_rgba(15,23,42,0.15)] border-t border-slate-100 flex flex-col z-10 max-h-[82%] overflow-hidden pb-safe"
+            >
+              {/* Native Grab/Drag Handle Visual */}
+              <div className="w-12 h-1.5 bg-slate-200 hover:bg-slate-300 rounded-full mx-auto mt-3 select-none shrink-0 cursor-grab active:cursor-grabbing" />
+
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 pt-3 pb-4 border-b border-slate-50 select-none shrink-0">
+                <div className="flex flex-col text-left">
+                  <h3 className="text-[17px] font-black text-slate-900 tracking-tight flex items-center gap-2">
+                    记录报名状态
+                  </h3>
+                  <span className="text-[11px] text-slate-400 mt-1 max-w-[270px] truncate leading-none">
+                    {selectedItem.unit} · {selectedItem.position}
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    setModalOpen(false);
+                    setSelectedItem(null);
+                  }}
+                  className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all active:scale-90"
+                >
+                  <X size={16} strokeWidth={2.5} />
+                </button>
+              </div>
+
+              {/* Scrollable Body */}
+              <div className="px-5 py-4 overflow-y-auto flex-1 flex flex-col space-y-4.5 font-sans text-left min-h-0">
+                {/* Status Selection Buttons */}
+                <div>
+                  <span className="block text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-2.5">
+                    选择报名状态
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {['未报名', '已报名', '已缴费', '已进入面试', '已放弃'].map((status) => {
+                      const isActive = selectedStatus === status;
+                      return (
+                        <button
+                          key={status}
+                          type="button"
+                          onClick={() => setSelectedStatus(status)}
+                          className={`px-3 py-1.5 text-[12.5px] font-bold rounded-[10px] transition-all flex items-center gap-1.5 cursor-pointer border ${
+                            isActive
+                              ? 'bg-blue-50/70 border-blue-450 text-blue-600 shadow-[0_2px_8px_rgba(0,122,255,0.08)]'
+                              : 'bg-slate-50/80 border-slate-200 text-slate-600 hover:bg-slate-100 active:scale-95'
+                          }`}
+                        >
+                          {isActive && <Check size={11} strokeWidth={3} className="text-blue-600 shrink-0" />}
+                          {status}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Remarks Textarea */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="block text-[11px] font-extrabold text-slate-400 uppercase tracking-widest">
+                      备注 (选填)
+                    </span>
+                    <span className="text-[10px] font-bold font-mono text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-[4px]">
+                      {remark.length}/200
+                    </span>
+                  </div>
+                  <textarea
+                    value={remark}
+                    onChange={(e) => setRemark(e.target.value.slice(0, 200))}
+                    placeholder="在这里记录考试进展（如笔试分、心路历程等）..."
+                    className="w-full h-20 px-3 py-2 text-[12.5px] text-slate-800 placeholder-slate-400/80 bg-slate-50 border border-slate-200 rounded-[12px] focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white focus:border-blue-500 transition-all resize-none leading-relaxed"
+                  />
+                </div>
+
+                {/* Vertical Change History Timeline List */}
+                <div className="flex-1 flex flex-col min-h-[130px] overflow-hidden">
+                  <span className="block text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-2.5">
+                    状态变更记录
+                  </span>
+                  <div className="bg-slate-50/50 rounded-[16px] border border-slate-200/60 flex-1 flex flex-col min-h-0 overflow-hidden">
+                    <div className="overflow-y-auto px-4 py-3 flex-1 min-h-0">
+                      {(!selectedItem.logs || selectedItem.logs.length === 0) ? (
+                        <div className="py-7 text-center text-slate-400 text-[11px] font-medium italic">
+                          暂无记录
+                        </div>
+                      ) : (
+                        <div className="relative pl-4 space-y-3.5 py-1.5">
+                          {/* Timeline vertical stem */}
+                          <div className="absolute left-[3.5px] top-2 bottom-2.5 w-[1.5px] bg-slate-200" />
+                          
+                          {selectedItem.logs.map((log) => (
+                            <div key={log.id} className="relative text-left flex flex-col">
+                              {/* Glowing Dot indicator */}
+                              <div className="absolute -left-[16.5px] top-[4px] w-1.5 h-1.5 rounded-full bg-blue-500 ring-2 ring-blue-500/15 shadow-sm" />
+                              
+                              <div className="flex items-center justify-between text-[10px] mb-0.5">
+                                <span className="font-extrabold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-[4px] tracking-wide text-[9.5px]">
+                                  {log.status}
+                                </span>
+                                <span className="text-[10px] font-bold text-slate-400 font-mono">
+                                  {log.timestamp}
+                                </span>
+                              </div>
+                              <p className="text-[12px] text-slate-600 font-normal leading-relaxed pl-0.5 break-words">
+                                {log.remark}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons Footer */}
+              <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-slate-100 bg-slate-50/50 select-none shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setModalOpen(false);
+                    setSelectedItem(null);
+                  }}
+                  className="px-4 py-1.5 font-bold text-[12px] text-slate-500 bg-white hover:bg-slate-50 border border-slate-200 rounded-[10px] transition-all cursor-pointer shadow-xs active:scale-95"
+                >
+                  取消
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirm}
+                  className="px-5 py-1.5 font-black text-[12px] text-white bg-blue-600 hover:bg-blue-700 rounded-[10px] shadow-sm active:scale-95 transition-all cursor-pointer"
+                >
+                  确定
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
