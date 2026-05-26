@@ -132,7 +132,7 @@ const renderDurationTrack = (item: ScheduleItem) => {
   );
 };
 
-export default function Schedule() {
+export default function Schedule1() {
   const [items, setItems] = useState<ScheduleItem[]>(() => {
     const saved = localStorage.getItem('schedule_items_v2');
     if (saved) {
@@ -323,10 +323,11 @@ export default function Schedule() {
   };
 
   const getBorderAccentClass = (type: string) => {
-    if (type.includes('待办') || type.includes('缴费')) return 'border-l-[3px] border-l-orange-500'; // Warning
-    if (type.includes('笔试') || type.includes('面试') || type.includes('考试')) return 'border-l-[3px] border-l-red-500'; // Urgent/Important
-    if (type.includes('完成')) return 'border-l-[3px] border-l-emerald-500'; // Success
-    return 'border-l-[3px] border-l-blue-500'; // Info
+    if (type.includes('缴费')) return 'border-l-[4px] border-l-orange-500';
+    if (type.includes('打印')) return 'border-l-[4px] border-l-blue-500';
+    if (type.includes('笔试')) return 'border-l-[4px] border-l-red-500';
+    if (type.includes('完成')) return 'border-l-[4px] border-l-slate-350';
+    return 'border-l-[4px] border-l-indigo-400';
   };
 
   const renderActionBtn = (item: ScheduleItem) => {
@@ -422,6 +423,8 @@ export default function Schedule() {
           {filteredItems.length > 0 ? (
             activeFilter === '全部' ? (
               <div className="relative pl-6 pr-0.5 font-sans">
+                {/* Vertical Line on left of items */}
+                <div className="absolute left-[10px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-[#007AFF] via-slate-200 to-slate-100/60 rounded-full" />
                 
                 {(() => {
                   // Group items by dateLabel
@@ -439,39 +442,23 @@ export default function Schedule() {
                   return sortedDates.map((date, index) => {
                     const itemsInDate = grouped[date];
                     const isToday = date === '05-18'; 
-                    const isPast = date < '05-18';
-                    const isFuture = date > '05-18';
                     const parts = date.split('-');
                     const monthNum = parts[0] ? parseInt(parts[0], 10) : 5;
                     const dayNum = parts[1] || date;
                     
-                    const lineColor = sortOrder === 'desc' 
-                      ? (isFuture ? 'bg-[#007AFF]' : 'bg-slate-200') 
-                      : (!isPast ? 'bg-[#007AFF]' : 'bg-slate-200');
-
-                    let dotClasses = '';
-                    let innerDot = null;
-                    if (isToday) {
-                      dotClasses = 'bg-[#007AFF] text-white shadow-md shadow-blue-500/20 ring-4 ring-[#007AFF]/20';
-                      innerDot = <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />;
-                    } else if (isPast) {
-                      dotClasses = 'bg-white border-2 border-slate-200';
-                      innerDot = <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />;
-                    } else {
-                      dotClasses = 'bg-white border-2 border-[#007AFF]';
-                      innerDot = <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF]" />;
-                    }
-                    
                     return (
                       <div key={date} className="relative mb-8 last:mb-2 group/day">
-                        {/* Timeline Vertical Segment */}
-                        {index !== sortedDates.length - 1 && (
-                          <div className={`absolute -left-[14px] top-[30px] -bottom-[32px] w-[2px] z-0 ${lineColor}`} />
-                        )}
-                        
                         {/* Dot on Timeline */}
-                        <div className={`absolute -left-[21px] top-[14px] w-4 h-4 rounded-full flex items-center justify-center z-10 transition-transform duration-205 group-hover/day:scale-110 ${dotClasses}`}>
-                          {innerDot}
+                        <div className={`absolute -left-[21px] top-[14px] w-4 h-4 rounded-full flex items-center justify-center z-10 transition-transform duration-205 group-hover/day:scale-110 ${
+                          isToday 
+                            ? 'bg-[#007AFF] text-white shadow-md shadow-blue-500/20 ring-4 ring-[#007AFF]/15' 
+                            : 'bg-white border-2 border-slate-300'
+                        }`}>
+                          {isToday ? (
+                            <Activity size={8} className="animate-pulse" />
+                          ) : (
+                            <div className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                          )}
                         </div>
                         
                         {/* Day Info Header Bar */}
