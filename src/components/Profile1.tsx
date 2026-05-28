@@ -5,11 +5,11 @@ import { Sparkles, UserCircle, Briefcase, ChevronLeft, ChevronRight, Plus, Check
 type ViewMode = 'overview' | 'editor';
 type SectionType = 'basic' | 'education' | 'experience' | 'certifications' | 'family' | 'evaluation';
 
-interface Profile1Props {
-  onNavigate?: (tab: 'home' | 'home1' | 'schedule' | 'schedule1' | 'profile' | 'profile1' | 'favorites' | 'targeted') => void;
+interface ProfileProps {
+  onNavigate?: (tab: 'home' | 'schedule' | 'profile' | 'favorites' | 'targeted') => void;
 }
 
-export default function Profile1({ onNavigate }: Profile1Props) {
+export default function Profile1({ onNavigate }: ProfileProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
   const [showProfileCards, setShowProfileCards] = useState(false);
@@ -47,15 +47,12 @@ export default function Profile1({ onNavigate }: Profile1Props) {
       {/* Completeness & Resumes Module */}
       <div className="bg-white mx-4 mt-6 rounded-[16px] border border-slate-200/60 shadow-sm overflow-hidden text-left mb-6">
         {/* Profile Completeness Circular Section */}
-        <div className="relative px-5 pt-16 pb-6 flex flex-col items-center text-center gap-5 border-b border-slate-100/60">
+        <div className="relative px-5 pt-14 pb-6 flex flex-col items-center text-center gap-5 border-b border-slate-100/60">
           <div className="absolute top-4 left-5 right-4 flex items-center justify-between">
             <h2 className="text-[15px] font-black text-slate-900 tracking-tight">我的简历</h2>
-            <button 
-              onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
-              className="text-[14px] font-black text-slate-900 tracking-tight bg-white hover:bg-slate-50 px-3 py-1.5 rounded-[8px] flex items-center gap-1 border border-slate-200/60 shadow-sm active:scale-95 transition-all"
-            >
-              <Eye size={14} strokeWidth={2.5} /> 预览
-            </button>
+            <span className="text-[11px] font-extrabold text-blue-600 bg-blue-50/80 px-3 py-1.5 rounded-[8px] flex items-center gap-0.5 border border-blue-100/50 shadow-sm">
+              请去PC端完善
+            </span>
           </div>
           {/* Circular Progress */}
           <div className="relative flex items-center justify-center shrink-0 w-[140px] h-[140px]">
@@ -103,11 +100,39 @@ export default function Profile1({ onNavigate }: Profile1Props) {
           </div>
         </div>
 
-        {/* 保存为一页纸简历大按钮 */}
-        <div className="p-4 bg-slate-50">
-          <button className="w-full bg-[#EEF2FF] hover:bg-blue-50 active:bg-blue-100 text-blue-600 py-3.5 rounded-[12px] font-bold text-[14px] flex items-center justify-center gap-2 border border-blue-100/50 shadow-sm transition-colors">
-            一页纸简历下载
-          </button>
+        {/* 在线简历 (我的简历) */}
+        <div className="p-4 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-50 border border-blue-100/50 rounded-[10px] flex items-center justify-center shrink-0">
+              <FileText size={20} className="text-blue-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-[14px] font-medium text-slate-900 truncate">在线简历</h3>
+            </div>
+            <button 
+              onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
+              className="bg-[#EEF2FF] text-blue-600 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-blue-100/50 active:bg-blue-50 transition-colors flex items-center justify-center shadow-sm"
+            >
+              预览
+            </button>
+          </div>
+        </div>
+
+        {/* 一页纸简历 */}
+        <div className="p-4">
+           <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-emerald-50 border border-emerald-100/50 rounded-[10px] flex items-center justify-center shrink-0">
+              <FileText size={20} className="text-emerald-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-[14px] font-medium text-slate-900 truncate">一页纸简历</h3>
+            </div>
+            <button 
+              className="bg-slate-50 text-slate-700 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-slate-200/60 active:bg-slate-100 transition-colors shadow-sm flex items-center gap-1"
+            >
+               保存本地
+            </button>
+          </div>
         </div>
       </div>
 
