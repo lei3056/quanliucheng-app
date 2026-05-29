@@ -114,7 +114,7 @@ const renderDurationTrack = (item: ScheduleItem) => {
         />
         {progressInfo.status === 'active' && progressInfo.progress > 0 && progressInfo.progress < 100 && (
           <div 
-            className="absolute top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full border-[1.5px] border-[#007AFF] shadow-sm"
+            className="absolute top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full border-[1.5px] border-blue-600 shadow-sm"
             style={{ left: `calc(${progressInfo.progress}% - 4px)` }}
           />
         )}
@@ -122,7 +122,7 @@ const renderDurationTrack = (item: ScheduleItem) => {
       <div className="flex justify-between text-[10px] text-slate-400 font-medium font-mono mt-1 px-0.5">
         <span>开始 ({item.dateLabel})</span>
         {progressInfo.status === 'active' && (
-          <span className="text-[#007AFF] font-sans font-semibold">
+          <span className="text-blue-600 font-sans font-semibold">
             今天
           </span>
         )}
@@ -333,7 +333,7 @@ export default function Schedule1() {
   const renderActionBtn = (item: ScheduleItem) => {
     const type = item.statusType;
     if (type.includes('缴费')) {
-      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-4 py-1.5 bg-blue-600 text-white rounded-[8px] text-[12px] font-bold active:bg-blue-700 transition-[#007AFF] shadow-sm transform active:scale-95 duration-75">去缴费</button>;
+      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-4 py-1.5 bg-blue-600 text-white rounded-[8px] text-[12px] font-bold active:bg-blue-700 transition-colors shadow-sm transform active:scale-95 duration-75">去缴费</button>;
     }
     if (type.includes('打印')) {
       return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-3 py-1.5 text-blue-600 bg-blue-50 border border-blue-100 font-medium text-[12px] active:bg-blue-100 rounded-[8px] transition-colors shadow-sm active:scale-95 duration-75">去打印准考证</button>;
@@ -451,7 +451,7 @@ export default function Schedule1() {
                         {/* Dot on Timeline */}
                         <div className={`absolute -left-[21px] top-[14px] w-4 h-4 rounded-full flex items-center justify-center z-10 transition-transform duration-205 group-hover/day:scale-110 ${
                           isToday 
-                            ? 'bg-[#007AFF] text-white shadow-md shadow-blue-500/20 ring-4 ring-[#007AFF]/15' 
+                            ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20 ring-4 ring-blue-600/15' 
                             : 'bg-white border-2 border-slate-300'
                         }`}>
                           {isToday ? (
@@ -513,6 +513,7 @@ export default function Schedule1() {
                             >
                               <ArrowUpDown size={11} className="text-[#007AFF]" />
                               <span>{sortOrder === 'desc' ? '时间：由近及远' : '时间：由远及近'}</span>
+                              
                             </button>
                           )}
                         </div>

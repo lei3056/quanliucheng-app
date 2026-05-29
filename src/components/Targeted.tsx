@@ -24,7 +24,7 @@ export default function Targeted({ onBack, onTrack }: TargetedProps) {
       {/* Header */}
       <div className="px-4 pt-12 pb-3 bg-white border-b border-slate-200/60 shrink-0 sticky top-0 z-20">
         <div className="flex items-center mb-3 relative">
-          <button onClick={onBack} className="absolute left-0 p-1 -ml-1 text-[#007AFF] active:opacity-50 flex items-center">
+          <button onClick={onBack} className="absolute left-0 p-1 -ml-1 text-primary-600 active:opacity-50 flex items-center">
             <ChevronLeft size={24} />
             <span className="text-[17px] -ml-1">返回</span>
           </button>
@@ -44,7 +44,7 @@ export default function Targeted({ onBack, onTrack }: TargetedProps) {
           </div>
           <button 
             onClick={() => setShowFilterModal(true)}
-            className="text-[#007AFF] p-1 active:opacity-50"
+            className="text-primary-600 p-1 active:opacity-50"
           >
             <SlidersHorizontal size={22} />
           </button>
@@ -136,9 +136,9 @@ export default function Targeted({ onBack, onTrack }: TargetedProps) {
               className="absolute bottom-0 left-0 right-0 bg-[#F2F2F7] z-[70] rounded-t-[10px] pb-8"
             >
               <div className="flex items-center justify-between px-4 py-3 bg-white rounded-t-[10px]">
-                <button onClick={() => setShowFilterModal(false)} className="text-[#007AFF] text-[17px] active:opacity-50">取消</button>
+                <button onClick={() => setShowFilterModal(false)} className="text-primary-600 text-[17px] active:opacity-50">取消</button>
                 <h2 className="text-[17px] font-semibold text-slate-900">筛选</h2>
-                <button onClick={() => setShowFilterModal(false)} className="text-[#007AFF] font-semibold text-[17px] active:opacity-50">完成</button>
+                <button onClick={() => setShowFilterModal(false)} className="text-primary-600 font-semibold text-[17px] active:opacity-50">完成</button>
               </div>
               
               <div className="px-4 py-6">

@@ -149,7 +149,7 @@ export default function Profile({ onNavigate }: ProfileProps) {
                   <h2 className="text-[18px] font-black text-slate-900 tracking-tight">
                     李雷
                   </h2>
-                  <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">
+                  <span className="text-[10px] font-bold text-primary-600 bg-primary-50 px-1.5 py-0.5 rounded border border-primary-100">
                     中共党员
                   </span>
                 </div>
@@ -195,7 +195,7 @@ export default function Profile({ onNavigate }: ProfileProps) {
                       x2="100%"
                       y2="0%"
                     >
-                      <stop offset="0%" stopColor="#3B82F6" /> {/* blue-500 */}
+                      <stop offset="0%" stopColor="#10b981" /> {/* primary-500 */}
                       <stop offset="100%" stopColor="#8B5CF6" />{" "}
                       {/* violet-500 */}
                     </linearGradient>
@@ -233,7 +233,7 @@ export default function Profile({ onNavigate }: ProfileProps) {
 
         {/* 保存为一页纸简历大按钮 */}
         <div className="p-3 bg-slate-50 shadow-inner">
-          <button className="w-full bg-[#EEF2FF] hover:bg-blue-50 active:bg-blue-100 text-blue-600 py-3 rounded-[10px] font-bold text-[14px] flex items-center justify-center gap-2 transition-colors">
+          <button className="w-full bg-primary-50 hover:bg-primary-50 active:bg-primary-100 text-primary-600 py-3 rounded-[10px] font-bold text-[14px] flex items-center justify-center gap-2 transition-colors">
             <Download size={15} /> 保存一页纸简历到本地
           </button>
         </div>
@@ -285,7 +285,7 @@ export default function Profile({ onNavigate }: ProfileProps) {
               <div
                 className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
                   section.status === "complete"
-                    ? "bg-blue-50 text-blue-600"
+                    ? "bg-primary-50 text-primary-600"
                     : section.status === "warning"
                       ? "bg-orange-50 text-orange-600"
                       : "bg-slate-100 text-slate-400"
@@ -305,7 +305,7 @@ export default function Profile({ onNavigate }: ProfileProps) {
               </div>
               <div className="shrink-0 flex items-center">
                 {section.status === "complete" ? (
-                  <CheckCircle2 size={16} className="text-blue-500" />
+                  <CheckCircle2 size={16} className="text-primary-500" />
                 ) : section.status === "warning" ? (
                   <AlertCircle size={16} className="text-orange-500" />
                 ) : (

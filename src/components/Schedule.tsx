@@ -89,7 +89,7 @@ const renderDurationTrack = (item: ScheduleItem) => {
           progressInfo.status === 'ended'
             ? 'text-slate-500 bg-slate-100'
             : progressInfo.status === 'upcoming'
-              ? 'text-blue-500 bg-blue-50'
+              ? 'text-primary-500 bg-primary-50'
               : 'text-[#34C759] bg-[#34C759]/10'
         }`}>
           <Clock size={11} className={`${progressInfo.status === 'active' ? 'animate-pulse' : ''}`} />
@@ -108,13 +108,13 @@ const renderDurationTrack = (item: ScheduleItem) => {
               ? 'bg-slate-400' 
               : progressInfo.status === 'upcoming' 
                 ? 'bg-slate-200' 
-                : 'bg-gradient-to-r from-[#007AFF] to-[#34C759]'
+                : 'bg-gradient-to-r from-primary-600 to-[#34C759]'
           }`}
           style={{ width: `${progressInfo.progress}%` }}
         />
         {progressInfo.status === 'active' && progressInfo.progress > 0 && progressInfo.progress < 100 && (
           <div 
-            className="absolute top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full border-[1.5px] border-[#007AFF] shadow-sm"
+            className="absolute top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full border-[1.5px] border-primary-600 shadow-sm"
             style={{ left: `calc(${progressInfo.progress}% - 4px)` }}
           />
         )}
@@ -122,7 +122,7 @@ const renderDurationTrack = (item: ScheduleItem) => {
       <div className="flex justify-between text-[10px] text-slate-400 font-medium font-mono mt-1 px-0.5">
         <span>开始 ({item.dateLabel})</span>
         {progressInfo.status === 'active' && (
-          <span className="text-[#007AFF] font-sans font-semibold">
+          <span className="text-primary-600 font-sans font-semibold">
             今天
           </span>
         )}
@@ -316,7 +316,7 @@ export default function Schedule() {
 
   const getStatusStyle = (type: string) => {
     if (type.includes('缴费')) return 'text-orange-600 bg-orange-50 border-orange-100';
-    if (type.includes('打印')) return 'text-blue-600 bg-blue-50 border-blue-100';
+    if (type.includes('打印')) return 'text-primary-600 bg-primary-50 border-primary-100';
     if (type.includes('笔试')) return 'text-red-600 bg-red-50 border-red-100';
     if (type.includes('完成')) return 'text-slate-500 bg-slate-100 border-slate-200';
     return 'text-slate-600 bg-slate-50 border-slate-200';
@@ -326,16 +326,16 @@ export default function Schedule() {
     if (type.includes('待办') || type.includes('缴费')) return 'border-l-[3px] border-l-orange-500'; // Warning
     if (type.includes('笔试') || type.includes('面试') || type.includes('考试')) return 'border-l-[3px] border-l-red-500'; // Urgent/Important
     if (type.includes('完成')) return 'border-l-[3px] border-l-emerald-500'; // Success
-    return 'border-l-[3px] border-l-blue-500'; // Info
+    return 'border-l-[3px] border-l-primary-500'; // Info
   };
 
   const renderActionBtn = (item: ScheduleItem) => {
     const type = item.statusType;
     if (type.includes('缴费')) {
-      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-4 py-1.5 bg-blue-600 text-white rounded-[8px] text-[12px] font-bold active:bg-blue-700 transition-[#007AFF] shadow-sm transform active:scale-95 duration-75">去缴费</button>;
+      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-4 py-1.5 bg-primary-600 text-white rounded-[8px] text-[12px] font-bold active:bg-primary-700 transition-colors shadow-sm transform active:scale-95 duration-75">去缴费</button>;
     }
     if (type.includes('打印')) {
-      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-3 py-1.5 text-blue-600 bg-blue-50 border border-blue-100 font-medium text-[12px] active:bg-blue-100 rounded-[8px] transition-colors shadow-sm active:scale-95 duration-75">去打印准考证</button>;
+      return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item, '已缴费'); }} className="px-3 py-1.5 text-primary-600 bg-primary-50 border border-primary-100 font-medium text-[12px] active:bg-primary-100 rounded-[8px] transition-colors shadow-sm active:scale-95 duration-75">去打印准考证</button>;
     }
     if (type.includes('笔试')) {
       return <button onClick={(e) => { e.stopPropagation(); handleOpenRecord(item); }} className="px-3 py-1.5 text-slate-500 bg-slate-50 border border-slate-200 font-medium text-[12px] active:bg-slate-100 rounded-[8px] transition-colors shadow-sm active:scale-95 duration-75">记录状态</button>;
@@ -365,7 +365,7 @@ export default function Schedule() {
               onClick={() => handleTopFilterClick(filter)}
               className={`flex-1 py-1.5 rounded-full text-[12px] font-medium transition-colors border text-center whitespace-nowrap px-1 ${
                 activeFilter === filter 
-                ? 'bg-blue-600 text-white border-blue-600 shadow-sm' 
+                ? 'bg-primary-600 text-white border-primary-600 shadow-sm' 
                 : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
@@ -446,58 +446,42 @@ export default function Schedule() {
                     const dayNum = parts[1] || date;
                     
                     const lineColor = sortOrder === 'desc' 
-                      ? (isFuture ? 'bg-[#007AFF]' : 'bg-slate-200') 
-                      : (!isPast ? 'bg-[#007AFF]' : 'bg-slate-200');
+                      ? (isFuture ? 'bg-primary-400' : 'bg-slate-200') 
+                      : (!isPast ? 'bg-primary-400' : 'bg-slate-200');
 
                     let dotClasses = '';
                     let innerDot = null;
                     if (isToday) {
-                      dotClasses = 'bg-[#007AFF] text-white shadow-md shadow-blue-500/20 ring-4 ring-[#007AFF]/20';
-                      innerDot = <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />;
+                      dotClasses = '';
+                      innerDot = <Clock size={16} className="text-primary-600 bg-slate-50 shadow-[0_0_0_4px_#f8fafc] rounded-full" strokeWidth={2.5} />;
                     } else if (isPast) {
-                      dotClasses = 'bg-white border-2 border-slate-200';
-                      innerDot = <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />;
+                      dotClasses = '';
+                      innerDot = <Clock size={16} className="text-slate-300 bg-slate-50 shadow-[0_0_0_4px_#f8fafc] rounded-full" strokeWidth={2} />;
                     } else {
-                      dotClasses = 'bg-white border-2 border-[#007AFF]';
-                      innerDot = <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF]" />;
+                      dotClasses = '';
+                      innerDot = <Clock size={16} className="text-primary-500 bg-slate-50 shadow-[0_0_0_4px_#f8fafc] rounded-full" strokeWidth={2.5} />;
                     }
                     
                     return (
                       <div key={date} className="relative mb-8 last:mb-2 group/day">
                         {/* Timeline Vertical Segment */}
                         {index !== sortedDates.length - 1 && (
-                          <div className={`absolute -left-[14px] top-[30px] -bottom-[32px] w-[2px] z-0 ${lineColor}`} />
+                          <div className={`absolute -left-[14px] top-[24px] -bottom-[32px] w-[2px] z-0 ${lineColor}`} />
                         )}
                         
                         {/* Dot on Timeline */}
-                        <div className={`absolute -left-[21px] top-[14px] w-4 h-4 rounded-full flex items-center justify-center z-10 transition-transform duration-205 group-hover/day:scale-110 ${dotClasses}`}>
+                        <div className={`absolute -left-[21px] top-[2px] flex items-center justify-center z-10 transition-transform duration-200 group-hover/day:scale-110 ${dotClasses}`}>
                           {innerDot}
                         </div>
                         
                         {/* Day Info Header Bar */}
                         <div className="flex items-center justify-between mb-3 pl-3 select-none">
                           <div className="flex items-center gap-3">
-                            {/* Mini Calendar Widget Card */}
-                            <div className={`flex flex-col items-center justify-center rounded-[8px] bg-white border ${
-                              isToday 
-                                ? 'border-blue-500 shadow-[0_2px_8px_rgba(0,122,255,0.12)] ring-1 ring-blue-500/10' 
-                                : 'border-slate-200/85 shadow-sm'
-                            } w-[38px] h-[40px] overflow-hidden shrink-0`}>
-                              <div className={`text-[8px] font-extrabold tracking-wider text-center w-full py-0.5 ${
-                                isToday ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500 border-b border-slate-150'
-                              }`}>
-                                {isToday ? 'TODAY' : `${monthNum}月`}
-                              </div>
-                              <div className="text-[13px] font-black leading-none py-1 text-slate-800 tracking-tight">
-                                {dayNum}
-                              </div>
-                            </div>
-
                             {/* Info Labels */}
                             <div className="flex flex-col">
                               <div className="flex items-center gap-1.5">
                                 <h4 className={`text-[13px] font-bold tracking-tight ${
-                                  isToday ? 'text-blue-600' : 'text-slate-800'
+                                  isToday ? 'text-primary-600' : 'text-slate-800'
                                 }`}>
                                   {isToday ? '今日提醒' : `${monthNum}月${parseInt(dayNum, 10)}日提醒`}
                                 </h4>
@@ -511,7 +495,7 @@ export default function Schedule() {
                                 <span className="text-[11px] text-slate-400 font-medium select-none mt-0.5 flex items-center gap-1">
                                   <span>共 {itemsInDate.length} 个提醒</span>
                                   {itemsInDate.some(item => item.statusType === '待缴费') && <span className="w-1.5 h-1.5 rounded-full bg-orange-400" title="待缴费" />}
-                                  {itemsInDate.some(item => item.statusType === '待打印') && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" title="待打印" />}
+                                  {itemsInDate.some(item => item.statusType === '待打印') && <span className="w-1.5 h-1.5 rounded-full bg-primary-500" title="待打印" />}
                                   {itemsInDate.some(item => item.statusType === '待笔试') && <span className="w-1.5 h-1.5 rounded-full bg-red-500" title="待考试" />}
                                 </span>
                               )}
@@ -522,10 +506,10 @@ export default function Schedule() {
                           {index === 0 && (
                             <button
                               onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
-                              className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 active:scale-95 text-[#007AFF] hover:text-blue-700 rounded-full text-[11px] font-semibold border border-slate-200/85 shadow-sm transition-all cursor-pointer mr-0.5 shrink-0"
+                              className="flex items-center justify-center w-7 h-7 bg-white hover:bg-slate-50 active:scale-95 text-primary-600 hover:text-primary-700 rounded-full text-[11px] font-semibold border border-slate-200/85 shadow-sm transition-all cursor-pointer mr-0.5 shrink-0"
                             >
-                              <ArrowUpDown size={11} className="text-[#007AFF]" />
-                              <span>{sortOrder === 'desc' ? '时间：由近及远' : '时间：由远及近'}</span>
+                              <ArrowUpDown size={11} className="text-primary-600" />
+                              
                             </button>
                           )}
                         </div>
@@ -536,9 +520,9 @@ export default function Schedule() {
                             <div 
                               key={item.id} 
                               onClick={() => handleOpenRecord(item)}
-                              className={`p-3.5 hover:bg-slate-50/50 active:bg-slate-100/60 transition-all duration-150 relative cursor-pointer hover:border-slate-350 group/item ${getBorderAccentClass(item.statusType)}`}
+                              className={`p-3.5 hover:bg-slate-50/50 active:bg-slate-100/60 transition-all duration-150 relative cursor-pointer hover:border-slate-350 group/item`}
                             >
-                              <h3 className="text-[14px] font-bold text-slate-900 leading-snug mb-1 group-hover/item:text-blue-600 transition-colors">
+                              <h3 className="text-[14px] font-bold text-slate-900 leading-snug mb-1 group-hover/item:text-primary-600 transition-colors">
                                 {item.unit}
                               </h3>
                               <p className="text-[13px] text-slate-600 mb-2.5 font-normal">{item.position}</p>
@@ -566,7 +550,7 @@ export default function Schedule() {
                   <div 
                     key={item.id} 
                     onClick={() => handleOpenRecord(item)}
-                    className={`bg-white rounded-[14px] border border-slate-200/60 p-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] active:bg-slate-50/80 hover:bg-slate-50/50 hover:border-slate-300 cursor-pointer transition-colors ${getBorderAccentClass(item.statusType)}`}
+                    className={`bg-white rounded-[14px] border border-slate-200/60 p-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.02)] active:bg-slate-50/80 hover:bg-slate-50/50 hover:border-slate-300 cursor-pointer transition-colors`}
                   >
                     <h3 className="text-[15px] font-bold text-slate-900 leading-snug mb-1">{item.unit}</h3>
                     <p className="text-[14px] text-slate-600 mb-3">{item.position}</p>
@@ -663,11 +647,11 @@ export default function Schedule() {
                           onClick={() => setSelectedStatus(status)}
                           className={`px-3 py-1.5 text-[12.5px] font-bold rounded-[10px] transition-all flex items-center gap-1.5 cursor-pointer border ${
                             isActive
-                              ? 'bg-blue-50/70 border-blue-450 text-blue-600 shadow-[0_2px_8px_rgba(0,122,255,0.08)]'
+                              ? 'bg-primary-50/70 border-primary-400 text-primary-600 shadow-[0_2px_8px_rgba(5,150,105,0.08)]'
                               : 'bg-slate-50/80 border-slate-200 text-slate-600 hover:bg-slate-100 active:scale-95'
                           }`}
                         >
-                          {isActive && <Check size={11} strokeWidth={3} className="text-blue-600 shrink-0" />}
+                          {isActive && <Check size={11} strokeWidth={3} className="text-primary-600 shrink-0" />}
                           {status}
                         </button>
                       );
@@ -689,7 +673,7 @@ export default function Schedule() {
                     value={remark}
                     onChange={(e) => setRemark(e.target.value.slice(0, 200))}
                     placeholder="在这里记录考试进展（如笔试分、心路历程等）..."
-                    className="w-full h-20 px-3 py-2 text-[12.5px] text-slate-800 placeholder-slate-400/80 bg-slate-50 border border-slate-200 rounded-[12px] focus:outline-none focus:ring-1 focus:ring-blue-500 focus:bg-white focus:border-blue-500 transition-all resize-none leading-relaxed"
+                    className="w-full h-20 px-3 py-2 text-[12.5px] text-slate-800 placeholder-slate-400/80 bg-slate-50 border border-slate-200 rounded-[12px] focus:outline-none focus:ring-1 focus:ring-primary-500 focus:bg-white focus:border-primary-500 transition-all resize-none leading-relaxed"
                   />
                 </div>
 
@@ -712,10 +696,10 @@ export default function Schedule() {
                           {selectedItem.logs.map((log) => (
                             <div key={log.id} className="relative text-left flex flex-col">
                               {/* Glowing Dot indicator */}
-                              <div className="absolute -left-[16.5px] top-[4px] w-1.5 h-1.5 rounded-full bg-blue-500 ring-2 ring-blue-500/15 shadow-sm" />
+                              <div className="absolute -left-[16.5px] top-[4px] w-1.5 h-1.5 rounded-full bg-primary-500 ring-2 ring-primary-500/15 shadow-sm" />
                               
                               <div className="flex items-center justify-between text-[10px] mb-0.5">
-                                <span className="font-extrabold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-[4px] tracking-wide text-[9.5px]">
+                                <span className="font-extrabold text-primary-600 bg-primary-50 px-1.5 py-0.5 rounded-[4px] tracking-wide text-[9.5px]">
                                   {log.status}
                                 </span>
                                 <span className="text-[10px] font-bold text-slate-400 font-mono">
@@ -749,7 +733,7 @@ export default function Schedule() {
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="px-5 py-1.5 font-black text-[12px] text-white bg-blue-600 hover:bg-blue-700 rounded-[10px] shadow-sm active:scale-95 transition-all cursor-pointer"
+                  className="px-5 py-1.5 font-black text-[12px] text-white bg-primary-600 hover:bg-primary-700 rounded-[10px] shadow-sm active:scale-95 transition-all cursor-pointer"
                 >
                   确定
                 </button>

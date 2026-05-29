@@ -50,7 +50,7 @@ export default function Profile1({ onNavigate }: ProfileProps) {
         <div className="relative px-5 pt-14 pb-6 flex flex-col items-center text-center gap-5 border-b border-slate-100/60">
           <div className="absolute top-4 left-5 right-4 flex items-center justify-between">
             <h2 className="text-[15px] font-black text-slate-900 tracking-tight">我的简历</h2>
-            <span className="text-[11px] font-extrabold text-blue-600 bg-blue-50/80 px-3 py-1.5 rounded-[8px] flex items-center gap-0.5 border border-blue-100/50 shadow-sm">
+            <span className="text-[11px] font-extrabold text-primary-600 bg-primary-50/80 px-3 py-1.5 rounded-[8px] flex items-center gap-0.5 border border-primary-100/50 shadow-sm">
               请去PC端完善
             </span>
           </div>
@@ -103,15 +103,15 @@ export default function Profile1({ onNavigate }: ProfileProps) {
         {/* 在线简历 (我的简历) */}
         <div className="p-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-50 border border-blue-100/50 rounded-[10px] flex items-center justify-center shrink-0">
-              <FileText size={20} className="text-blue-600" />
+            <div className="w-10 h-10 bg-primary-50 border border-primary-100/50 rounded-[10px] flex items-center justify-center shrink-0">
+              <FileText size={20} className="text-primary-600" />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-[14px] font-medium text-slate-900 truncate">在线简历</h3>
             </div>
             <button 
               onClick={() => window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', '_blank')}
-              className="bg-[#EEF2FF] text-blue-600 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-blue-100/50 active:bg-blue-50 transition-colors flex items-center justify-center shadow-sm"
+              className="bg-primary-50 text-primary-600 px-3 py-1.5 rounded-[8px] text-[13px] font-bold border border-primary-100/50 active:bg-primary-50 transition-colors flex items-center justify-center shadow-sm"
             >
               预览
             </button>
@@ -170,7 +170,7 @@ export default function Profile1({ onNavigate }: ProfileProps) {
               }`}
             >
               <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-                section.status === 'complete' ? 'bg-blue-50 text-blue-600' : 
+                section.status === 'complete' ? 'bg-primary-50 text-primary-600' : 
                 section.status === 'warning' ? 'bg-orange-50 text-orange-600' : 'bg-slate-100 text-slate-400'
               }`}>
                 <section.icon size={18} />
@@ -183,7 +183,7 @@ export default function Profile1({ onNavigate }: ProfileProps) {
               </div>
               <div className="shrink-0 flex items-center">
                 {section.status === 'complete' ? (
-                  <CheckCircle2 size={16} className="text-blue-500" />
+                  <CheckCircle2 size={16} className="text-primary-500" />
                 ) : section.status === 'warning' ? (
                   <AlertCircle size={16} className="text-orange-500" />
                 ) : (
