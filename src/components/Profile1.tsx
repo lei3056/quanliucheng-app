@@ -27,6 +27,9 @@ export default function Profile1({ onNavigate }: ProfileProps) {
   const [familyList, setFamilyList] = useState([
     { id: 1, relation: '父亲', name: '李建国', company: '市直属机关事务中心', politics: '中共党员' }
   ]);
+  const [scoreValue, setScoreValue] = useState(80);
+  const [showScoreDialog, setShowScoreDialog] = useState(false);
+  const [tempScore, setTempScore] = useState('');
 
   const sections = [
     { id: 'basic', title: '基础身份', icon: UserCircle, status: 'complete', summary: '李雷, 男, 党员' },
@@ -42,6 +45,17 @@ export default function Profile1({ onNavigate }: ProfileProps) {
     setViewMode('editor');
   };
 
+  const getScoreInfo = (score: number) => {
+    if (score <= 20) return { label: '待完善', color: '#FF4D4F' };
+    if (score <= 40) return { label: '基础', color: '#FF7A45' };
+    if (score <= 60) return { label: '一般', color: '#FFA940' };
+    if (score <= 80) return { label: '良好', color: '#52C41A' };
+    if (score <= 95) return { label: '优秀', color: '#36CFC9' };
+    return { label: '极佳', color: '#1890FF' };
+  };
+
+  const scoreInfo = getScoreInfo(scoreValue);
+
   const Overview = () => (
     <div className="flex flex-col">
       {/* Completeness & Resumes Module */}
@@ -55,14 +69,14 @@ export default function Profile1({ onNavigate }: ProfileProps) {
             </span>
           </div>
           {/* Circular Progress */}
-          <div className="relative flex items-center justify-center shrink-0 w-[140px] h-[140px]">
+          <div 
+            className="relative flex items-center justify-center shrink-0 w-[140px] h-[140px] cursor-pointer"
+            onClick={() => {
+              setTempScore(scoreValue.toString());
+              setShowScoreDialog(true);
+            }}
+          >
             <svg width="140" height="140" className="transform -rotate-90 drop-shadow-sm">
-              <defs>
-                <linearGradient id="completedGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#FB923C" /> {/* orange-400 */}
-                  <stop offset="100%" stopColor="#EF4444" /> {/* red-500 */}
-                </linearGradient>
-              </defs>
               <circle
                 cx="70"
                 cy="70"
@@ -75,25 +89,25 @@ export default function Profile1({ onNavigate }: ProfileProps) {
                 cx="70"
                 cy="70"
                 r="58"
-                stroke="url(#completedGradient)"
+                stroke={scoreInfo.color}
                 strokeWidth="14"
                 fill="none"
                 strokeLinecap="round"
                 strokeDasharray={2 * Math.PI * 58}
-                strokeDashoffset={2 * Math.PI * 58 * (1 - 0.8)}
+                strokeDashoffset={2 * Math.PI * 58 * (1 - (scoreValue / 100))}
                 className="transition-all duration-1000 ease-out"
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center pt-1 pointer-events-none select-none">
               <div className="flex items-baseline text-slate-800">
-                <span className="text-[44px] font-[900] tracking-tighter leading-none shrink-0" style={{ letterSpacing: "-0.05em" }}>80</span>
+                <span className="text-[44px] font-[900] tracking-tighter leading-none shrink-0" style={{ letterSpacing: "-0.05em" }}>{scoreValue}</span>
                 <span className="text-[16px] font-[800] ml-[2px] leading-none mb-1">%</span>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col items-center">
-             <h3 className="text-[17px] font-black text-slate-900 mb-1.5">档案资料完成极佳</h3>
+             <h3 className="text-[17px] font-black text-slate-900 mb-1.5">档案资料完成{scoreInfo.label}</h3>
              <p className="text-[13px] text-slate-500 leading-relaxed max-w-[260px]">
                丰富档案资料可提升职位精准度，更有机会获得用人单位主动青睐。
              </p>
@@ -509,6 +523,62 @@ export default function Profile1({ onNavigate }: ProfileProps) {
           )}
         </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {showScoreDialog && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-white w-full max-w-[300px] rounded-[20px] p-5 shadow-xl"
+            >
+              <h3 className="text-[17px] font-bold tracking-tight text-slate-900 mb-4 text-center">设置资料完成度</h3>
+              <input 
+                type="number" 
+                min="1" 
+                max="100"
+                value={tempScore}
+                onChange={(e) => setTempScore(e.target.value)}
+                className="w-full h-11 bg-slate-50 border border-slate-200 rounded-[10px] px-3 font-medium text-[15px] focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all mb-5 text-center"
+                placeholder="范围 1-100"
+              />
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setShowScoreDialog(false)}
+                  className="flex-1 h-10 bg-slate-100/80 text-slate-600 font-bold text-[14px] rounded-[10px] active:bg-slate-200 transition-colors"
+                >
+                  取消
+                </button>
+                <button 
+                  onClick={() => {
+                    const val = parseInt(tempScore, 10);
+                    if (!isNaN(val) && val >= 1 && val <= 100) {
+                      setScoreValue(val);
+                      setShowScoreDialog(false);
+                    } else if (val > 100) {
+                      setScoreValue(100);
+                      setShowScoreDialog(false);
+                    } else if (val < 1) {
+                      setScoreValue(1);
+                      setShowScoreDialog(false);
+                    }
+                  }}
+                  className="flex-1 h-10 bg-primary-600 text-white font-bold text-[14px] rounded-[10px] active:bg-primary-700 transition-colors shadow-sm"
+                >
+                  保存
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
