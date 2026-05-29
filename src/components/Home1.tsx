@@ -52,7 +52,7 @@ export default function Home1({ onNavigate, onTrack, onShowList }: { onNavigate?
   const colorStyles: Record<string, { bg: string, text: string, badgeBg: string, badgeBorder: string }> = {
     teal: { bg: 'bg-teal-500', text: 'text-teal-600', badgeBg: 'bg-teal-50', badgeBorder: 'border-teal-100/50' },
     amber: { bg: 'bg-amber-500', text: 'text-amber-600', badgeBg: 'bg-amber-50', badgeBorder: 'border-amber-100/50' },
-    blue: { bg: 'bg-blue-500', text: 'text-blue-600', badgeBg: 'bg-blue-50', badgeBorder: 'border-blue-100/50' },
+    primary: { bg: 'bg-primary-500', text: 'text-primary-600', badgeBg: 'bg-primary-50', badgeBorder: 'border-primary-100/50' },
     indigo: { bg: 'bg-indigo-500', text: 'text-indigo-600', badgeBg: 'bg-indigo-50', badgeBorder: 'border-indigo-100/50' },
     slate: { bg: 'bg-slate-500', text: 'text-slate-600', badgeBg: 'bg-slate-50', badgeBorder: 'border-slate-100/50' },
   };
@@ -159,7 +159,7 @@ export default function Home1({ onNavigate, onTrack, onShowList }: { onNavigate?
           <div className="w-8 h-8 flex items-center justify-center bg-slate-200/50 rounded-full">
             <Target className="text-slate-900" size={18} />
           </div>
-          <button className="text-blue-500">
+          <button className="text-primary-600">
              <MessageSquare size={22} />
           </button>
         </div>
@@ -345,11 +345,11 @@ export default function Home1({ onNavigate, onTrack, onShowList }: { onNavigate?
                     >
                       <div className="p-4 pr-12 relative">
                         <div className="mb-2 pr-4 text-left">
-                          <h3 className="text-[15px] font-semibold text-slate-900 mb-1 leading-snug group-active:text-blue-600 transition-colors">
+                          <h3 className="text-[15px] font-semibold text-slate-900 mb-1 leading-snug group-active:text-primary-600 transition-colors">
                             {item.unit}
                           </h3>
                           <div className="flex items-center gap-2">
-                            <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
+                            <span className="text-[13px] text-primary-600 font-medium bg-primary-50 px-2 py-0.5 rounded cursor-default border border-primary-100/50">
                               {item.position}
                             </span>
                             <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
@@ -386,7 +386,7 @@ export default function Home1({ onNavigate, onTrack, onShowList }: { onNavigate?
                           >
                             <Bookmark 
                               size={18} 
-                              className={bookmarkedKeys.includes(key) ? "text-[#007AFF] fill-[#007AFF]" : ""}
+                              className={bookmarkedKeys.includes(key) ? "text-primary-600 fill-primary-600" : ""}
                             />
                           </button>
                           <button
@@ -440,12 +440,12 @@ export default function Home1({ onNavigate, onTrack, onShowList }: { onNavigate?
                       >
                         <div className="mb-2">
                           <div className="mb-1 text-left">
-                            <h3 className="text-[15px] font-semibold text-slate-900 leading-snug group-active:text-blue-600 transition-colors pr-6">
+                            <h3 className="text-[15px] font-semibold text-slate-900 leading-snug group-active:text-primary-600 transition-colors pr-6">
                               {item.unit}
                             </h3>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
+                            <span className="text-[13px] text-primary-600 font-medium bg-primary-50 px-2 py-0.5 rounded cursor-default border border-primary-100/50">
                               {item.position}
                             </span>
                             <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
@@ -477,7 +477,7 @@ export default function Home1({ onNavigate, onTrack, onShowList }: { onNavigate?
                           <button 
                             disabled={item.status === '已结束'}
                             onClick={() => item.status !== '已结束' && onTrack?.(`${item.unit} - ${item.position}`, '未报名')}
-                            className={`flex-1 ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 border border-slate-200/50 cursor-not-allowed' : 'bg-[#EEF2FF] text-blue-600 active:bg-[#E0E7FF] border border-blue-100/50 shadow-sm'} py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors`}
+                            className={`flex-1 ${item.status === '已结束' ? 'bg-slate-100 text-slate-400 border border-slate-200/50 cursor-not-allowed' : 'bg-primary-50 text-primary-600 active:bg-primary-100 border border-primary-100/50 shadow-sm'} py-2 rounded-[10px] font-bold text-[13px] flex items-center justify-center gap-1.5 transition-colors`}
                           >
                             <Edit3 size={14} />
                             状态
@@ -496,7 +496,7 @@ export default function Home1({ onNavigate, onTrack, onShowList }: { onNavigate?
                           >
                             <Bookmark 
                               size={18} 
-                              className={bookmarkedKeys.includes(key) ? "text-[#007AFF] fill-[#007AFF]" : ""}
+                              className={bookmarkedKeys.includes(key) ? "text-primary-600 fill-primary-600" : ""}
                             />
                           </button>
                           <button

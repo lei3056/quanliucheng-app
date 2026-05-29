@@ -270,10 +270,10 @@ const FilterModal = ({
   const renderHeader = () => {
     if (view === "main") {
       return (
-        <div className="flex items-center justify-between px-4 py-3.5 bg-white border-b border-slate-200/60 relative">
+        <div className="flex items-center justify-between px-6 py-3.5 bg-white border-b border-slate-200/60 relative">
           <button
             onClick={onClose}
-            className="text-[#007AFF] text-[17px] active:opacity-50"
+            className="text-primary-600 text-[17px] active:opacity-50"
           >
             取消
           </button>
@@ -282,7 +282,7 @@ const FilterModal = ({
           </span>
           <button
             onClick={() => onApply(examType, location)}
-            className="text-[#007AFF] font-semibold text-[17px] active:opacity-50"
+            className="text-primary-600 font-semibold text-[17px] active:opacity-50"
           >
             完成
           </button>
@@ -298,14 +298,14 @@ const FilterModal = ({
     if (view === "county") title = "选择区县";
 
     return (
-      <div className="flex items-center justify-between px-4 py-3.5 bg-white border-b border-slate-200/60 relative">
+      <div className="flex items-center justify-between px-6 py-3.5 bg-white border-b border-slate-200/60 relative">
         <button
           onClick={() => {
             if (view === "examType" || view === "province") setView("main");
             if (view === "city") setView("province");
             if (view === "county") setView("city");
           }}
-          className="text-[#007AFF] flex items-center -ml-1.5 active:opacity-50 z-10"
+          className="text-primary-600 flex items-center -ml-1.5 active:opacity-50 z-10"
         >
           <ChevronLeft size={26} strokeWidth={2.5} />
           <span className="text-[17px] -ml-0.5">返回</span>
@@ -325,7 +325,7 @@ const FilterModal = ({
           <div className="bg-white rounded-[10px] overflow-hidden">
             <button
               onClick={() => setView("examType")}
-              className="w-full flex items-center justify-between px-4 py-3.5 bg-white active:bg-slate-50 border-b border-slate-100 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-3.5 bg-white active:bg-slate-50 border-b border-slate-100 transition-colors"
             >
               <span className="text-[17px] text-slate-900">考试类型</span>
               <div className="flex items-center gap-1">
@@ -335,7 +335,7 @@ const FilterModal = ({
             </button>
             <button
               onClick={() => setView("province")}
-              className="w-full flex items-center justify-between px-4 py-3.5 bg-white active:bg-slate-50 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-3.5 bg-white active:bg-slate-50 transition-colors"
             >
               <span className="text-[17px] text-slate-900">工作地点</span>
               <div className="flex items-center gap-1">
@@ -356,11 +356,11 @@ const FilterModal = ({
               setExamType("全部");
               setView("main");
             }}
-            className="w-full px-4 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
+            className="w-full px-6 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
           >
             <span className="text-[17px] text-slate-900">全部</span>
             {examType === "全部" && (
-              <Check size={20} className="text-[#007AFF]" />
+              <Check size={20} className="text-primary-600" />
             )}
           </button>
           {examTypes.map((t) => (
@@ -370,10 +370,10 @@ const FilterModal = ({
                 setExamType(t);
                 setView("main");
               }}
-              className="w-full px-4 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
+              className="w-full px-6 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
             >
               <span className="text-[17px] text-slate-900">{t}</span>
-              {examType === t && <Check size={20} className="text-[#007AFF]" />}
+              {examType === t && <Check size={20} className="text-primary-600" />}
             </button>
           ))}
         </div>
@@ -388,11 +388,11 @@ const FilterModal = ({
               setLocation("全部");
               setView("main");
             }}
-            className="w-full px-4 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
+            className="w-full px-6 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
           >
             <span className="text-[17px] text-slate-900">全部</span>
             {location === "全部" && (
-              <Check size={20} className="text-[#007AFF]" />
+              <Check size={20} className="text-primary-600" />
             )}
           </button>
           {locationData.map((prov, i) => (
@@ -402,7 +402,7 @@ const FilterModal = ({
                 setSelProv(i);
                 setView("city");
               }}
-              className="w-full px-4 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
+              className="w-full px-6 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
             >
               <span className="text-[17px] text-slate-900">
                 {prov.province}
@@ -425,7 +425,7 @@ const FilterModal = ({
               setLocation(locationData[selProv].province);
               setView("main");
             }}
-            className="w-full px-4 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50 bg-[#F2F2F7]/50"
+            className="w-full px-6 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50 bg-[#F2F2F7]/50"
           >
             <span className="text-[17px] text-slate-900 font-medium">
               全{locationData[selProv].province}
@@ -438,7 +438,7 @@ const FilterModal = ({
                 setSelCity(i);
                 setView("county");
               }}
-              className="w-full px-4 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
+              className="w-full px-6 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
             >
               <span className="text-[17px] text-slate-900">{c.city}</span>
               <div className="flex items-center gap-1">
@@ -459,7 +459,7 @@ const FilterModal = ({
               setLocation(locationData[selProv].cities[selCity].city);
               setView("main");
             }}
-            className="w-full px-4 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50 bg-[#F2F2F7]/50"
+            className="w-full px-6 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50 bg-[#F2F2F7]/50"
           >
             <span className="text-[17px] text-slate-900 font-medium">
               全{locationData[selProv].cities[selCity].city}
@@ -474,11 +474,11 @@ const FilterModal = ({
                   setLocation(locName);
                   setView("main");
                 }}
-                className="w-full px-4 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
+                className="w-full px-6 py-3.5 border-b border-slate-100 flex justify-between items-center active:bg-slate-50"
               >
                 <span className="text-[17px] text-slate-900">{c}</span>
                 {location === locName && (
-                  <Check size={20} className="text-[#007AFF]" />
+                  <Check size={20} className="text-primary-600" />
                 )}
               </button>
             );
@@ -605,13 +605,13 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
       />
 
       {/* GitHub Style Header */}
-      <div className="bg-white border-b border-slate-200/60 sticky top-0 z-30 pt-12 pb-3 px-4 h-[116px] flex flex-col justify-end">
+      <div className="bg-white border-b border-slate-200/60 sticky top-0 z-30 pt-12 pb-3 px-6 h-[116px] flex flex-col justify-end">
         {!isSearchMode ? (
           <>
             <div className="flex items-center justify-between mb-1">
               <button
                 onClick={onBack}
-                className="flex items-center text-[#007AFF] font-medium"
+                className="flex items-center text-primary-600 font-medium"
               >
                 <ChevronLeft size={28} strokeWidth={2.5} className="-ml-1.5" />
                 <span className="text-[14px] ml-0.5">返回</span>
@@ -619,13 +619,13 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
               <div className="flex gap-4">
                 <button
                   onClick={() => setIsSearchMode(true)}
-                  className="text-[#007AFF]"
+                  className="text-primary-600"
                 >
                   <Search size={22} />
                 </button>
                 <button
                   onClick={() => setIsFilterOpen(true)}
-                  className="text-[#007AFF]"
+                  className="text-primary-600"
                 >
                   <Filter size={22} />
                 </button>
@@ -670,9 +670,9 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                               setSelectedTimeFilter(option);
                               setIsTimeDropdownOpen(false);
                             }}
-                            className={`w-full text-center px-4 py-2.5 text-[14px] transition-colors ${
+                            className={`w-full text-center px-6 py-2.5 text-[14px] transition-colors ${
                               selectedTimeFilter === option
-                                ? "text-blue-600 font-bold bg-blue-50/70"
+                                ? "text-primary-600 font-bold bg-primary-50/70"
                                 : "text-slate-700 hover:bg-slate-50"
                             }`}
                           >
@@ -707,7 +707,7 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
             {searchQuery.length > 0 && (
               <button
                 type="submit"
-                className="text-[#007AFF] font-medium text-[17px] active:opacity-50 whitespace-nowrap"
+                className="text-primary-600 font-medium text-[17px] active:opacity-50 whitespace-nowrap"
               >
                 搜索
               </button>
@@ -718,7 +718,7 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                 setIsSearchMode(false);
                 setSearchQuery("");
               }}
-              className="text-[#007AFF] text-[17px] active:opacity-50 whitespace-nowrap"
+              className="text-primary-600 text-[17px] active:opacity-50 whitespace-nowrap"
             >
               取消
             </button>
@@ -728,8 +728,8 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
 
       {/* List Container */}
       <div className="flex-1 overflow-y-auto pb-32">
-        <div className="mt-4 px-4 font-sans">
-          <div className="bg-white rounded-[12px] shadow-sm border border-slate-200/60 overflow-hidden">
+        <div className="mt-4 px-6 font-sans">
+          <div className="bg-white rounded-[12px] shadow-[0_8px_24px_-4px_rgba(0,0,0,0.05)] border border-slate-200/60 overflow-hidden">
             {filteredJobs.filter((job) => !hiddenIds.includes(job.id))
               .length === 0 ? (
               <div className="py-12 px-4 text-center">
@@ -744,7 +744,7 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                     setAppliedLocation("全部");
                     setHiddenIds([]);
                   }}
-                  className="text-[#007AFF] text-[13px] font-semibold active:opacity-50 mt-1"
+                  className="text-primary-600 text-[13px] font-semibold active:opacity-50 mt-1"
                 >
                   清除所有筛选
                 </button>
@@ -776,11 +776,11 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                     >
                       <div className="p-4 pr-12 relative">
                         <div className="mb-2 pr-4">
-                          <h3 className="text-[15px] font-semibold text-slate-900 mb-1 leading-snug group-active:text-blue-600 transition-colors">
+                          <h3 className="text-[15px] font-semibold text-slate-900 mb-1 leading-snug group-active:text-primary-600 transition-colors">
                             {job.unit}
                           </h3>
                           <div className="flex items-center gap-2">
-                            <span className="text-[13px] text-blue-600 font-medium bg-blue-50 px-2 py-0.5 rounded cursor-default border border-blue-100/50">
+                            <span className="text-[13px] text-primary-600 font-medium bg-primary-50 px-2 py-0.5 rounded cursor-default border border-primary-100/50">
                               {job.position}
                             </span>
                             <span className="text-[12px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/50">
@@ -824,7 +824,7 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
                               size={18}
                               className={
                                 bookmarkedIds.includes(job.id)
-                                  ? "text-[#007AFF] fill-[#007AFF]"
+                                  ? "text-primary-600 fill-primary-600"
                                   : ""
                               }
                             />
@@ -866,7 +866,7 @@ export default function JobList({ title, onBack, onTrack }: JobListProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 35, scale: 0.95 }}
             transition={{ type: "spring", damping: 22, stiffness: 220 }}
-            className="absolute bottom-10 left-4 right-4 bg-[#1C1C1E]/95 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-white/10 flex items-center justify-between z-50 overflow-hidden"
+            className="absolute bottom-10 left-6 right-6 bg-[#1C1C1E]/95 backdrop-blur-md text-white px-4 py-3 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-white/10 flex items-center justify-between z-50 overflow-hidden"
           >
             <div className="flex items-center gap-2.5">
               <div className="w-5 h-5 bg-[#3A3A3C] rounded-full flex items-center justify-center">
