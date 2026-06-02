@@ -40,11 +40,8 @@ export default function App() {
 
   const navItems = [
     { id: "home", icon: Compass, label: "岗位" },
-    { id: "home1", icon: Compass, label: "岗位1" },
     { id: "schedule", icon: CalendarIcon, label: "提醒" },
-    { id: "schedule1", icon: CalendarIcon, label: "提醒1" },
     { id: "study", icon: BookOpen, label: "学习" },
-    { id: "profile", icon: User, label: "我的" },
     { id: "profile1", icon: User, label: "我的1" },
   ] as const;
 
@@ -93,11 +90,8 @@ export default function App() {
         {/* Bottom Navigation */}
         {[
           "home",
-          "home1",
           "study",
           "schedule",
-          "schedule1",
-          "profile",
           "profile1",
         ].includes(activeTab) && (
           <div className="absolute bottom-0 w-full bg-white border-t border-slate-200 px-1 py-4 pb-safe flex justify-around items-center z-50 rounded-b-[24px]">
