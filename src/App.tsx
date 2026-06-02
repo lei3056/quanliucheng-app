@@ -8,10 +8,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Home from "./components/Home";
-import Home1 from "./components/Home1";
 import Schedule from "./components/Schedule";
-import Schedule1 from "./components/Schedule1";
-import Profile from "./components/Profile";
 import Profile1 from "./components/Profile1";
 import Favorites from "./components/Favorites";
 import Targeted from "./components/Targeted";
@@ -21,11 +18,8 @@ import JobList from "./components/JobList";
 export default function App() {
   const [activeTab, setActiveTab] = useState<
     | "home"
-    | "home1"
     | "study"
     | "schedule"
-    | "schedule1"
-    | "profile"
     | "profile1"
     | "favorites"
     | "targeted"
@@ -42,7 +36,7 @@ export default function App() {
     { id: "home", icon: Compass, label: "岗位" },
     { id: "schedule", icon: CalendarIcon, label: "提醒" },
     { id: "study", icon: BookOpen, label: "学习" },
-    { id: "profile1", icon: User, label: "我的1" },
+    { id: "profile1", icon: User, label: "我的" },
   ] as const;
 
   return (
@@ -56,18 +50,8 @@ export default function App() {
               onShowList={handleNavigateToList}
             />
           )}
-          {activeTab === "home1" && (
-            <Home1
-              onNavigate={setActiveTab as any}
-              onShowList={handleNavigateToList}
-            />
-          )}
           {activeTab === "study" && <Study />}
           {activeTab === "schedule" && <Schedule />}
-          {activeTab === "schedule1" && <Schedule1 />}
-          {activeTab === "profile" && (
-            <Profile onNavigate={setActiveTab as any} />
-          )}
           {activeTab === "profile1" && (
             <Profile1 onNavigate={setActiveTab as any} />
           )}
